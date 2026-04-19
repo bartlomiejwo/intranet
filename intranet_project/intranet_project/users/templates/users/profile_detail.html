@@ -1,0 +1,134 @@
+{% extends "intranet/base.html" %}
+{% load static %}
+
+{% block head-css %}
+  <link rel="stylesheet" href="{% static 'users/css/profiles.css' %}">
+
+  {{ block.super }}
+{% endblock %}
+
+{% block content %}
+  <div class="content-section">
+
+    <div class="media">
+      <div class="profile-container">
+        <div class="profile-header mb-4">
+          <div class="profile-avatar">
+            {% if profile.image %}
+              <img class="rounded-circle w-50-h-50 mr-1" src="{{ profile.image.url }}" alt="Avatar">
+            {% else %}
+              <img class="w-50-h-50 ml-1 mr-1" src="{% static 'intranet/images/profile-avatar-default.svg' %}" alt="Avatar">
+            {% endif %}
+          </div>
+          <div class="media-body">
+            <h2 class="account-heading text-wrap">{{ profile.get_name }} ({{ profile.user.username }})</h2>
+          </div>
+        </div>
+        <div class="profile-body">
+          {% if user == profile.user %}
+            <select class="form-control mb-4" name="profileNavigation" id="profileNavigation">
+              <option value="{% url 'users:profile_detail' profile.id %}">Profil</option>
+              <option value="{% url 'intranet:user_posts' %}">Moje wpisy</option>
+              <option value="{% url 'conference_rooms:user_meetings_accepted' %}">Moje spotkania</option>
+              <option value="{% url 'absence_calendar:user_vacation_leaves' %}">Moje nieobecności</option>
+              <option value="{% url 'files_management:user_files' %}">Moje pliki</option>
+              <option value="{% url 'users:profile_avatar_update' profile.id %}">Zmiana zdjęcia profilowego</option>
+              <option value="{% url 'users:profile_notifications_update' profile.id %}">Ustawienia powiadomień</option>
+            </select>
+            <hr class="w-25">
+          {% endif %}
+
+          {% if not profile.user.employee and not profile.user.email %}
+            <div class="alert alert-primary mt-2" role="alert">
+              Brak informacji o tym użytkowniku.
+            </div>
+          {% endif %}
+
+          {% if profile.user.employee.cell_phone_number %}
+            <div class="mb-2">
+              <div><i class="fa fa-info-circle mr-2" aria-hidden="true"></i><b>Telefon komórkowy</b></div>
+              <div class="profile-data-display d-inline-block ml-4 text-wrap">{{ profile.user.employee.get_cell_phone_number }}</div>
+            </div>
+          {% endif %}
+          {% if profile.user.employee.short_cell_phone_number %}
+            <div class="mb-2">
+              <div><i class="fa fa-info-circle mr-2" aria-hidden="true"></i><b>Skrócony telefon komórkowy</b></div>
+              <div class="profile-data-display d-inline-block ml-4 text-wrap">{{ profile.user.employee.short_cell_phone_number }}</div>
+            </div>
+          {% endif %}
+          {% if profile.user.employee.internal_phone_number %}
+            <div class="mb-2">
+              <div><i class="fa fa-info-circle mr-2" aria-hidden="true"></i><b>Telefon stacjonarny</b></div>
+              <div class="profile-data-display d-inline-block ml-4 text-wrap">{{ profile.user.employee.get_internal_phone_number }}</div>
+            </div>
+          {% endif %}
+          {% if profile.user.employee.additional_phone_number %}
+            <div class="mb-2">
+              <div><i class="fa fa-info-circle mr-2" aria-hidden="true"></i><b>Telefon dodatkowy</b></div>
+              <div class="profile-data-display d-inline-block ml-4 text-wrap">{{ profile.user.employee.get_additional_phone_number }}</div>
+            </div>
+          {% endif %}
+          {% if profile.user.email %}
+            <div class="mb-2">
+              <div><i class="fa fa-info-circle mr-2" aria-hidden="true"></i><b>Email</b></div>
+              <div class="profile-data-display d-inline-block ml-4 text-wrap">{{ profile.user.email }}</div>
+            </div>
+          {% endif %}
+          {% if profile.user.employee.get_department %}
+            <div class="mb-2">
+              <div><i class="fa fa-info-circle mr-2" aria-hidden="true"></i><b>Dział</b></div>
+              <div class="profile-data-display d-inline-block ml-4 text-wrap">{{ profile.user.employee.get_department_name }}</div>
+            </div>
+          {% endif %}
+          {% if profile.user.employee.title %}
+            <div class="mb-2">
+              <div><i class="fa fa-info-circle mr-2" aria-hidden="true"></i><b>Stanowisko</b></div>
+              <div class="profile-data-display d-inline-block ml-4 text-wrap">{{ profile.user.employee.title }}</div>
+            </div>
+          {% endif %}
+          {% if profile.user.employee.registration_number %}
+            {% if request.user == profile.user or request.user.is_superuser or request_user_is_in_payroll_department %}
+              <div class="mb-2">
+                <div><i class="fa fa-info-circle mr-2" aria-hidden="true"></i><b>Numer ewidencyjny</b></div>
+                <div class="profile-data-display d-inline-block ml-4 text-wrap">{{ profile.user.employee.registration_number }}</div>
+              </div>
+            {% endif %}
+          {% endif %}
+          {% if profile.user.employee.location %}
+            <div class="mb-2">
+              <div><i class="fa fa-info-circle mr-2" aria-hidden="true"></i><b>Lokalizacja</b></div>
+              <div class="profile-data-display d-inline-block ml-4 text-wrap">{{ profile.user.employee.location }}</div>
+            </div>
+          {% endif %}
+          {% if profile.user.employee.region_name %}
+            <div class="mb-2">
+              <div><i class="fa fa-info-circle mr-2" aria-hidden="true"></i><b>Region</b></div>
+              <div class="profile-data-display d-inline-block ml-4 text-wrap">{{ profile.user.employee.region_name }}</div>
+            </div>
+          {% endif %}
+          {% if profile.user.employee.region_code %}
+            <div class="mb-2">
+              <div><i class="fa fa-info-circle mr-2" aria-hidden="true"></i><b>Kod regionu</b></div>
+              <div class="profile-data-display d-inline-block ml-4 text-wrap">{{ profile.user.employee.region_code }}</div>
+            </div>
+          {% endif %}
+          {% if profile.user.employee.cities %}
+            <div class="mb-2">
+              <div><i class="fa fa-info-circle mr-2" aria-hidden="true"></i><b>Miasta</b></div>
+              <div class="profile-data-display d-inline-block ml-4 text-wrap">{{ profile.user.employee.cities }}</div>
+            </div>
+          {% endif %}
+        </div>
+        {% if profile.user.employee and perms.company_structure.can_fill_employee_additional_data %}
+          <a class="btn btn-info btn-sm mb-1 mt-2" href="{% url 'company_structure:fill_employee_additional_data' profile.user.employee.pk %}"><b>Uzupełnij dodatkowe informacje</b></a>
+        {% endif %}
+      </div>
+    </div>
+
+  </div>
+{% endblock content %}
+
+{% block bottom-js %}
+  {{ block.super }}
+  <script defer src="{% static 'users/js/profiles.js' %}"></script>
+{% endblock bottom-js %}

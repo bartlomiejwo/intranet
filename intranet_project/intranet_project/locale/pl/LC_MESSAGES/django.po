@@ -1,0 +1,2421 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-04-13 10:28+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n"
+"%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n"
+"%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
+
+#: absence_calendar/admin.py:51 absence_calendar/models.py:1438
+msgid "Vacation leave"
+msgstr "Urlop wypoczynkowy"
+
+#: absence_calendar/admin.py:77 absence_calendar/models.py:1455
+msgid "Special leave"
+msgstr "Urlop okolicznościowy"
+
+#: absence_calendar/admin.py:87
+msgid "City (remote work address)"
+msgstr "Miasto (adres pracy zdalnej)"
+
+#: absence_calendar/admin.py:112 absence_calendar/models.py:1470
+msgid "Remote work"
+msgstr "Praca zdalna"
+
+#: absence_calendar/forms.py:51
+msgid "Event cannot be set in the past."
+msgstr "Wydarzenie nie może zostać zaplanowane w przeszłości."
+
+#: absence_calendar/forms.py:118 absence_calendar/forms.py:251
+#: absence_calendar/forms.py:362 absence_calendar/forms.py:484
+msgid "End date"
+msgstr "Data zakończenia"
+
+#: absence_calendar/forms.py:137 notifier/receivers.py:365
+#: notifier/receivers.py:610 notifier/receivers.py:839
+msgid "Absent"
+msgstr "Nieobecny"
+
+#: absence_calendar/forms.py:181 absence_calendar/forms.py:185
+#: absence_calendar/forms.py:294 absence_calendar/forms.py:298
+#: absence_calendar/forms.py:415 absence_calendar/forms.py:419
+msgid "Decisive person"
+msgstr "Osoba decydująca"
+
+#: absence_calendar/forms.py:191
+msgid "Leave for year"
+msgstr "Urlop za rok"
+
+#: absence_calendar/forms.py:202 absence_calendar/forms.py:313
+#: absence_calendar/forms.py:434
+msgid "today"
+msgstr "dzisiaj"
+
+#: absence_calendar/forms.py:204 absence_calendar/forms.py:315
+#: absence_calendar/forms.py:436
+msgid "until"
+msgstr "do"
+
+#: absence_calendar/forms.py:252 absence_calendar/forms.py:363
+#: absence_calendar/forms.py:485
+msgid "Number of days"
+msgstr "Liczba dni"
+
+#: absence_calendar/forms.py:447
+msgid "Poland"
+msgstr "Polska"
+
+#: absence_calendar/jobs.py:43
+msgid "Started saving leaves documents."
+msgstr "Rozpoczęto zapisywanie dokumentów urlopowych."
+
+#: absence_calendar/jobs.py:52
+#, python-format
+msgid "Finished saving leaves documents in %(work_time)s."
+msgstr "Ukończono zapisywanie dokumentów urlopowych w czasie: %(work_time)s."
+
+#: absence_calendar/jobs.py:67
+#, python-format
+msgid "Exception occured while saving vacation leave document(%(vl)s): %(e)s"
+msgstr ""
+"Wystąpił wyjątek w czasie zapisywania dokumentu urlopu "
+"wypoczynkowego(%(vl)s): %(e)s"
+
+#: absence_calendar/jobs.py:83
+#, python-format
+msgid "Exception occured while saving special leave document(%(sl)s): %(e)s"
+msgstr ""
+"Wystąpił wyjątek  w czasie zapisywania dokumentu urlopu "
+"okolicznościowego(%(sl)s): %(e)s"
+
+#: absence_calendar/jobs.py:99
+msgid "Exception occured while saving remote work document(%(rw)s): %(e)s"
+msgstr ""
+"Wystąpił wyjątek  w czasie zapisywania dokumentu pracy zdalnej(%(sl)s): %(e)s"
+
+#: absence_calendar/models.py:20
+msgid "event"
+msgstr "wydarzenie"
+
+#: absence_calendar/models.py:21
+msgid "events"
+msgstr "wydarzenia"
+
+#: absence_calendar/models.py:23 conference_rooms/models.py:102
+#: custom_pages/models.py:23 custom_pages/models.py:52 notifier/models.py:16
+msgctxt "title"
+msgid "the name of something"
+msgstr "tytuł"
+
+#: absence_calendar/models.py:24 conference_rooms/models.py:103
+msgid "date"
+msgstr "data"
+
+#: absence_calendar/models.py:25 conference_rooms/models.py:106
+#: notifier/models.py:17 scheduler/models.py:17
+msgid "description"
+msgstr "opis"
+
+#: absence_calendar/models.py:26 conference_rooms/models.py:107
+msgid "created by"
+msgstr "utworzony przez"
+
+#: absence_calendar/models.py:34 absence_calendar/models.py:71
+msgid "absence type"
+msgstr "typ nieobecności"
+
+#: absence_calendar/models.py:35
+msgid "absence types"
+msgstr "typy nieobecności"
+
+#: absence_calendar/models.py:37 absence_calendar/models.py:132
+#: absence_calendar/models.py:562 absence_calendar/models.py:576
+msgid "text"
+msgstr "tekst"
+
+#: absence_calendar/models.py:38 absence_calendar/models.py:134
+#: absence_calendar/models.py:565 absence_calendar/models.py:578
+#: conference_rooms/models.py:28
+msgid "visible"
+msgstr "widoczny"
+
+#: absence_calendar/models.py:39 absence_calendar/models.py:135
+#: conference_rooms/models.py:29
+msgid "default"
+msgstr "domyślny"
+
+#: absence_calendar/models.py:53
+#, python-format
+msgid ""
+"There can be only one visible default absence type                         "
+"(current default: %(current_default)s)."
+msgstr ""
+"Może być tylko jeden widoczny domyślny typ "
+"nieobecności                         (obecny domyślny: %(current_default)s)."
+
+#: absence_calendar/models.py:66
+msgid "absence"
+msgstr "nieobecność"
+
+#: absence_calendar/models.py:67
+msgid "absences"
+msgstr "nieobecności"
+
+#: absence_calendar/models.py:69 absence_calendar/models.py:212
+#: absence_calendar/models.py:640 absence_calendar/models.py:1073
+msgid "absent"
+msgstr "nieobecny"
+
+#: absence_calendar/models.py:72 absence_calendar/models.py:167
+#: absence_calendar/models.py:213 absence_calendar/models.py:597
+#: absence_calendar/models.py:641 absence_calendar/models.py:1023
+#: absence_calendar/models.py:1074
+msgid "start date"
+msgstr "data rozpoczęcia"
+
+#: absence_calendar/models.py:73 absence_calendar/models.py:168
+#: absence_calendar/models.py:214 absence_calendar/models.py:598
+#: absence_calendar/models.py:642 absence_calendar/models.py:1024
+#: absence_calendar/models.py:1075
+msgid "end date"
+msgstr "data zakończenia"
+
+#: absence_calendar/models.py:74
+msgid "additional information"
+msgstr "informacje dodatkowe"
+
+#: absence_calendar/models.py:129 absence_calendar/models.py:171
+#: absence_calendar/models.py:220
+msgid "vacation leave type"
+msgstr "typ urlopu wypoczynkowego"
+
+#: absence_calendar/models.py:130
+msgid "vacation leave types"
+msgstr "typy urlopów wypoczynkowych"
+
+#: absence_calendar/models.py:133 absence_calendar/models.py:564
+msgid "max number of days"
+msgstr "Maksymalna liczba dni"
+
+#: absence_calendar/models.py:146
+#, python-format
+msgid ""
+"There can be only one visible default vacation leave "
+"type                         (current default: %(current_default)s)."
+msgstr ""
+"Może być tylko jeden widoczny domyślny typ urlopu "
+"wypoczynkowego                          (obecny domyślny: "
+"%(current_default)s)."
+
+#: absence_calendar/models.py:162
+msgid "vacation leave document"
+msgstr "Dokument urlopu wypoczynkowego"
+
+#: absence_calendar/models.py:163
+msgid "vacation leave documents"
+msgstr "Dokumenty urlopów wypoczynkowych"
+
+#: absence_calendar/models.py:165 absence_calendar/models.py:589
+#: absence_calendar/models.py:1021
+msgid "document ID"
+msgstr "identyfikator dokumentu"
+
+#: absence_calendar/models.py:166 absence_calendar/models.py:590
+#: absence_calendar/models.py:1022
+msgid "absent name"
+msgstr "nieobecny"
+
+#: absence_calendar/models.py:169 absence_calendar/models.py:215
+msgid "leave for year"
+msgstr "urlop za rok"
+
+#: absence_calendar/models.py:170 absence_calendar/models.py:218
+#: absence_calendar/models.py:595 absence_calendar/models.py:646
+#: absence_calendar/models.py:1025 absence_calendar/models.py:1077
+msgid "number of days"
+msgstr "liczba dni"
+
+#: absence_calendar/models.py:172 absence_calendar/models.py:599
+#: absence_calendar/models.py:1026
+msgid "decisive name"
+msgstr "osoba decyzyjna"
+
+#: absence_calendar/models.py:173 absence_calendar/models.py:225
+#: absence_calendar/models.py:593 absence_calendar/models.py:647
+#: absence_calendar/models.py:1027 absence_calendar/models.py:1090
+msgid "date of completion"
+msgstr "data wypełnienia"
+
+#: absence_calendar/models.py:174 absence_calendar/models.py:591
+#: absence_calendar/models.py:1028 company_structure/models.py:101
+msgid "registration number"
+msgstr "numer ewidencyjny"
+
+#: absence_calendar/models.py:176 absence_calendar/models.py:1030
+msgid "department name"
+msgstr "dział"
+
+#: absence_calendar/models.py:178 absence_calendar/models.py:1032
+msgid "department manager name"
+msgstr "kierownik działu"
+
+#: absence_calendar/models.py:179 absence_calendar/models.py:592
+#: absence_calendar/models.py:1033 absence_calendar/models.py:1040
+#: absence_calendar/models.py:1085 live_settings/models.py:90
+msgid "city"
+msgstr "miasto"
+
+#: absence_calendar/models.py:187
+msgid "vacation leave"
+msgstr "urlop wypoczynkowy"
+
+#: absence_calendar/models.py:188
+msgid "vacation leaves"
+msgstr "urlopy wypoczynkowe"
+
+#: absence_calendar/models.py:203 absence_calendar/models.py:629
+#: absence_calendar/models.py:1064 conference_rooms/models.py:95
+msgid "Pending"
+msgstr "Oczekujący"
+
+#: absence_calendar/models.py:204 absence_calendar/models.py:630
+#: absence_calendar/models.py:1065 conference_rooms/models.py:96
+msgid "Accepted"
+msgstr "Zaakceptowany"
+
+#: absence_calendar/models.py:205 absence_calendar/models.py:631
+#: absence_calendar/models.py:1066 conference_rooms/models.py:97
+msgid "Rejected"
+msgstr "Odrzucony"
+
+#: absence_calendar/models.py:206 absence_calendar/models.py:632
+#: absence_calendar/models.py:1067
+msgid "Canceled"
+msgstr "Odwołany"
+
+#: absence_calendar/models.py:207 absence_calendar/models.py:633
+#: absence_calendar/models.py:1068
+msgid "Canceled by decisive person"
+msgstr "Odwołany przez osobę decydującą"
+
+#: absence_calendar/models.py:208 absence_calendar/models.py:635
+#: absence_calendar/models.py:1069
+msgid "Pending to cancel"
+msgstr "Oczekujący na odwołanie"
+
+#: absence_calendar/models.py:209 absence_calendar/models.py:636
+#: absence_calendar/models.py:1070
+msgid "Pending to finish earlier"
+msgstr "Oczekujący na wcześniejsze zakończenie"
+
+#: absence_calendar/models.py:223 absence_calendar/models.py:649
+#: absence_calendar/models.py:1088
+msgid "decisive person"
+msgstr "osoba decydująca"
+
+#: absence_calendar/models.py:224 absence_calendar/models.py:658
+#: absence_calendar/models.py:1089
+msgid "message for decisive person"
+msgstr "wiadomość dla osoby decydującej"
+
+#: absence_calendar/models.py:227 absence_calendar/models.py:651
+#: absence_calendar/models.py:1092 conference_rooms/models.py:108
+msgid "status"
+msgstr "stan"
+
+#: absence_calendar/models.py:230 absence_calendar/models.py:654
+#: absence_calendar/models.py:1095 conference_rooms/models.py:110
+msgid "status changed by"
+msgstr "stan zmieniony przez"
+
+#: absence_calendar/models.py:232 absence_calendar/models.py:656
+#: absence_calendar/models.py:1097 conference_rooms/models.py:112
+msgid "last status change time"
+msgstr "data ostatniej zmiany stanu"
+
+#: absence_calendar/models.py:233 absence_calendar/models.py:659
+#: absence_calendar/models.py:1098 conference_rooms/models.py:113
+msgid "rejection reason"
+msgstr "powód odrzucenia"
+
+#: absence_calendar/models.py:235 absence_calendar/models.py:661
+#: absence_calendar/models.py:1100
+msgid "pending end date"
+msgstr "oczekująca data zakończenia"
+
+#: absence_calendar/models.py:237 absence_calendar/models.py:663
+#: absence_calendar/models.py:1102
+msgid "pending number of days"
+msgstr "oczekująca liczba dni"
+
+#: absence_calendar/models.py:240 absence_calendar/models.py:677
+#: absence_calendar/models.py:1105
+msgid "document"
+msgstr "dokument"
+
+#: absence_calendar/models.py:251
+#, python-format
+msgid ""
+"The maximum number of leave days for this vacation leave type is "
+"%(max_number_of_days)s."
+msgstr ""
+"Maksymalna liczba dni dla tego typu urlopu wypoczynkowego to "
+"%(max_number_of_days)s."
+
+#: absence_calendar/models.py:261
+msgid "You need to have employee assigned in order to plan vacation leave."
+msgstr "Aby zaplanować urlop wypoczynkowy musisz mieć przypisanego pracownika."
+
+#: absence_calendar/models.py:269 absence_calendar/models.py:705
+#: absence_calendar/models.py:1126
+msgid "You chose wrong decisive person."
+msgstr "Wybrano złą osobę decyzyjną."
+
+#: absence_calendar/models.py:297 absence_calendar/models.py:307
+#: absence_calendar/models.py:733 absence_calendar/models.py:743
+#: absence_calendar/models.py:1154 absence_calendar/models.py:1164
+msgid ""
+"The number of days between start date and end date cannot be lower than the "
+"number of days entered."
+msgstr ""
+"Liczba dni pomiędzy datą początkową oraz datą końcową nie może być mniejsza "
+"niż podana liczba dni."
+
+#: absence_calendar/models.py:559
+msgid "special leave reason"
+msgstr "powód urlopu okolicznościowego"
+
+#: absence_calendar/models.py:560
+msgid "special leave reasons"
+msgstr "powody urlopów okolicznościowych"
+
+#: absence_calendar/models.py:563 absence_calendar/models.py:577
+msgid "text in application"
+msgstr "tekst we wniosku"
+
+#: absence_calendar/models.py:573
+msgid "special leave confirmation document name"
+msgstr "nazwa dokumentu potwierdzającego urlop okolicznościowy"
+
+#: absence_calendar/models.py:574
+msgid "special leave confirmation document names"
+msgstr "nazwy dokumentów potwierdzających urlop okolicznościowy"
+
+#: absence_calendar/models.py:586
+msgid "special leave document"
+msgstr "dokument urlopu okolicznościowego"
+
+#: absence_calendar/models.py:587
+msgid "special leave documents"
+msgstr "dokumenty urlopów okolicznościowych"
+
+#: absence_calendar/models.py:594
+msgid "company name"
+msgstr "nazwa firmy"
+
+#: absence_calendar/models.py:596 absence_calendar/models.py:644
+msgid "reason"
+msgstr "powód"
+
+#: absence_calendar/models.py:600 absence_calendar/models.py:667
+msgid "confirmation document name"
+msgstr "nazwa dokumentu potwierdzającego"
+
+#: absence_calendar/models.py:601 absence_calendar/models.py:669
+msgid "confirmation document number"
+msgstr "numer dokumentu potwierdzającego"
+
+#: absence_calendar/models.py:602 absence_calendar/models.py:671
+msgid "confirmation document issue date"
+msgstr "data wydania dokumentu potwierdzającego"
+
+#: absence_calendar/models.py:603
+msgid "confirming person name"
+msgstr "osoba potwierdzająca"
+
+#: absence_calendar/models.py:612
+msgid "special leave"
+msgstr "urlop okolicznościowy"
+
+#: absence_calendar/models.py:613
+msgid "special leaves"
+msgstr "urlopy okolicznościowe"
+
+#: absence_calendar/models.py:634
+msgid "Confirmed"
+msgstr "Potwierdzony"
+
+#: absence_calendar/models.py:674
+msgid "confirming person"
+msgstr "osoba potwierdzająca"
+
+#: absence_calendar/models.py:687
+#, python-format
+msgid ""
+"The maximum number of leave days for this reason is %(max_number_of_days)s."
+msgstr ""
+"Maksymalna liczba dni wolnych z podanego powodu to: %(max_number_of_days)s."
+
+#: absence_calendar/models.py:697
+msgid "You need to have employee assigned in order to plan special leave."
+msgstr ""
+"Aby zaplanować urlop okolicznościowy musisz mieć przypisanego pracownika."
+
+#: absence_calendar/models.py:1018
+msgid "remote work document"
+msgstr "Dokument pracy zdalnej"
+
+#: absence_calendar/models.py:1019
+msgid "remote work documents"
+msgstr "Dokumenty pracy zdalnej"
+
+#: absence_calendar/models.py:1034 absence_calendar/models.py:1079
+msgid "country"
+msgstr "kraj"
+
+#: absence_calendar/models.py:1035 absence_calendar/models.py:1080
+msgid "street"
+msgstr "ulica"
+
+#: absence_calendar/models.py:1036 absence_calendar/models.py:1081
+msgid "house number"
+msgstr "numer domu"
+
+#: absence_calendar/models.py:1038 absence_calendar/models.py:1083
+msgid "apartment number"
+msgstr "numer lokalu"
+
+#: absence_calendar/models.py:1039 absence_calendar/models.py:1084
+msgid "postal code"
+msgstr "kod pocztowy"
+
+#: absence_calendar/models.py:1048
+msgid "remote work"
+msgstr ""
+
+#: absence_calendar/models.py:1049
+msgid "remote works"
+msgstr "praca zdalna"
+
+#: absence_calendar/models.py:1118
+msgid "You need to have employee assigned in order to plan remote work."
+msgstr "Aby zaplanować pracę zdalną musisz mieć przypisanego pracownika."
+
+#: absence_calendar/models.py:1398
+msgid "The start date must be no later than the end date."
+msgstr "Data rozpoczęcia nie może być późniejsza niż data zakończenia."
+
+#: absence_calendar/models.py:1404
+msgid "The date of completion must be no later than the start date."
+msgstr "Data wypełnienia wniosku nie może być późniejsza niż data rozpoczęcia."
+
+#: absence_calendar/models.py:1411
+#, python-format
+msgid ""
+"At the given date range there is already absence planned! "
+"%(colliding_absences)s"
+msgstr ""
+"Dla podanego zakresu czasowego istnieje już zaplanowana nieobecność! "
+"%(colliding_absences)s"
+
+#: absence_calendar/models.py:1477
+msgid "Type"
+msgstr "Typ"
+
+#: absence_calendar/models.py:1477 notifier/receivers.py:366
+#: notifier/receivers.py:611 notifier/receivers.py:840
+msgid "From"
+msgstr "Od"
+
+#: absence_calendar/models.py:1478 notifier/receivers.py:367
+#: notifier/receivers.py:612 notifier/receivers.py:841
+msgid "To"
+msgstr "Do"
+
+#: absence_calendar/views.py:450 absence_calendar/views.py:496
+msgid "The decision on this vacation leave has already been made."
+msgstr "Decyzja dotycząca tego urlopu wypoczynkowego została już podjęta."
+
+#: absence_calendar/views.py:458 absence_calendar/views.py:781
+#: absence_calendar/views.py:1324 absence_calendar/views.py:1662
+#: absence_calendar/views.py:2286 absence_calendar/views.py:2602
+msgid "At the given date range employee is already absent!"
+msgstr "W podanym zakresie czasu pracownik ma już zaplanowaną nieobecność!"
+
+#: absence_calendar/views.py:465 absence_calendar/views.py:788
+msgid "Vacation leave was accepted."
+msgstr "Urlop wypoczynkowy został zaakceptowany."
+
+#: absence_calendar/views.py:502 absence_calendar/views.py:831
+msgid "Vacation leave was rejected."
+msgstr "Urlop wypoczynkowy został odrzucony."
+
+#: absence_calendar/views.py:533 absence_calendar/views.py:569
+msgid "The decision on this vacation leave cancelation has already been made."
+msgstr ""
+"Decyzja dotycząca odwołania tego urlopu wypoczynkowego została już podjęta."
+
+#: absence_calendar/views.py:538
+msgid "Vacation leave cancelation was accepted."
+msgstr "Odwołanie urlopu wypoczynkowego zostało zaakceptowane."
+
+#: absence_calendar/views.py:578 absence_calendar/views.py:1448
+#: absence_calendar/views.py:2406
+msgid "The request for cancelation was rejected."
+msgstr "Prośba o odwołanie została odrzucona."
+
+#: absence_calendar/views.py:580
+msgid "Vacation leave cancelation was rejected."
+msgstr "Prośba o odwołanie urlopu wypoczynkowego została odrzucona."
+
+#: absence_calendar/views.py:612 absence_calendar/views.py:654
+#: absence_calendar/views.py:1528
+msgid ""
+"The decision on this request to finish vacation leave earlier has already "
+"been made."
+msgstr ""
+"Decyzja dotycząca wcześniejszego zakończenia tego urlopu wypoczynkowego "
+"została już podjęta."
+
+#: absence_calendar/views.py:622
+msgid "Request to finish vacation leave earlier was accepted."
+msgstr ""
+"Prośba o wcześniejsze zakończenie urlopu wypoczynkowego została "
+"zaakceptowana."
+
+#: absence_calendar/views.py:665
+msgid "The request for vacation leave to finish earlier was rejected."
+msgstr ""
+"Prośba o wcześniejsze zakończenie urlopu wypoczynkowego została odrzucona."
+
+#: absence_calendar/views.py:668 absence_calendar/views.py:1546
+msgid "Request to finish vacation leave earlier was rejected."
+msgstr ""
+"Prośba o wcześniejsze zakończenie urlopu wypoczynkowego została odrzucona."
+
+#: absence_calendar/views.py:769 absence_calendar/views.py:821
+msgid "The decision regarding this vacation leave can not be changed."
+msgstr ""
+"Decyzja dotycząca tego urlopu wypoczynkowego nie może zostać zmieniona."
+
+#: absence_calendar/views.py:773
+msgid "This vacation leave is not rejected."
+msgstr "Ten urlop wypoczynkowy nie jest odrzucony."
+
+#: absence_calendar/views.py:825
+msgid "This vacation leave is not accepted."
+msgstr "Ten urlop wypoczynkowy nie jest zaakceptowany."
+
+#: absence_calendar/views.py:1046
+msgid "Vacation leaves"
+msgstr "Urlopy wypoczynkowe"
+
+#: absence_calendar/views.py:1316 absence_calendar/views.py:1362
+msgid "The decision on this special leave has already been made."
+msgstr "Decyzja dotycząca tego urlopu okolicznościowego została już podjęta."
+
+#: absence_calendar/views.py:1331 absence_calendar/views.py:1669
+msgid "Special leave was accepted."
+msgstr "Urlop okolicznościowy został zaakceptowany."
+
+#: absence_calendar/views.py:1368 absence_calendar/views.py:1712
+msgid "Special leave was rejected."
+msgstr "Urlop okolicznościowy został odrzucony."
+
+#: absence_calendar/views.py:1399 absence_calendar/views.py:1435
+msgid "The decision on this special leave cancelation has already been made."
+msgstr ""
+"Decyzja dotycząca odwołania tego urlopu okolicznościowego została już "
+"podjęta."
+
+#: absence_calendar/views.py:1404
+msgid "Special leave cancelation was accepted."
+msgstr "Prośba o odwołanie urlopu okolicznościowego została zaakceptowana."
+
+#: absence_calendar/views.py:1450
+msgid "Special leave cancelation was rejected."
+msgstr "Prośba o odwołanie urlopu okolicznościowego został odrzucona."
+
+#: absence_calendar/views.py:1482
+msgid ""
+"The decision on this request to finish special leave earlier has already "
+"been made."
+msgstr ""
+"Decyzja dotycząca wcześniejszego zakończenia tego urlopu okolicznościowego "
+"została już podjęta."
+
+#: absence_calendar/views.py:1496
+msgid "Request to finish special leave earlier was accepted."
+msgstr ""
+"Prośba o wcześniejsze zakończenie urlopu okolicznościowego została "
+"zaakceptowana."
+
+#: absence_calendar/views.py:1543
+msgid "The request for special leave to finish earlier was rejected."
+msgstr ""
+"Prośba o wcześniejsze zakończenie urlopu okolicznościowego została odrzucona."
+
+#: absence_calendar/views.py:1650 absence_calendar/views.py:1702
+msgid "The decision regarding this special leave can not be changed."
+msgstr ""
+"Decyzja dotycząca tego urlopu okolicznościowego nie może zostać zmieniona."
+
+#: absence_calendar/views.py:1654
+msgid "This special leave is not rejected."
+msgstr "Ten urlop okolicznościowy nie jest odrzucony."
+
+#: absence_calendar/views.py:1706
+msgid "This special leave is not accepted."
+msgstr "Ten urlop okolicznościowy nie jest zaakceptowany."
+
+#: absence_calendar/views.py:1938
+msgid "Special leaves"
+msgstr "Urlopy okolicznościowe"
+
+#: absence_calendar/views.py:2028
+msgid "Confirmation document was confirmed."
+msgstr "Dokument potwierdzający został zweryfikowany."
+
+#: absence_calendar/views.py:2278 absence_calendar/views.py:2324
+msgid "The decision on this remote work has already been made."
+msgstr "Decyzja dotycząca tej pracy zdalnej została już podjęta."
+
+#: absence_calendar/views.py:2293 absence_calendar/views.py:2609
+msgid "Remote work was accepted."
+msgstr "Praca zdalna została zaakceptowane."
+
+#: absence_calendar/views.py:2330 absence_calendar/views.py:2652
+msgid "Remote work was rejected."
+msgstr "Praca zdalna została odrzucona."
+
+#: absence_calendar/views.py:2361 absence_calendar/views.py:2397
+msgid "The decision on this remote work cancelation has already been made."
+msgstr "Decyzja dotycząca odwołania tej pracy zdalnej została już podjęta."
+
+#: absence_calendar/views.py:2366
+msgid "Remote work cancelation was accepted."
+msgstr "Prośba o odwołanie pracy zdalnej została zaakceptowana."
+
+#: absence_calendar/views.py:2408
+msgid "Remote work cancelation was rejected."
+msgstr "Prośba o odwołanie pracy zdalnej została odrzucona."
+
+#: absence_calendar/views.py:2440 absence_calendar/views.py:2482
+msgid ""
+"The decision on this request to finish remote work earlier has already been "
+"made."
+msgstr ""
+"Decyzja dotycząca wcześniejszego zakończenia tej pracy zdalnej została już "
+"podjęta."
+
+#: absence_calendar/views.py:2450
+msgid "Request to finish remote work earlier was accepted."
+msgstr "Prośba o wcześniejsze zakończenie pracy zdalnej została zaakceptowana."
+
+#: absence_calendar/views.py:2493
+msgid "The request for remote work to finish earlier was rejected."
+msgstr "Prośba o wcześniejsze zakończenie pracy zdalnej została odrzucona."
+
+#: absence_calendar/views.py:2496
+msgid "Request to finish remote work earlier was rejected."
+msgstr "Prośba o wcześniejsze zakończenie pracy zdalnej została odrzucona."
+
+#: absence_calendar/views.py:2590 absence_calendar/views.py:2642
+msgid "The decision regarding this remote work can not be changed."
+msgstr "Decyzja dotycząca tej pracy zdalnej nie może zostać zmieniona."
+
+#: absence_calendar/views.py:2594
+msgid "This remote work is not rejected."
+msgstr "Ta praca zdalna nie jest odrzucona."
+
+#: absence_calendar/views.py:2646
+msgid "This remote work is not accepted."
+msgstr "Ta praca zdalna nie jest zaakceptowana."
+
+#: absence_calendar/views.py:2856
+msgid "Remote works"
+msgstr "Prace zdalne"
+
+#: absence_calendar/views.py:3257
+msgid "A validation error occured."
+msgstr "Wystąpił błąd walidacji."
+
+#: company_structure/models.py:15 company_structure/models.py:333
+#: glpi_integration/models.py:15
+msgid "department"
+msgstr "dział"
+
+#: company_structure/models.py:16 company_structure/models.py:64
+msgid "departments"
+msgstr "działy"
+
+#: company_structure/models.py:18 conference_rooms/models.py:25
+#: conference_rooms/models.py:63 conference_rooms/models.py:197
+#: files_management/models.py:38 live_settings/models.py:19
+#: live_settings/models.py:89 live_settings/models.py:129
+#: live_settings/models.py:219 live_settings/models.py:272
+#: live_settings/models.py:337 live_settings/models.py:398
+#: live_settings/models.py:441 live_settings/models.py:455
+msgid "name"
+msgstr "nazwa"
+
+#: company_structure/models.py:63 company_structure/models.py:67
+msgid "subordinate department"
+msgstr "dział podrzędny"
+
+#: company_structure/models.py:69
+msgid "parent department"
+msgstr "dział nadrzędny"
+
+#: company_structure/models.py:80
+msgid "Department cannot be a subordinate of itself."
+msgstr "Dział nie może podlegać sam sobie."
+
+#: company_structure/models.py:87 company_structure/models.py:334
+#: glpi_integration/models.py:62
+msgid "employee"
+msgstr "pracownik"
+
+#: company_structure/models.py:88
+msgid "employees"
+msgstr "pracownicy"
+
+#: company_structure/models.py:95 intranet/models.py:120 users/models.py:17
+msgid "user"
+msgstr "użytkownik"
+
+#: company_structure/models.py:96
+msgid "cell phone number"
+msgstr "komórkowy numer telefonu"
+
+#: company_structure/models.py:97
+msgid "internal phone number"
+msgstr "wewnętrzny numer telefonu"
+
+#: company_structure/models.py:98
+msgid "additional phone number"
+msgstr "dodatkowy numer telefonu"
+
+#: company_structure/models.py:99
+msgctxt "title"
+msgid "job title"
+msgstr "stanowisko"
+
+#: company_structure/models.py:100 conference_rooms/models.py:22
+#: conference_rooms/models.py:66
+msgid "location"
+msgstr "lokalizacja"
+
+#: company_structure/models.py:102
+msgid "region name"
+msgstr "nazwa regionu"
+
+#: company_structure/models.py:103
+msgid "region code"
+msgstr "kod regionu"
+
+#: company_structure/models.py:104
+msgid "cities"
+msgstr "miasta"
+
+#: company_structure/models.py:106
+msgid "short cell phone number"
+msgstr "skrócony komórkowy numer telefonu"
+
+#: company_structure/models.py:304
+msgid "Employee"
+msgstr "Pracownik"
+
+#: company_structure/models.py:320
+msgid "department member"
+msgstr "członek działu"
+
+#: company_structure/models.py:321
+msgid "department members"
+msgstr "członkowie działu"
+
+#: company_structure/models.py:328 glpi_integration/models.py:78
+msgid "Member"
+msgstr "Członek"
+
+#: company_structure/models.py:329 glpi_integration/models.py:79
+msgid "Deputy Manager"
+msgstr "Zastępca kierownika"
+
+#: company_structure/models.py:330 glpi_integration/models.py:80
+msgid "Manager"
+msgstr "Kierownik"
+
+#: company_structure/models.py:335
+msgid "role"
+msgstr "rola"
+
+#: company_structure/models.py:346
+msgid "Wrong department member role was given."
+msgstr "Dla członka działu została podana zła rola."
+
+#: conference_rooms/forms.py:86
+msgid "Participants"
+msgstr "Uczestnicy"
+
+#: conference_rooms/forms.py:90
+msgid "Create meeting"
+msgstr "Utwórz spotkanie"
+
+#: conference_rooms/forms.py:90
+msgid "Modify meeting"
+msgstr "Zmodyfikuj spotkanie"
+
+#: conference_rooms/models.py:17
+msgid "Meeting date cannot be set in the past."
+msgstr "Data spotkania nie może być ustanowiona w przeszłości."
+
+#: conference_rooms/models.py:23
+msgid "locations"
+msgstr "lokalizacje"
+
+#: conference_rooms/models.py:27
+msgid "moderator group"
+msgstr "grupa moderatorów"
+
+#: conference_rooms/models.py:40
+#, python-format
+msgid ""
+"There can be only one visible default location                         "
+"(current default: %(current_default)s)."
+msgstr ""
+"Może być tylko jedna widoczna domyślna lokalizacja                         "
+"(obecna domyślna: %(current_default)s)."
+
+#: conference_rooms/models.py:56 conference_rooms/models.py:101
+msgid "conference room"
+msgstr "sala konferencyjna"
+
+#: conference_rooms/models.py:57
+msgid "conference rooms"
+msgstr "sale konferencyjne"
+
+#: conference_rooms/models.py:64
+msgid "color"
+msgstr "kolor"
+
+#: conference_rooms/models.py:65 custom_pages/models.py:26
+#: custom_pages/models.py:53 live_settings/models.py:443
+msgid "position"
+msgstr "pozycja"
+
+#: conference_rooms/models.py:86 conference_rooms/models.py:198
+msgid "meeting"
+msgstr "spotkanie"
+
+#: conference_rooms/models.py:87
+msgid "meetings"
+msgstr "spotkania"
+
+#: conference_rooms/models.py:104
+msgid "start time"
+msgstr "czas rozpoczęcia"
+
+#: conference_rooms/models.py:105
+msgid "end time"
+msgstr "czas zakończenia"
+
+#: conference_rooms/models.py:126
+msgid "The start time must be no later than the end time."
+msgstr ""
+"Data rozpoczęcia spotkania nie może być późniejsza niż data zakończenia "
+"spotkania."
+
+#: conference_rooms/models.py:136
+#, python-format
+msgid "At the given time meeting is already planned! %(colliding_meetings)s"
+msgstr ""
+"W podanym czasie istnieje już zaplanowane spotkanie! %(colliding_meetings)s"
+
+#: conference_rooms/models.py:194
+msgid "participant"
+msgstr "uczestnik"
+
+#: conference_rooms/models.py:195
+msgid "participants"
+msgstr "uczestnicy"
+
+#: conference_rooms/views.py:510 conference_rooms/views.py:757
+msgid "You are not allowed to accept this meeting."
+msgstr "Nie jesteś uprawniony, aby zaakceptować to spotkanie."
+
+#: conference_rooms/views.py:514 conference_rooms/views.py:539
+msgid "The decision on this meeting has already been made."
+msgstr "Decyzja dotycząca tego spotkania została już podjęta."
+
+#: conference_rooms/views.py:519
+msgid "The meeting was accepted."
+msgstr "Spotkanie zostało zaakceptowane."
+
+#: conference_rooms/views.py:535 conference_rooms/views.py:783
+msgid "You are not allowed to reject this meeting."
+msgstr "Nie jesteś uprawniony, aby odrzucić to spotkanie."
+
+#: conference_rooms/views.py:545
+msgid "The meeting was rejected."
+msgstr "Spotkanie zostało odrzucone."
+
+#: conference_rooms/views.py:761 conference_rooms/views.py:787
+msgid "The status of this meeting has already been changed."
+msgstr "Stan tego spotkania został już zmieniony."
+
+#: conference_rooms/views.py:766
+msgid "The meeting decision was changed to accepted."
+msgstr "Decyzja dotycząca tego spotkania została zmieniona na zaakceptowane."
+
+#: conference_rooms/views.py:793
+msgid "The meeting decision was changed to rejected."
+msgstr "Decyzja dotycząca tego spotkania została zmieniona na odrzucone."
+
+#: custom_pages/models.py:11
+#, python-format
+msgid "Position %(value)s is already occupied by \"%(object_name)s\""
+msgstr "Pozycja %(value)s jest już zajęta przez \"%(object_name)s\""
+
+#: custom_pages/models.py:19
+msgid "tab"
+msgstr "zakładka"
+
+#: custom_pages/models.py:20
+msgid "tabs"
+msgstr "zakładki"
+
+#: custom_pages/models.py:25
+msgid "area name"
+msgstr "nazwa obszaru"
+
+#: custom_pages/models.py:44
+msgid "page"
+msgstr "strona"
+
+#: custom_pages/models.py:45
+msgid "pages"
+msgstr "strony"
+
+#: custom_pages/models.py:48
+msgid "parent tab"
+msgstr "zakładka nadrzędna"
+
+#: custom_pages/models.py:54 intranet/models.py:22 intranet/models.py:81
+msgid "content"
+msgstr "zawartość"
+
+#: files_management/forms.py:40 files_management/models.py:79
+msgid ""
+"You have already posted this file before, you can access it below this link: "
+msgstr ""
+"Ten plik został przez Ciebie przesłany już wcześniej, możesz go znaleźć pod "
+"tym linkiem: "
+
+#: files_management/forms.py:56 files_management/models.py:98
+msgid "You have exceeded files capacity limit."
+msgstr "Przekroczono limit zajętości plików."
+
+#: files_management/jobs.py:43
+msgid "Starting removal of unused uploaded files."
+msgstr "Rozpoczynanie usuwania nieużywanych plików."
+
+#: files_management/jobs.py:57
+#, python-format
+msgid "%(number)s files were removed."
+msgstr "%(number)s plików zostało usuniętych."
+
+#: files_management/jobs.py:61
+#, python-format
+msgid "Removal of unused uploaded files finished in %(work_time)s."
+msgstr "Usuwanie nieużywanych plików zakończono w czasie: %(work_time)s."
+
+#: files_management/models.py:35
+msgid "intranet file"
+msgstr "plik intranet"
+
+#: files_management/models.py:36
+msgid "intranet files"
+msgstr "pliki intranet"
+
+#: files_management/models.py:39
+msgid "file"
+msgstr "plik"
+
+#: files_management/models.py:40
+msgid "owner"
+msgstr "właściciel"
+
+#: files_management/models.py:41
+msgid "upload date"
+msgstr "data przesłania"
+
+#: files_management/models.py:42
+msgid "added with wysiwyg"
+msgstr "dodano za pomocą wysiwyg"
+
+#: files_management/models.py:43
+msgid "usage counter"
+msgstr "użycia"
+
+#: files_management/models.py:44
+msgid "file size"
+msgstr "rozmiar pliku"
+
+#: files_management/models.py:45
+msgid "extension"
+msgstr "rozszerzenie"
+
+#: files_management/models.py:47
+msgid "file content hash"
+msgstr "hash zawartości pliku"
+
+#: files_management/models.py:61
+#, python-format
+msgid "File is too big. Maximum file size: %(max_file_size)s MB."
+msgstr "Plik jest zbyt duży. Maksymalna wielkość pliku: %(max_file_size)s MB."
+
+#: files_management/models.py:111
+msgid "Unknown"
+msgstr "Nieznany"
+
+#: files_management/views.py:57
+msgid "An error occurred while uploading file."
+msgstr "Wystąpił błąd podczas przesyłania pliku."
+
+#: files_management/views.py:109
+msgid "No files have been deleted."
+msgstr "Żadne pliki nie zostały usunięte."
+
+#: files_management/views.py:112
+msgid "File was deleted successfully."
+msgstr "Plik został usunięty pomyślnie."
+
+#: files_management/views.py:114
+msgid "Files were deleted successfully."
+msgstr "Pliki zostały usunięte pomyślnie."
+
+#: files_management/views.py:116
+#, python-format
+msgid "%(files_deleted_number)s files were deleted."
+msgstr "%(files_deleted_number)s plików zostało usuniętych."
+
+#: files_management/views.py:119
+msgid "An error occurred."
+msgstr "Wystąpił błąd."
+
+#: glpi_integration/glpi_api.py:472
+#, python-format
+msgid "Comment data for user %(username)s could not be extracted."
+msgstr ""
+"Dane z komentarza dla użytkownika %(username)s nie mogły zostać wydobyte."
+
+#: glpi_integration/glpi_api.py:529
+#, python-format
+msgid "Exception occured while extracting data from comment: %(e)s"
+msgstr "Wystąpił wyjątek podczas wydobywania danych z komentarza: %(e)s"
+
+#: glpi_integration/jobs.py:43
+msgid "Starting GLPI synchronization."
+msgstr "Rozpoczynanie synchronizacji GLPI."
+
+#: glpi_integration/jobs.py:58
+#, python-format
+msgid "GLPI synchronization finished in %(work_time)s."
+msgstr "Synchronizacja GLPI została zakończona w czasie: %(work_time)s."
+
+#: glpi_integration/jobs.py:63
+msgid "Starting GLPI data download."
+msgstr "Rozpoczynanie pobierania danych z GLPI."
+
+#: glpi_integration/jobs.py:85
+#, python-format
+msgid "Exception occured while downloading GLPI data: %(e)s"
+msgstr "Wystąpił wyjątek podczas pobierania danych z GLPI: %(e)s"
+
+#: glpi_integration/jobs.py:89
+msgid "GLPI data download finished."
+msgstr "Ukończono pobieranie danych z GLPI."
+
+#: glpi_integration/jobs.py:95
+msgid "Starting departments synchronization."
+msgstr "Rozpoczynanie synchronizacji działów."
+
+#: glpi_integration/jobs.py:101
+#, python-format
+msgid "Exception occured while synchronizing departments: %(e)s"
+msgstr "Wystąpił wyjątek podczas synchronizacji działów: %(e)s"
+
+#: glpi_integration/jobs.py:105
+msgid "Departments synchronization finished."
+msgstr "Synchronizacja działów zakończona."
+
+#: glpi_integration/jobs.py:111
+msgid "Starting users synchronization."
+msgstr "Rozpoczynanie synchronizacji użytkowników."
+
+#: glpi_integration/jobs.py:117
+#, python-format
+msgid "Exception occured while synchronizing users: %(e)s"
+msgstr "Wystąpił wyjątek podczas synchronizacji użytkowników: %(e)s"
+
+#: glpi_integration/jobs.py:121
+msgid "Users synchronization finished."
+msgstr "Synchronizacja użytkowników zakończona."
+
+#: glpi_integration/models.py:9 glpi_integration/models.py:85
+msgid "GLPI department"
+msgstr "dział z GLPI"
+
+#: glpi_integration/models.py:10
+msgid "GLPI departments"
+msgstr "działy z GLPI"
+
+#: glpi_integration/models.py:12
+msgid "GLPI group ID"
+msgstr "identyfikator grupy z GLPI"
+
+#: glpi_integration/models.py:13 glpi_integration/models.py:59
+msgid "GLPI last modification date"
+msgstr "ostatnia data modyfikacji w GLPI"
+
+#: glpi_integration/models.py:23 glpi_integration/models.py:30
+msgid "GLPI subordinate department"
+msgstr "dział podrzędny z GLPI"
+
+#: glpi_integration/models.py:24
+msgid "GLPI subordinate departments"
+msgstr "działy podrzędne z GLPI"
+
+#: glpi_integration/models.py:36
+msgid "GLPI parent department"
+msgstr "dział nadrzędny z GLPI"
+
+#: glpi_integration/models.py:48
+msgid "Glpi department cannot be a subordinate of itself."
+msgstr "Glpi department nie może podlegać sam sobie."
+
+#: glpi_integration/models.py:55 glpi_integration/models.py:86
+msgid "GLPI employee"
+msgstr "pracownik z GLPI"
+
+#: glpi_integration/models.py:56
+msgid "GLPI employees"
+msgstr "pracownicy z GLPI"
+
+#: glpi_integration/models.py:58
+msgid "GLPI user ID"
+msgstr "identyfikator użytkownika z GLPI"
+
+#: glpi_integration/models.py:70
+msgid "GLPI deparment member"
+msgstr "członek działu z GLPI"
+
+#: glpi_integration/models.py:71
+msgid "GLPI department members"
+msgstr "członkowie działu z GLPI"
+
+#: glpi_integration/models.py:83
+msgid "GLPI relation ID"
+msgstr "identyfikator relacji z GLPI"
+
+#: glpi_integration/models.py:87
+msgid "GLPI role"
+msgstr "rola z GLPI"
+
+#: glpi_integration/updater.py:131
+#, python-format
+msgid "GLPI parent department of %(id)d glpi department does not exist."
+msgstr "Nadrzędny GLPI department (%(id)d GLPI department) nie istnieje."
+
+#: glpi_integration/updater.py:203
+#, python-format
+msgid ""
+"This nickname is already taken, given account (%(account_name)d) will not be "
+"synchronized."
+msgstr ""
+"Ten login jest już zajęty, podane konto (%(account_name)d) nie będzie "
+"synchronizowane."
+
+#: intranet/forms.py:26
+msgid "Content"
+msgstr "Zawartość"
+
+#: intranet/models.py:16 intranet/models.py:79 intranet/models.py:123
+msgid "post"
+msgstr "wpis"
+
+#: intranet/models.py:17
+msgid "posts"
+msgstr "wpisy"
+
+#: intranet/models.py:23 notifier/models.py:18
+msgid "date created"
+msgstr "data utworzenia"
+
+#: intranet/models.py:24 intranet/models.py:80
+msgid "author"
+msgstr "autor"
+
+#: intranet/models.py:25
+msgid "comments allowed"
+msgstr "komentarze dozwolone"
+
+#: intranet/models.py:26
+msgid "likes allowed"
+msgstr "polubienia dozwolone"
+
+#: intranet/models.py:27
+msgid "published"
+msgstr "opublikowany"
+
+#: intranet/models.py:28
+msgid "publication date"
+msgstr "data publikacji"
+
+#: intranet/models.py:29
+msgid "expiration date"
+msgstr "data wygaśnięcia"
+
+#: intranet/models.py:30 intranet/models.py:83
+msgid "edit date"
+msgstr "data edycji"
+
+#: intranet/models.py:31
+msgid "pinned"
+msgstr "przypięty"
+
+#: intranet/models.py:40
+msgid "Expiration date cannot be earlier than publication date."
+msgstr "Data wygaśnięcia nie może być wcześniejsza niż data publikacji."
+
+#: intranet/models.py:75 intranet/models.py:125
+msgid "comment"
+msgstr "komentarz"
+
+#: intranet/models.py:76
+msgid "comments"
+msgstr "komentarze"
+
+#: intranet/models.py:82
+msgid "date posted"
+msgstr "data utworzenia"
+
+#: intranet/models.py:95
+msgid "The post you want to comment on has the comment option turned off."
+msgstr "Wpis, który chcesz skomentować ma wyłączoną opcję komentowania."
+
+#: intranet/models.py:113
+msgid "like"
+msgstr "polubienie"
+
+#: intranet/models.py:114
+msgid "likes"
+msgstr "polubienia"
+
+#: intranet/models.py:126
+msgid "timestamp"
+msgstr "znacznik czasu"
+
+#: intranet/models.py:137
+msgid "Exactly one object should be liked."
+msgstr "Tylko jeden obiekt może być polubiony."
+
+#: intranet/models.py:145
+msgid "The post you want to like has likes turned off."
+msgstr "Wpis, który chcesz polubić ma wyłączoną opcję polubień."
+
+#: intranet_project/general_functions.py:23
+msgid "This page does not exist."
+msgstr "Ta strona nie istnieje."
+
+#: intranet_project/settings.py:197
+msgid "Polish"
+msgstr "Polski"
+
+#: intranet_project/settings.py:198
+msgid "English"
+msgstr "Angielski"
+
+#: live_settings/global_live_settings.py:52
+#, python-format
+msgid "Default logo (%(default_logo_name)s) is missing."
+msgstr "Brak domyślnego logo (%(default_logo_name)s)."
+
+#: live_settings/global_live_settings.py:64
+#, python-format
+msgid "Uploaded active logo (%(logo_name)s) is missing."
+msgstr "Brak przesłanego aktywnego logo (%(logo_name)s)."
+
+#: live_settings/models.py:16 live_settings/models.py:17
+msgid "general settings"
+msgstr "Ustawienia ogólne"
+
+#: live_settings/models.py:20 live_settings/models.py:87
+#: live_settings/models.py:127 live_settings/models.py:218
+#: live_settings/models.py:271 live_settings/models.py:335
+#: live_settings/models.py:396 live_settings/models.py:454
+msgid "active"
+msgstr "aktywny"
+
+#: live_settings/models.py:22
+msgid "website name"
+msgstr "nazwa strony"
+
+#: live_settings/models.py:23
+msgid "admin website name"
+msgstr "nazwa strony administracyjnej"
+
+#: live_settings/models.py:27
+msgid "Image should be in PNG format."
+msgstr "Obraz powinien być w formacie PNG."
+
+#: live_settings/models.py:28
+msgid "logo"
+msgstr "logo"
+
+#: live_settings/models.py:41
+#, python-format
+msgid ""
+"There can be only one active general settings                         "
+"(current active: %(current_active)s)."
+msgstr ""
+"Mogą istnieć tylko jedne aktywne ustawienia ogólne                         "
+"(obecnie aktywne: %(current_active)s)."
+
+#: live_settings/models.py:52 live_settings/models.py:58
+msgid "Wrong image format. Image format should be PNG."
+msgstr "Zły format obrazu. Pożądany format obrazu to PNG."
+
+#: live_settings/models.py:73
+msgid "Default website name"
+msgstr "Domyślna nazwa strony"
+
+#: live_settings/models.py:74
+msgid "Default administration website name"
+msgstr "Domyślna nazwa strony administracyjnej"
+
+#: live_settings/models.py:84 live_settings/models.py:85
+msgid "company settings"
+msgstr "ustawienia firmy"
+
+#: live_settings/models.py:101 live_settings/models.py:300
+#, python-format
+msgid ""
+"There can be only one active company settings                         "
+"(current active: %(current_active)s)."
+msgstr ""
+"Mogą być tylko jedne aktywne ustawienia firmy                         "
+"(obecnie aktywne: %(current_active)s)."
+
+#: live_settings/models.py:117
+msgid "Default company name"
+msgstr "Domyślna nazwa firmy"
+
+#: live_settings/models.py:118
+msgid "Default city"
+msgstr "Domyślne miasto"
+
+#: live_settings/models.py:124 live_settings/models.py:125
+msgid "GLPI integration settings"
+msgstr "ustawienia integracji z GLPI"
+
+#: live_settings/models.py:131 live_settings/models.py:442
+msgid "url"
+msgstr "url"
+
+#: live_settings/models.py:132
+msgid "authorization"
+msgstr "autoryzacja"
+
+#: live_settings/models.py:133
+msgid "app token"
+msgstr "app token"
+
+#: live_settings/models.py:135
+msgid "parent groups names to sync"
+msgstr "parent groups names to sync"
+
+#: live_settings/models.py:136
+msgid "user account sync group"
+msgstr "user account sync group"
+
+#: live_settings/models.py:137
+msgid "user_data_sync_group"
+msgstr "user_data_sync_group"
+
+#: live_settings/models.py:139
+msgid "user_data_sync_from_comment_group"
+msgstr "user_data_sync_from_comment_group"
+
+#: live_settings/models.py:141
+msgid "comment data start separator"
+msgstr "comment data start separator"
+
+#: live_settings/models.py:142
+msgid "comment data end separator"
+msgstr "comment data end separator"
+
+#: live_settings/models.py:144
+msgid "region name api key"
+msgstr "nazwa regionu - klucz API"
+
+#: live_settings/models.py:145
+msgid "region code api key"
+msgstr "kod regionu - klucz API"
+
+#: live_settings/models.py:146
+msgid "cities api key"
+msgstr "miasta - klucz API"
+
+#: live_settings/models.py:148
+msgid "short cell phone number api key"
+msgstr "skrócony komórkowy numer telefonu - klucz API"
+
+#: live_settings/models.py:150 live_settings/models.py:224
+#: live_settings/models.py:284 live_settings/models.py:342
+#: live_settings/models.py:457
+msgid "enabled"
+msgstr "włączony"
+
+#: live_settings/models.py:151 live_settings/models.py:225
+#: live_settings/models.py:285 live_settings/models.py:345
+#: live_settings/models.py:459
+msgid "weeks"
+msgstr "tygodnie"
+
+#: live_settings/models.py:152 live_settings/models.py:226
+#: live_settings/models.py:286 live_settings/models.py:346
+#: live_settings/models.py:460
+msgid "days"
+msgstr "dni"
+
+#: live_settings/models.py:153 live_settings/models.py:227
+#: live_settings/models.py:287 live_settings/models.py:347
+#: live_settings/models.py:461
+msgid "hours"
+msgstr "godziny"
+
+#: live_settings/models.py:154 live_settings/models.py:228
+#: live_settings/models.py:288 live_settings/models.py:348
+#: live_settings/models.py:462
+msgid "minutes"
+msgstr "minuty"
+
+#: live_settings/models.py:155 live_settings/models.py:229
+#: live_settings/models.py:289 live_settings/models.py:349
+#: live_settings/models.py:463
+msgid "next run time"
+msgstr "czas następnego uruchomienia"
+
+#: live_settings/models.py:166
+#, python-format
+msgid ""
+"There can be only one active glpi_integration "
+"settings                         (current active: %(current_active)s)."
+msgstr ""
+"Mogą być tylko jedne aktywne ustawienia integracji "
+"GLPI                          (obecnie aktywne: %(current_active)s)."
+
+#: live_settings/models.py:190
+msgid "Default GLPI"
+msgstr "Domyślne GLPI"
+
+#: live_settings/models.py:215 live_settings/models.py:216
+msgid "files management settings"
+msgstr "ustawienia zarządzania plikami"
+
+#: live_settings/models.py:221
+msgid "Maximum file size in megabytes."
+msgstr "Maksymalny rozmiar pliku w megabajtach."
+
+#: live_settings/models.py:222
+msgid "max file size"
+msgstr "maksymalny rozmiar pliku"
+
+#: live_settings/models.py:240
+#, python-format
+msgid ""
+"There can be only one active files management "
+"settings                         (current active: %(current_active)s)."
+msgstr ""
+"Mogą być tylko jedne aktywne ustawienia zarządzania "
+"plikami                          (obecnie aktywne: %(current_active)s)."
+
+#: live_settings/models.py:268 live_settings/models.py:269
+msgid "absence calendar settings"
+msgstr "ustawnienia kalendarza nieobecności"
+
+#: live_settings/models.py:275
+msgid "payroll department group"
+msgstr "Kadry i płace - grupa"
+
+#: live_settings/models.py:278
+msgid "risk assessment URL"
+msgstr "ocena ryzyka URL"
+
+#: live_settings/models.py:280
+msgid "safety rules URL"
+msgstr "zasady BHP URL"
+
+#: live_settings/models.py:282
+msgid "personal data protection URL"
+msgstr "ochrona danych osobowych URL"
+
+#: live_settings/models.py:316
+msgid "Default absence calendar settings name"
+msgstr "Domyślne ustawnienia kalendarza nieobecności"
+
+#: live_settings/models.py:332 live_settings/models.py:333
+msgid "notifier settings"
+msgstr "ustawienia powiadomień"
+
+#: live_settings/models.py:338
+msgid "email subject prefix"
+msgstr "temat maila - prefiks"
+
+#: live_settings/models.py:339
+msgid "email subject suffix"
+msgstr "temat maila - sufiks"
+
+#: live_settings/models.py:340
+msgid "email footer"
+msgstr "stopka maila"
+
+#: live_settings/models.py:343
+msgid "remove only checked"
+msgstr "usuń tylko sprawdzone"
+
+#: live_settings/models.py:344 live_settings/models.py:458
+msgid "remove older than"
+msgstr "usuń starsze niż"
+
+#: live_settings/models.py:344 live_settings/models.py:458
+msgid "Weeks"
+msgstr "Tygodnie"
+
+#: live_settings/models.py:360
+#, python-format
+msgid ""
+"There can be only one active notifier settings                         "
+"(current active: %(current_active)s)."
+msgstr ""
+"Mogą być tylko jedne aktywne ustawienia powiadomień                         "
+"(obecnie aktywne: %(current_active)s)."
+
+#: live_settings/models.py:376
+msgid "Default notifier settings"
+msgstr "Domyślne ustawienia powiadomień"
+
+#: live_settings/models.py:393 live_settings/models.py:394
+msgid "conference rooms settings"
+msgstr "ustawienia sal konferencyjnych"
+
+#: live_settings/models.py:399
+msgid "start hour"
+msgstr "godzina rozpoczęcia"
+
+#: live_settings/models.py:400
+msgid "end hour"
+msgstr "godzina zakończenia"
+
+#: live_settings/models.py:401
+msgid "desired rooms number"
+msgstr "pożadana liczba wyświetlanych sal konferencyjnych"
+
+#: live_settings/models.py:413
+#, python-format
+msgid ""
+"There can be only one active conference rooms "
+"settings                         (current active: %(current_active)s)."
+msgstr ""
+"Mogą być tylko jedne aktywne ustawienia sal "
+"konferencyjnych                          (obecnie aktywne: "
+"%(current_active)s)."
+
+#: live_settings/models.py:429
+msgid "Default conference rooms settings"
+msgstr "Domyślne ustawienia sal konferencyjnych"
+
+#: live_settings/models.py:438
+msgid "useful link"
+msgstr "przydatny link"
+
+#: live_settings/models.py:439
+msgid "useful links"
+msgstr "przydatne linki"
+
+#: live_settings/models.py:451 live_settings/models.py:452
+msgid "logging settings"
+msgstr "ustawienia logowania"
+
+#: live_settings/models.py:474
+#, python-format
+msgid ""
+"There can be only one active logging settings                         "
+"(current active: %(current_active)s)."
+msgstr ""
+"Mogą istnieć tylko jedne aktywne ustawienia "
+"logowania                         (obecnie aktywne: %(current_active)s)."
+
+#: live_settings/models.py:490
+msgid "Default logging settings"
+msgstr "Domyślne ustawienia logowania"
+
+#: notifier/jobs.py:43
+msgid "Starting removal of notifications."
+msgstr "Rozpoczynanie usuwania powiadomień."
+
+#: notifier/jobs.py:58
+#, python-format
+msgid ""
+"Removal of %(deleted_notifications)s notifications finished in %(work_time)s."
+msgstr ""
+"Usuwanie %(deleted_notifications)s powiadomień zakończono w czasie: "
+"%(work_time)s."
+
+#: notifier/models.py:10
+msgid "notification"
+msgstr "powiadomienie"
+
+#: notifier/models.py:11
+msgid "notifications"
+msgstr "powiadomienia"
+
+#: notifier/models.py:13
+msgid "receiver"
+msgstr "odbiorca"
+
+#: notifier/models.py:14
+msgid "redirect url"
+msgstr "url przekierowania"
+
+#: notifier/models.py:19
+msgid "checked"
+msgstr "sprawdzone"
+
+#: notifier/receivers.py:72
+msgid "Meeting pending"
+msgstr "Spotkanie oczekuje na decyzję"
+
+#: notifier/receivers.py:73
+msgid "The meeting is waiting for your approval."
+msgstr "Spotkanie oczekuje na Twoją decyzję."
+
+#: notifier/receivers.py:80 notifier/receivers.py:96
+msgid "Meeting accepted"
+msgstr "Spotkanie zaakceptowane"
+
+#: notifier/receivers.py:81
+msgid "Your meeting has been accepted."
+msgstr "Twoje spotkanie zostało zaakceptowane"
+
+#: notifier/receivers.py:88 notifier/receivers.py:104
+msgid "Meeting rejected"
+msgstr "Spotkanie odrzucone"
+
+#: notifier/receivers.py:89
+msgid "Your meeting has been rejected."
+msgstr "Twoje spotkanie zostało odrzucone."
+
+#: notifier/receivers.py:97
+msgid "The decision regarding one of your meetings was changed to accepted."
+msgstr ""
+"Decyzja dotycząca jednego z twoich spotkań została zmieniona na "
+"zaakceptowane."
+
+#: notifier/receivers.py:105
+msgid "The decision regarding one of your meetings was changed to rejected."
+msgstr ""
+"Decyzja dotycząca jednego z twoich spotkań została zmieniona na odrzucone."
+
+#: notifier/receivers.py:117
+msgid "Meeting modified"
+msgstr "Spotkanie zostało zmienione"
+
+#: notifier/receivers.py:118
+msgid "The meeting was modified and waits for your reapproval."
+msgstr "Spotkanie zostało zmienione i oczekuje na Twoją decyzję."
+
+#: notifier/receivers.py:130
+msgid "Meeting deleted"
+msgstr "Spotkanie usunięte"
+
+#: notifier/receivers.py:131
+msgid "Accepted meeting has been deleted."
+msgstr "Zaakceptowane spotkanie zostało usunięte."
+
+#: notifier/receivers.py:135 notifier/receivers.py:364
+#: notifier/receivers.py:609 notifier/receivers.py:838
+msgid "Details"
+msgstr "Szczegóły"
+
+#: notifier/receivers.py:136
+msgid "Conference room"
+msgstr "Sala konferencyjna"
+
+#: notifier/receivers.py:137
+msgid "Created by"
+msgstr "Utworzony przez"
+
+#: notifier/receivers.py:138
+msgid "Time"
+msgstr "Czas"
+
+#: notifier/receivers.py:154
+msgid "Vacation leave pending"
+msgstr "Urlop wypoczynkowy oczekuje na decyzję"
+
+#: notifier/receivers.py:155
+msgid "A vacation leave is waiting for your approval."
+msgstr "Urlop wypoczynkowy oczekuje na Twoją decyzję."
+
+#: notifier/receivers.py:162
+msgid "Vacation leave deleted"
+msgstr "Urlop wypoczynkowy usunięty"
+
+#: notifier/receivers.py:163
+msgid "Vacation leave that was waiting for your approval has been deleted."
+msgstr "Urlop wypoczynkowy, który oczekiwał na Twoją decyzję, został usunięty."
+
+#: notifier/receivers.py:169
+msgid "Vacation leave accepted"
+msgstr "Urlop wypoczynkowy zaakceptowany"
+
+#: notifier/receivers.py:170
+msgid "Your vacation leave has been accepted."
+msgstr "Twój urlop wypoczynkowy został zaakceptowany."
+
+#: notifier/receivers.py:179 notifier/receivers.py:322
+msgid "New vacation leave document"
+msgstr "Urlop wypoczynkowy - dokument"
+
+#: notifier/receivers.py:180 notifier/receivers.py:323
+msgid "New vacation leave document has appeared."
+msgstr "Pojawił się nowy dokumentu dotyczący urlopu wypoczynkowego."
+
+#: notifier/receivers.py:186
+msgid "Vacation leave rejected"
+msgstr "Urlop wypoczynkowy odrzucony"
+
+#: notifier/receivers.py:187
+msgid "Your vacation leave has been rejected."
+msgstr "Twój urlop wypoczynkowy został odrzucony."
+
+#: notifier/receivers.py:194 notifier/receivers.py:204
+msgid "Vacation leave pending to finish earlier"
+msgstr "Urlop wypoczynkowy oczekuje na wcześniejsze zakończenie"
+
+#: notifier/receivers.py:195
+msgid "Vacation leave accepted by you is pending to finish earlier."
+msgstr ""
+"Urlop wypoczynkowy zaakceptowany przez Ciebie oczekuje na decyzję dotyczącą "
+"wcześniejszego zakończenia."
+
+#: notifier/receivers.py:205
+msgid "One of vacation leaves is pending to finish earlier."
+msgstr ""
+"Jeden z urlopów wypoczynkowych oczekuje na decyzję dotyczącą wcześniejszego "
+"zakończenia."
+
+#: notifier/receivers.py:212
+msgid "Request to finish vacation leave earlier accepted"
+msgstr ""
+"Prośba o wcześniejsze zakończenie urlopu wypoczynkowego została "
+"zaakceptowana."
+
+#: notifier/receivers.py:213
+msgid "Request to finish vacation leave earlier has been accepted."
+msgstr ""
+"Prośba o wcześniejsze zakończenie urlopu wypoczynkowego została "
+"zaakceptowana."
+
+#: notifier/receivers.py:222
+msgid "Vacation leave finished earlier"
+msgstr "Urlop wypoczynkowy zakończony wcześniej"
+
+#: notifier/receivers.py:223
+msgid "One of requests to finish vacation leave earlier was accepted."
+msgstr ""
+"Jedna z prósb o wcześniejsze zakończenie urlopu wypoczynkowego została "
+"zaakceptowana."
+
+#: notifier/receivers.py:230 notifier/receivers.py:240
+msgid "Request to finish vacation leave earlier rejected"
+msgstr "Prośba o wcześniejsze zakończenie urlopu wypoczynkowego odrzucona"
+
+#: notifier/receivers.py:231 notifier/receivers.py:241
+msgid "Request to finish vacation leave earlier has been rejected."
+msgstr ""
+"Prośba o wcześniejsze zakończenie urlopu wypoczynkowego została odrzucona."
+
+#: notifier/receivers.py:248 notifier/receivers.py:258
+msgid "Vacation leave updated"
+msgstr "Urlop wypoczynkowy - aktualizacja"
+
+#: notifier/receivers.py:249
+msgid ""
+"Vacation leave accepted by you was updated and waits for your reapproval."
+msgstr ""
+"Urlop wypoczynkowy zaakceptowany przez Ciebie został zmodyfikowany i "
+"oczekuje na Twoją decyzję."
+
+#: notifier/receivers.py:259
+msgid ""
+"Vacation leave has been updated and now waits for reapproval from decisive "
+"person."
+msgstr ""
+"Urlop wypoczynkowy został zaktualizowany i teraz oczekuje na podjęcie "
+"decyzji przez osobę decydującą."
+
+#: notifier/receivers.py:267
+msgid "Vacation leave decisive person changed"
+msgstr "Urlop wypoczynkowy - zmiana osoby decydującej"
+
+#: notifier/receivers.py:268
+msgid ""
+"The decisive person in the vacation leave you were responsible for has "
+"changed. You are no longer responsible for this vacation leave."
+msgstr ""
+"We wniosku urlopu wypoczynkowego została zmieniona osoba decydująca. Nie "
+"ponosisz już odpowiedzialności za podjęcie decyzji dotyczącej tego wniosku."
+
+#: notifier/receivers.py:276 notifier/receivers.py:286
+msgid "Vacation leave canceled"
+msgstr "Urlop wypoczynkowy odwołany"
+
+#: notifier/receivers.py:277
+msgid "Cancelation of your vacation leave was accepted."
+msgstr ""
+"Prośba o odwołanie Twojego urlopu wypoczynkowego została zaakceptowana."
+
+#: notifier/receivers.py:287
+msgid "One of vacation leaves has been canceled."
+msgstr "Jeden z urlopów wypoczynkowych został odwołany."
+
+#: notifier/receivers.py:294 notifier/receivers.py:304
+msgid "Vacation leave cancelation rejected"
+msgstr "Prośba o odwołanie urlopu wypoczynkowego została odrzucona"
+
+#: notifier/receivers.py:295
+msgid "Cancelation of your vacation leave was rejected."
+msgstr "Prośba o odwołanie Twojego urlopu wypoczynkowego została odrzucona."
+
+#: notifier/receivers.py:305
+msgid "One of vacation leaves cancelation has been rejected."
+msgstr "Odwołanie jednego z urlopów wypoczynkowych zostało odrzucone."
+
+#: notifier/receivers.py:312 notifier/receivers.py:330
+#: notifier/receivers.py:340
+msgid "Vacation leave decision changed"
+msgstr "Urlop wypoczynkowy - zmiana decyzji"
+
+#: notifier/receivers.py:313
+msgid "The decision regarding your vacation leave was changed to accepted."
+msgstr ""
+"Decyzja dotycząca Twojego urlopu wypoczynkowego została zmieniona na "
+"zaakceptowany."
+
+#: notifier/receivers.py:331
+msgid "The decision regarding your vacation leave was changed to rejected."
+msgstr ""
+"Decyzja dotycząca Twojego urlopu wypoczynkowego została zmieniona na "
+"odrzucony."
+
+#: notifier/receivers.py:341
+msgid ""
+"Vacation leave that previously was accepted, has been rejected by decisive."
+msgstr ""
+"Urlop wypoczynkowy, który wcześniej był zaakceptowany, został odrzucony "
+"przez osobę decydującą."
+
+#: notifier/receivers.py:349
+msgid "Vacation leave is pending to cancel"
+msgstr "Prośba o odwołanie urlopu wypoczynkowego oczekuje na decyzję"
+
+#: notifier/receivers.py:350
+msgid "One of vacation leaves you accepted is pending to cancel."
+msgstr ""
+"Jeden z urlopów wypoczynkowych, które były zaakceptowane, oczekuje na "
+"decyzję w sprawie odwołania."
+
+#: notifier/receivers.py:359
+msgid "Vacation leave pending to cancel"
+msgstr "Odwołanie urlopu wypoczynkowego oczekuje na decyzję"
+
+#: notifier/receivers.py:360
+msgid "One of vacation leaves is pending to cancel."
+msgstr ""
+"Jeden z urlopów wypoczynkowych, które były zaakceptowane, oczekuje na "
+"decyzję w sprawie odwołania."
+
+#: notifier/receivers.py:382
+msgid "Special leave pending"
+msgstr "Urlop okolicznościowy oczekuje na decyzję"
+
+#: notifier/receivers.py:383
+msgid "A special leave is waiting for your approval."
+msgstr "Urlop okolicznościowy oczekuje na Twoją decyzję."
+
+#: notifier/receivers.py:390
+msgid "Special leave deleted"
+msgstr "Urlop okolicznościowy usunięty"
+
+#: notifier/receivers.py:391
+msgid "Special leave that was waiting for your approval has been deleted."
+msgstr ""
+"Urlop okolicznościowy, który oczekiwał na Twoją decyzję, został usunięty."
+
+#: notifier/receivers.py:398
+msgid "Special leave accepted"
+msgstr "Urlop okolicznościowy zaakceptowany"
+
+#: notifier/receivers.py:399
+msgid "Your special leave has been accepted."
+msgstr "Twój urlop okolicznościowy został zaakceptowany."
+
+#: notifier/receivers.py:407 notifier/receivers.py:568
+msgid "New special leave"
+msgstr "Nowy urlop okolicznościowy"
+
+#: notifier/receivers.py:408 notifier/receivers.py:569
+msgid "New special leave has appeared."
+msgstr "Pojawił się nowy urlop okolicznościowy."
+
+#: notifier/receivers.py:414
+msgid "Special leave rejected"
+msgstr "Urlop okolicznościowy odrzucony"
+
+#: notifier/receivers.py:415
+msgid "Your special leave has been rejected."
+msgstr "Twój urlop okolicznościowy został odrzucony."
+
+#: notifier/receivers.py:422 notifier/receivers.py:432
+msgid "Request for special leave to finish earlier accepted"
+msgstr ""
+"Prośba o wcześniejsze zakończenie urlopu okolicznościowego zaakceptowana"
+
+#: notifier/receivers.py:423
+msgid "Request for special leave to finish earlier has been accepted"
+msgstr ""
+"Prośba o wcześniejsze zakończenie urlopu okolicznościowego została "
+"zaakceptowana."
+
+#: notifier/receivers.py:433
+msgid "One of special leave requests to finish earlier has been accepted."
+msgstr ""
+"Jedna z prósb o wcześniejsze zakończenie urlopu okolicznościowego została "
+"zaakceptowana."
+
+#: notifier/receivers.py:440 notifier/receivers.py:450
+msgid "Special leave pending to finish earlier"
+msgstr "Urlop okolicznościowy oczekuje na wcześniejsze zakończenie"
+
+#: notifier/receivers.py:441
+msgid "One of special leaves that you accepted is pending to finish earlier."
+msgstr ""
+"Jeden z urlopów okolicznościowych, który zaakceptowałeś oczekuje na "
+"wcześniejsze zakończenie."
+
+#: notifier/receivers.py:451
+msgid "One of special leaves is pending to finish earlier."
+msgstr ""
+"Jeden z urlopów okolicznościowych oczekuje na decyzję dotyczącą "
+"wcześniejszego zakończenia."
+
+#: notifier/receivers.py:458 notifier/receivers.py:468
+msgid "Request for special leave to finish earlier rejected"
+msgstr ""
+"Prośba o wcześniejsze zakończenie urlopu okolicznościowego została odrzucona."
+
+#: notifier/receivers.py:459
+msgid "Request for special leave to finish earlier has been rejected."
+msgstr ""
+"Prośba o wcześniejsze zakończenie urlopu okolicznościowego została odrzucona."
+
+#: notifier/receivers.py:469
+msgid "One of special leave requests to finish earlier has been rejected."
+msgstr ""
+"Prośba o wcześniejsze zakończenie jednego z urlopów okolicznościowych "
+"została odrzucona."
+
+#: notifier/receivers.py:476 notifier/receivers.py:487
+msgid "Special leave updated"
+msgstr "Urlop okolicznościowy - aktualizacja"
+
+#: notifier/receivers.py:477
+msgid ""
+"One of special leaves you accepted has been updated and waits for your "
+"reapproval."
+msgstr ""
+"Jeden z urlopów okolicznościowych, który zaakceptowałeś został zmodyfikowany "
+"i czeka na podjęcie decyzj. "
+
+#: notifier/receivers.py:488
+msgid "One of special leaves was updated and now needs to be reapproved."
+msgstr ""
+"Jeden z urlopów okolicznościowych został zaktualizowany i teraz oczekuje na "
+"ponowną decyzję."
+
+#: notifier/receivers.py:495
+msgid "Special leave decisive person changed"
+msgstr "Urlop okolicznościowy - zmiana osoby decydującej"
+
+#: notifier/receivers.py:496
+msgid ""
+"The decisive person in the special leave you were responsible for has "
+"changed. You are no longer responsible for this vacation leave."
+msgstr ""
+"We wniosku urlopu okolicznościowego została zmieniona osoba decydująca. Nie "
+"ponosisz już odpowiedzialności za podjęcie decyzji dotyczącej tego wniosku."
+
+#: notifier/receivers.py:504 notifier/receivers.py:514
+msgid "Special leave is pending to cancel"
+msgstr "Prośba o odwołanie urlopu okolicznościowego oczekuje na decyzję"
+
+#: notifier/receivers.py:505
+msgid "One of special leaves you accepted is pending to cancel."
+msgstr ""
+"Jeden z urlopów okolicznościowych, które były zaakceptowane, oczekuje na "
+"decyzję w sprawie odwołania."
+
+#: notifier/receivers.py:515
+msgid "One of special leaves is pending to cancel."
+msgstr ""
+"Jeden z urlopów okolicznościowych oczekuje na decyzję w sprawie odwołania."
+
+#: notifier/receivers.py:522 notifier/receivers.py:532
+msgid "Special leave canceled"
+msgstr "Urlop okolicznościowy odrzucony"
+
+#: notifier/receivers.py:523
+msgid "Cancelation of your special leave was accepted."
+msgstr ""
+"Prośba o odwołanie Twojego urlopu okolicznościowego została zaakceptowana."
+
+#: notifier/receivers.py:533
+msgid "One of special leaves has been canceled."
+msgstr "Jeden z urlopów okolicznościowych został odwołany."
+
+#: notifier/receivers.py:540 notifier/receivers.py:550
+msgid "Special leave cancelation rejected"
+msgstr "Prośba o odwołanie urlopu okolicznościowego została odrzucona."
+
+#: notifier/receivers.py:541
+msgid "Cancelation of your special leave was rejected."
+msgstr "Prośba o odwołanie Twojego urlopu okolicznościowego została odrzucona."
+
+#: notifier/receivers.py:551
+msgid "One of special leaves cancelation has been rejected."
+msgstr ""
+"Prośba o odwołanie jednego z urlopów okolicznościowych została odrzucona."
+
+#: notifier/receivers.py:558 notifier/receivers.py:576
+#: notifier/receivers.py:586
+msgid "Special leave decision changed"
+msgstr "Urlop okolicznościowy - zmiana decyzji"
+
+#: notifier/receivers.py:559
+msgid "The decision regarding your special leave was changed to accepted."
+msgstr ""
+"Decyzja dotycząca Twojego urlopu okolicznościowego została zmieniona na "
+"zaakceptowany."
+
+#: notifier/receivers.py:577
+msgid "The decision regarding your special leave was changed to rejected."
+msgstr ""
+"Decyzja dotycząca Twojego urlopu okolicznościowego została zmieniona na "
+"odrzucony."
+
+#: notifier/receivers.py:587
+msgid ""
+"The decision regarding one of special leaves has been changed to rejected."
+msgstr ""
+"Decyzja dotycząca jednego z urlopów okolicznościowych została zmieniona na "
+"odrzucony."
+
+#: notifier/receivers.py:594 notifier/receivers.py:604
+msgid "Special leave confirmed"
+msgstr "Urlop okolicznościowy potwierdzony"
+
+#: notifier/receivers.py:595
+msgid "Your special leave has been confirmed."
+msgstr "Twój urlop okolicznościowy został potwierdzony."
+
+#: notifier/receivers.py:605
+msgid "One of special leaves has been confirmed."
+msgstr "Jeden z urlopów okolicznościowych został potwierdzony."
+
+#: notifier/receivers.py:628
+msgid "Remote work pending"
+msgstr "Praca zdalna oczekuje na decyzję"
+
+#: notifier/receivers.py:629
+msgid "A remote work is waiting for your approval."
+msgstr "Praca zdalna oczekuje na Twoją decyzję."
+
+#: notifier/receivers.py:636
+msgid "Remote work deleted"
+msgstr "Praca zdalna usunięta"
+
+#: notifier/receivers.py:637
+msgid "Remote work that was waiting for your approval has been deleted."
+msgstr "Praca zdalna, która oczekiwała na Twoją decyzję, została usunięta."
+
+#: notifier/receivers.py:643
+msgid "Remote work accepted"
+msgstr "Praca zdalna została zaakceptowana."
+
+#: notifier/receivers.py:644
+msgid "Your remote work has been accepted."
+msgstr "Twoja praca zdalna została zaakceptowana."
+
+#: notifier/receivers.py:653 notifier/receivers.py:796
+msgid "New remote work document"
+msgstr "Nowy dokument pracy zdalnej"
+
+#: notifier/receivers.py:654 notifier/receivers.py:797
+msgid "New remote work document has appeared."
+msgstr "Pojawił się nowy dokument dotyczący pracy zdalnej."
+
+#: notifier/receivers.py:660
+msgid "Remote work rejected"
+msgstr "Praca zdalna został odrzucone."
+
+#: notifier/receivers.py:661
+msgid "Your remote work has been rejected."
+msgstr "Twoja praca zdalna została odrzucona."
+
+#: notifier/receivers.py:668 notifier/receivers.py:678
+msgid "Remote work pending to finish earlier"
+msgstr "Praca zdalna oczekuje na wcześniejsze zakończenie"
+
+#: notifier/receivers.py:669
+msgid "Remote work accepted by you is pending to finish earlier."
+msgstr ""
+"Praca zdalna zaakceptowana przez Ciebie oczekuje na decyzję dotyczącą "
+"wcześniejszego zakończenia."
+
+#: notifier/receivers.py:679
+msgid "One of remote works is pending to finish earlier."
+msgstr ""
+"Jeden z wniosków o pracę zdalną oczekuje na decyzję dotyczącą wcześniejszego "
+"zakończenia."
+
+#: notifier/receivers.py:686
+msgid "Request to finish remote work earlier accepted"
+msgstr "Prośba o wcześniejsze zakończenie pracy zdalnej została zaakceptowana."
+
+#: notifier/receivers.py:687
+msgid "Request to finish remote work earlier has been accepted."
+msgstr "Prośba o wcześniejsze zakończenie pracy zdalnej została zaakceptowana."
+
+#: notifier/receivers.py:696
+msgid "Remote work finished earlier"
+msgstr "Praca zdalna zakończona wcześniej"
+
+#: notifier/receivers.py:697
+msgid "One of requests to finish remote work earlier was accepted."
+msgstr ""
+"Jedna z prósb o wcześniejsze zakończenie pracy zdalnej została zaakceptowana."
+
+#: notifier/receivers.py:704 notifier/receivers.py:714
+msgid "Request to finish remote work earlier rejected"
+msgstr "Prośba o wcześniejsze zakończenie pracy zdalnej odrzucona"
+
+#: notifier/receivers.py:705 notifier/receivers.py:715
+msgid "Request to finish remote work earlier has been rejected."
+msgstr "Prośba o wcześniejsze zakończenie pracy zdalnej została odrzucona."
+
+#: notifier/receivers.py:722 notifier/receivers.py:732
+msgid "Remote work updated"
+msgstr "Praca zdalna - aktualizacja"
+
+#: notifier/receivers.py:723
+msgid "Remote work accepted by you was updated and waits for your reapproval."
+msgstr ""
+"Praca zdalna zaakceptowana przez Ciebie została zmodyfikowana i oczekuje na "
+"Twoją decyzję."
+
+#: notifier/receivers.py:733
+msgid ""
+"Remote work has been updated and now waits for reapproval from decisive "
+"person."
+msgstr ""
+"Praca zdalna została zaktualizowana i teraz oczekuje na podjęcie decyzji "
+"przez osobę decydującą."
+
+#: notifier/receivers.py:741
+msgid "Remote work decisive person changed"
+msgstr "Praca zdalna - zmiana osoby decydującej"
+
+#: notifier/receivers.py:742
+msgid ""
+"The decisive person in the remote work you were responsible for has changed. "
+"You are no longer responsible for this remote work."
+msgstr ""
+"We wniosku o pracę zdalną została zmieniona osoba decydująca. Nie ponosisz "
+"już odpowiedzialności za podjęcie decyzji dotyczącej tego wniosku."
+
+#: notifier/receivers.py:750 notifier/receivers.py:760
+msgid "Remote work canceled"
+msgstr "Praca zdalna odwołana"
+
+#: notifier/receivers.py:751
+msgid "Cancelation of your remote work was accepted."
+msgstr "Prośba o odwołanie Twojej pracy zdalnej została zaakceptowana."
+
+#: notifier/receivers.py:761
+msgid "One of remote works has been canceled."
+msgstr "Jeden z wniosków o pracę zdalną został odwołany."
+
+#: notifier/receivers.py:768 notifier/receivers.py:778
+msgid "Remote work cancelation rejected"
+msgstr "Prośba o odwołanie pracy zdalnej została odrzucona."
+
+#: notifier/receivers.py:769
+msgid "Cancelation of your remote work was rejected."
+msgstr "Prośba o odwołanie Twojej pracy zdalnej została odrzucona."
+
+#: notifier/receivers.py:779
+msgid "One of remote works cancelation has been rejected."
+msgstr ""
+"Prośba o odwołanie jednego z wniosków o pracę zdalną została odrzucona."
+
+#: notifier/receivers.py:786 notifier/receivers.py:804
+#: notifier/receivers.py:814
+msgid "Remote work decision changed"
+msgstr "Praca zdalna - zmiana decyzji"
+
+#: notifier/receivers.py:787
+msgid "The decision regarding your remote work was changed to accepted."
+msgstr ""
+"Decyzja dotycząca Twojego wniosku o pracę zdalną została zmieniona na "
+"zaakceptowany."
+
+#: notifier/receivers.py:805
+msgid "The decision regarding your remote work was changed to rejected."
+msgstr ""
+"Decyzja dotycząca Twojego wniosku o prace zdalną została zmieniona na "
+"odrzucony."
+
+#: notifier/receivers.py:815
+msgid ""
+"Remote work that previously was accepted, has been rejected by decisive."
+msgstr ""
+"Wniosek o pracę zdalną, który wcześniej był zaakceptowany, został odrzucony "
+"przez osobę decydującą."
+
+#: notifier/receivers.py:823
+msgid "Remote work is pending to cancel"
+msgstr "Prośba o odwołanie pracy zdalnej oczekuje na decyzję"
+
+#: notifier/receivers.py:824
+msgid "One of remote works you accepted is pending to cancel."
+msgstr ""
+"Jeden z wniosków o pracę zdalną, które były zaakceptowane, oczekuje na "
+"decyzję w sprawie odwołania."
+
+#: notifier/receivers.py:833
+msgid "Remote work pending to cancel"
+msgstr "Odwołanie pracy zdalnej oczekuje na decyzję"
+
+#: notifier/receivers.py:834
+msgid "One of remote works is pending to cancel."
+msgstr ""
+"Jeden z wniosków o pracę zdalną oczekuje na decyzję w sprawie odwołania."
+
+#: scheduler/jobs.py:43
+msgid "Starting removal of logs."
+msgstr "Rozpoczynanie usuwania logów."
+
+#: scheduler/jobs.py:54
+#, python-format
+msgid "Removal of %(deleted_logs)s logs finished in %(work_time)s."
+msgstr "Usuwanie %(deleted_logs)s logów zakończono w czasie: %(work_time)s."
+
+#: scheduler/models.py:11
+msgid "job log"
+msgstr "log zadania"
+
+#: scheduler/models.py:12
+msgid "job logs"
+msgstr "logi zadań"
+
+#: scheduler/models.py:14
+msgid "job id"
+msgstr "identyfikator zadania"
+
+#: scheduler/models.py:15
+msgid "log status"
+msgstr "stan logu"
+
+#: scheduler/models.py:16
+msgid "log time"
+msgstr "czas logu"
+
+#: scheduler/models.py:48
+msgid "Scheduled job encountered problems"
+msgstr "Zaplanowane zadanie napotkało problemy"
+
+#: scheduler/models.py:49
+#, python-format
+msgid ""
+"Scheduled job %(job_id)s has encountered problems (status="
+"%(problem_status)s)."
+msgstr ""
+"Zaplanowane zadanie %(job_id)s napotkało problemy (stan=%(problem_status)s)."
+
+#: users/models.py:14
+msgid "profile"
+msgstr "profil"
+
+#: users/models.py:15
+msgid "profiles"
+msgstr "profile"
+
+#: users/models.py:19
+msgid "Provide 50x50 image in PNG format."
+msgstr "Prześlij obraz w rozmiarach 50x50 w formacie PNG."
+
+#: users/models.py:19
+msgid "image"
+msgstr "obraz"
+
+#: users/models.py:21
+msgid "Files capacity limit in megabytes."
+msgstr "Limit zajętości miejsca przez pliki w megabajtach."
+
+#: users/models.py:22
+msgid "files capacity limit"
+msgstr "limit zajętości miejsca"
+
+#: users/models.py:24
+msgid "app notifications"
+msgstr "powiadomienia aplikacji"
+
+#: users/models.py:25
+msgid "email notifications"
+msgstr "powiadomienia mailowe"
+
+#: users/models.py:28
+msgid "job scheduler app notifications"
+msgstr "powiadomienia aplikacji dla harmonogramu zadań"
+
+#: users/models.py:30
+msgid "job scheduler email notifications"
+msgstr "powiadomienia mailowe dla harmonogramu zadań"

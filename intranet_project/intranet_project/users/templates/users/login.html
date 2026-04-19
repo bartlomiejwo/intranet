@@ -1,0 +1,24 @@
+{% extends "intranet/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+  <div class="content-section">
+
+    <form method="POST">
+      {% csrf_token %}
+
+      <fieldset class="form-group">
+        <legend class="border-bottom mb-4">Logowanie</legend>
+        <p class="small text-danger">
+          <b>Login</b> - taki sam jak do domeny/komputera/FortiClient (z reguły pierwsza litera imienia i nazwisko bez polskich znaków)</br>
+          <b>Hasło</b> - takie samo jak do domeny/komputera/FortiClient
+        </p>
+        {{ form|crispy }}
+      </fieldset>
+
+      <div class="form-group">
+        <button class="btn btn-outline-primary" type="submit">Zaloguj</button>
+      </div>
+    </form>
+
+  </div>
+{% endblock content %}
