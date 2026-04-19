@@ -1,0 +1,212 @@
+{% extends "intranet/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load intranet_tags %}
+
+{% block head-css %}
+  <link rel="stylesheet" href="{% static 'intranet/css/posts.css' %}">
+
+  {{ block.super }}
+{% endblock %}
+
+{% block full-content %}
+
+  <div class="col-md-9">
+    <article class="media content-section">
+      <div class="post-container">
+        <div class="post-body">
+          <div class="post-avatar-side-container">
+            <div class="mr-3">
+              {% if post.author.profile.image %}
+                <img class="rounded-circle w-50-h-50" src="{{ post.author.profile.image.url }}">
+              {% else %}
+                <img src="{% static 'intranet/images/profile-avatar-default.svg' %}" alt="Avatar" class="w-50-h-50">
+              {% endif %}
+            </div>
+          </div>
+          <div class="post-content-side-container">
+            
+            <div class="post-header-container article-metadata">
+              <div class="post-header-container-text">
+                <div>
+                  {% if post.pinned %}
+                    <i class="fa fa-thumb-tack font-color-pinned" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="Ten wpis jest przypięty.">&nbsp;</i>
+                  {% endif %}
+                  {% url 'users:profile_detail' post.author.profile.id as profile_url %}
+                  <a class="link-blue-on-hover {% if post.pinned %}font-color-pinned{% else %}font-color-grey{% endif %} text-wrap" href="{% if profile_url %}{{ profile_url }}{% else %}#{% endif %}"><b>{{ post.author.profile.get_name }}</b></a>
+                </div>
+                <div>
+                  <small class="text-muted">{{ post.publication_date|date:"j E, Y H:i" }}</small>
+                </div>
+              </div>
+              {% if user.is_authenticated and post.author == user %}
+                {% if perms.intranet.can_pin_post or post.author == user %}
+                  <div class="dropdown dropleft float-right pos-static">
+                    <a class="btn btn-sm btn-no-outline" href="#" role="button" id="postDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <i class="fa fa-ellipsis-v float-right" aria-hidden="true"></i>
+                    </a>
+
+                    <div class="dropdown-menu" aria-labelledby="postDropdownMenuLink">
+                        {% if perms.intranet.can_pin_post %}
+                          <a class="dropdown-item" href="{% url 'intranet:post_toggle_pinned_state' post.id %}">{% if post.pinned %}Odepnij{% else %}Przypnij{% endif %}</a>
+                        {% endif %}
+                        {% if post.author == user %}
+                          <a class="dropdown-item" href="{% url 'intranet:post_update' post.id %}">Edytuj</a>
+                          <a class="dropdown-item" href="{% url 'intranet:post_delete' post.id %}">Usuń</a>
+                        {% endif %}
+                    </div>
+                  </div>
+                {% endif %}
+              {% endif %}
+            </div>
+            
+            <div class="article-content post-content text-wrap image-container">
+              {{ post.content|safe }}
+            </div>
+          </div>
+        </div>
+
+        <div class="post-footer mt-3">
+          <div></div>
+          <div class="post-footer-end">
+            {% if post.edit_date %}
+              <div class="mr-2">
+                <small class="text-muted">edytowany {{ post.edit_date|date:"j E, Y H:i" }}</small>
+              </div>
+            {% endif %}
+            {% if post.likes_allowed %}
+              {% if user.is_authenticated %}
+                {% user_liked_object user post as post_liked %}
+                <div class="d-inline mr-2 like-button-area {% if post_liked %}like-button-area-liked{% else %}like-button-area-not-liked{% endif %}" data-id="{{ post.id }}">
+                  <button type="button" class="like-button {% if post_liked %}like-button-liked{% else %}like-button-not-liked{% endif %}" data-url="{% url 'intranet:post_toggle_like_state_ajax' post.id %}" data-id="{{ post.id }}" data-indicator-id="post-{{post.id}}">
+                    <i class="fa fa-heart" aria-hidden="true"></i>
+                  </button><small class="font-weight-bold likes-indicator" data-id="post-{{ post.id }}">{{ post.get_likes }}</small>
+                </div>
+              {% else %}
+                <div class="d-inline mr-2 like-button-area like-button-area-not-liked">
+                    <i class="fa fa-heart" aria-hidden="true">&nbsp;</i><small class="font-weight-bold likes-indicator">{{ post.get_likes }}</small>
+                </div>
+              {% endif %}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </article>
+
+    {% if post.comments_allowed %}
+      <section id="comments_section">
+      {% if post.comments.count > 0 %}
+        <div class="content-section">
+          <div class="card-body">
+            <h2>Komentarze ({{ post.comments.count }})</h2>
+
+            {% for comment in post.comments.all %}
+              <div class="comment-container pb-2 ml-1">
+                <div class="comments pb-3 comment-body mt-4">
+                  <div class="comment-avatar-side-container">
+                    <div class="mr-3">
+                      {% if comment.author.profile.image %}
+                        <img class="rounded-circle w-50-h-50" src="{{ comment.author.profile.image.url }}">
+                      {% else %}
+                        <img src="{% static 'intranet/images/profile-avatar-default.svg' %}" alt="Avatar" class="w-50-h-50">
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="comment-content-side-container">
+                    <div class="comment-header-container article-metadata">
+                      <div class="comment-header-container-text">
+                        <div>
+                          {% url 'users:profile_detail' comment.author.profile.id as profile_url %}
+                          <a class="link-blue-on-hover font-color-grey text-wrap" href="{% if profile_url %}{{ profile_url }}{% else %}#{% endif %}"><b>{{ comment.author.profile.get_name }}</b></a>
+                        </div>
+                        <div>
+                          <small class="text-muted">{{ comment.date_posted|date:"j E, Y H:i" }}</small>
+                        </div>
+                      </div>
+                      {% if user.is_authenticated and comment.author == user %}
+                        <div class="dropdown dropleft float-right pos-static">
+                          <a class="btn btn-sm btn-no-outline" href="#" role="button" id="commentDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-ellipsis-v float-right" aria-hidden="true"></i>
+                          </a>
+
+                          <div class="dropdown-menu" aria-labelledby="commentDropdownMenuLink">
+                            <a class="dropdown-item" href="{% url 'intranet:comment_update' comment.id %}">Edytuj</a>
+                            <a class="dropdown-item" href="{% url 'intranet:comment_delete' comment.id %}">Usuń</a>
+                          </div>
+                        </div>
+                      {% endif %}
+                    </div>
+
+                    <div class="article-content text-wrap image-container">
+                      {{ comment.content|safe }}
+                    </div>
+                  </div>
+                </div>
+                <div class="comment-footer">
+                  <div></div>
+                  <div class="comment-footer-end">
+                    {% if comment.edit_date %}
+                      <div class="mr-2">
+                        <small class="text-muted">edytowany {{ comment.edit_date|date:"d.m.Y H:i" }}</small>
+                      </div>
+                    {% endif %}
+                    {% if user.is_authenticated %}
+                      {% user_liked_object user comment as comment_liked %}
+                      <div class="d-inline mr-1 like-button-area {% if comment_liked %}like-button-area-liked{% else %}like-button-area-not-liked{% endif %}" data-id="{{ comment.id }}">
+                        <button type="button" class="like-button {% if comment_liked %}like-button-liked{% else %}like-button-not-liked{% endif %}"  data-url="{% url 'intranet:comment_toggle_like_state_ajax' comment.id %}" data-id="{{ comment.id }}" data-indicator-id="comment-{{comment.id}}">
+                          <i class="fa fa-heart" aria-hidden="true"></i>
+                        </button><small class="font-weight-bold likes-indicator"  data-id="comment-{{ comment.id }}">{{ comment.get_likes }}</small>
+                      </div>
+                    {% else %}
+                      <div class="d-inline mr-1 like-button-area like-button-area-not-liked">
+                          <i class="fa fa-heart" aria-hidden="true">&nbsp;</i><small class="font-weight-bold likes-indicator">{{ comment.get_likes }}</small>
+                      </div>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+      </section>
+
+      {% if user.is_authenticated %}
+        <article class="content-section">
+          <form method="POST">
+            {% csrf_token %}
+
+            <fieldset class="form-group">
+              <legend class="mb-2">Dodaj komentarz</legend>
+              {{ form|crispy }}
+            </fieldset>
+
+            <div class="form-group">
+              <button class="btn btn-outline-primary" type="submit">Dodaj</button>
+            </div>
+          </form>
+        </article>
+      {% endif %}
+    {% endif %}
+  </div>
+
+{% endblock full-content %}
+
+{% block bottom-js %}
+  {{ block.super }}
+
+  <script>
+    var csrfToken = '{{ csrf_token }}';
+    var fileUploadUrl = "{% url 'files_management:upload_file_ajax' %}";
+
+    $('[data-toggle="tooltip"]').tooltip();
+  </script>
+  <script defer src="{% static 'intranet/js/ajax_navigation_back_forward_refresh.js' %}"></script>
+  <script defer src="{% static 'intranet/js/posts.js'%}"></script>
+
+  <script src="{% static 'tinymce/tinymce.min.js' %}"></script>
+  <script src="{% static 'tinymce/jquery.tinymce.min.js' %}"></script>
+  <script src="{% static 'intranet/js/tinymce_callbacks.js' %}"></script>
+  <script src="{% static 'intranet/js/tinymce_init_for_comment.js' %}"></script>
+
+{% endblock bottom-js %}

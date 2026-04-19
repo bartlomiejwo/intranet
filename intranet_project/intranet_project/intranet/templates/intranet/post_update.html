@@ -1,0 +1,35 @@
+{% extends "intranet/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block head-js %}
+  {{ block.super }}
+
+  <script>
+    var csrfToken = '{{ csrf_token }}';
+    var fileUploadUrl = "{% url 'files_management:upload_file_ajax' %}";
+  </script>
+
+  {{ form.media }}
+{% endblock head-js%}
+
+{% block full-content %}
+  <div class="col-md-9">
+    <div class="content-section">
+
+      <form method="POST">
+        {% csrf_token %}
+
+        <fieldset class="form-group">
+          <legend class="border-bottom mb-4">Edycja wpisu</legend>
+          {{ form|crispy }}
+        </fieldset>
+
+        <div class="form-group">
+          <button class="btn btn-outline-primary" type="submit">Zatwierdź</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+{% endblock full-content %}

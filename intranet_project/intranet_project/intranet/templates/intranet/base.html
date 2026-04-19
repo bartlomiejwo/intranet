@@ -1,0 +1,301 @@
+{% load static %}
+{% load intranet_tags %}
+{% load custom_pages_tags %}
+{% load notifier_tags %}
+
+{% date_input_format as date_input_format %}
+{% datetime_input_format as datetime_input_format %}
+{% language_code as language_code %}
+
+{% nav_objects_list as nav_objects_list %}
+{% NAV_OBJECT_TYPES_LIST as NAV_OBJECT_TYPES_LIST %}
+{% useful_links as useful_links %}
+
+{% if user.is_authenticated %}
+  {% NOTIFIER_WS_URLS as NOTIFIER_WS_URLS %}
+  {% NOTIFIER_REQUEST_REMOVE_NOTIFICATION as NOTIFIER_REQUEST_REMOVE_NOTIFICATION %}
+  {% NOTIFIER_RESPONSE_PUSH_NOTIFICATION as NOTIFIER_RESPONSE_PUSH_NOTIFICATION %}
+  {% NOTIFIER_RESPONSE_NOTIFICATION_REMOVED as NOTIFIER_RESPONSE_NOTIFICATION_REMOVED %}
+  {% NOTIFIER_REQUEST_CHECK_NOTIFICATION as NOTIFIER_REQUEST_CHECK_NOTIFICATION %}
+  {% NOTIFIER_RESPONSE_NOTIFICATION_CHECKED as NOTIFIER_RESPONSE_NOTIFICATION_CHECKED %}
+  {% user_notifications user as user_notifications %}
+
+  {% if perms.conference_rooms.moderate_meeting %}
+    {% load conference_rooms_tags %}
+    {% meetings_to_moderate user as meetings_to_moderate %}
+  {% endif %}
+
+  {% if user.employee %}
+    {% if user.employee.is_manager or user.employee.is_deputy_manager %}
+      {% load absence_calendar_tags %}
+      {% leaves_to_moderate request as leaves_to_moderate %}
+    {% endif%}
+  {% elif perms.absence_calendar.moderate_vacation_leave and perms.absence_calendar.moderate_special_leave and perms.absence_calendar.moderate_remote_work %}
+    {% load absence_calendar_tags %}
+    {% leaves_to_moderate request as leaves_to_moderate %}
+  {% endif %}
+{% endif %}
+
+{% now "Y-m-d" as today %}
+{% now "Y" as current_year %}
+{% now "m" as current_month %}
+
+<!DOCTYPE html>
+<html>
+<head>
+  {% if title %}
+    <title>{% website_name %} - {{ title }}</title>
+  {% else %}
+    <title>{% website_name %}</title>
+  {% endif %}
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ 
+  {% block head-css%}
+    <link rel="stylesheet" href="{% static 'intranet/bootstrap-4.4.1-dist/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'intranet/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'intranet/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'intranet/flatpickr/4.6.6/css/flatpickr.css' %}">
+    <link rel="stylesheet" href="{% static 'intranet/flatpickr/4.6.6/themes/material_blue.css' %}">
+  {% endblock %}
+
+  {% block head-js %}
+    {{ NOTIFIER_REQUEST_REMOVE_NOTIFICATION|json_script:"NOTIFIER_REQUEST_REMOVE_NOTIFICATION" }}
+    {{ NOTIFIER_RESPONSE_PUSH_NOTIFICATION|json_script:"NOTIFIER_RESPONSE_PUSH_NOTIFICATION" }}
+    {{ NOTIFIER_RESPONSE_NOTIFICATION_REMOVED|json_script:"NOTIFIER_RESPONSE_NOTIFICATION_REMOVED" }}
+    {{ NOTIFIER_REQUEST_CHECK_NOTIFICATION|json_script:"NOTIFIER_REQUEST_CHECK_NOTIFICATION" }}
+    {{ NOTIFIER_RESPONSE_NOTIFICATION_CHECKED|json_script:"NOTIFIER_RESPONSE_NOTIFICATION_CHECKED" }}
+    {{ language_code|json_script:"BACKEND_LANGUAGE_CODE" }}
+  {% endblock %}
+  
+</head>
+
+{% block full-body %}
+  <body>
+    <header class="site-header">
+      <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <a class="navbar-brand" href="{% url 'intranet:home' %}">
+          <img src="{% logo_url %}" alt="Logo" height="30">
+          {% website_name %}
+        </a>
+        
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto"></ul>
+          <div class="navbar-nav">
+
+            <div class="dropdown">
+              <span class="nav-item nav-link small dropdown-toggle" data-toggle="dropdown" style="cursor: pointer;">Przydatne linki</span>
+              <div class="dropdown-menu">
+                {% for link in useful_links %}
+                  <a class="dropdown-item small" href="{{ link.url }}">{{ link.name }}</a>
+                {% endfor %}
+              </div>
+            </div>
+            <a class="nav-item nav-link small" href="{% url 'absence_calendar:absence_calendar' current_year current_month %}">Kalendarz</a>
+            <a class="nav-item nav-link small" href="{% url 'conference_rooms:conference_rooms' today %}">Sale konferencyjne</a>
+
+            {% if user.is_authenticated %}
+              <div class="btn-group">
+                <button type="button" class="btn btn-primary max-w-40" id="notificationsButton">
+                  <i class="fa fa-bell-o {% if user_notifications|unchecked_notifications > 0 %}bell-shake{% endif %}" id="notificationBell" aria-hidden="true"></i>
+                  <span class="badge {% if user_notifications|unchecked_notifications <= 0 %}d-none{% endif %}" id="notificationsNumber">{% if user_notifications|unchecked_notifications < 99 %}{{ user_notifications|unchecked_notifications }}{% else %}99{% endif %}</span>
+                </button>
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  {{ user.username }}
+                </button>
+
+                <div class="dropdown-menu dropdown-menu-right position-absolute main-dropdown-menu">
+                  {% url 'users:profile_detail' user.profile.id as profile_url %}
+                  <a class="dropdown-item" href="{% if profile_url %}{{ profile_url }}{% else %}#{% endif %}">Mój profil</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="{% url 'intranet:post_create' %}">Dodaj wpis</a>
+                  <a class="dropdown-item" href="{% url 'absence_calendar:absence_create' %}">Zaplanuj nieobecność</a>
+                  <a class="dropdown-item" href="{% url 'conference_rooms:meeting_create' %}">Zarezerwuj salę konferencyjną</a>
+
+                  {% if perms.conference_rooms.moderate_meeting or perms.absence_calendar.moderate_vacation_leave and perms.absence_calendar.moderate_special_leave and perms.absence_calendar.moderate_remote_work %}
+                    <div class="dropdown-divider"></div>
+                  {% elif user.employee %}
+                    {% if user.employee.is_manager or user.employee.is_deputy_manager %}
+                      <div class="dropdown-divider"></div>
+                    {% endif%}
+                  {% endif %}
+
+                  {% if perms.absence_calendar.moderate_vacation_leave and perms.absence_calendar.moderate_special_leave and perms.absence_calendar.moderate_remote_work %}
+                    <a class="dropdown-item" href="{% url 'absence_calendar:vacation_leaves_moderation' %}">
+                      <div class="d-flex justify-content-between">
+                        <div>Moderuj nieobecności</div>
+                        <div><span class="badge badge-primary" id="leavesToModerateCounter">{{ leaves_to_moderate }}</span></div>
+                      </div>
+                    </a>
+                  {% elif user.employee %}
+                    {% if user.employee.is_manager or user.employee.is_deputy_manager %}
+                      <a class="dropdown-item" href="{% url 'absence_calendar:vacation_leaves_moderation' %}">
+                        <div class="d-flex justify-content-between">
+                          <div>Moderuj nieobecności</div>
+                          <div><span class="badge badge-primary" id="leavesToModerateCounter">{{ leaves_to_moderate }}</span></div>
+                        </div>
+                      </a>
+                    {% endif%}
+                  {% endif %}
+                  {% if perms.conference_rooms.moderate_meeting %}
+                    <a class="dropdown-item" href="{% url 'conference_rooms:meetings_moderation' %}">
+                      <div class="d-flex justify-content-between">
+                        <div>Moderuj spotkania</div>
+                        <div><span class="badge badge-primary" id="meetingsToModerateCounter">{{ meetings_to_moderate }}</span></div>
+                      </div>
+                    </a>
+                  {% endif %}
+                  {% if perms.absence_calendar.view_vacation_leave_document and perms.absence_calendar.view_special_leave_document %}
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="{% url 'absence_calendar:vacation_leaves_applications' %}">Wnioski urlopowe</a>
+                  {% endif %}
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="{% url 'users:logout' %}">Wyloguj</a>
+                </div>
+              </div>
+            {% else %}
+              <a class="nav-item nav-link small" href="{% url 'users:login' %}">Logowanie</a>
+            {% endif %}
+
+          </div>
+        </div>
+
+      </nav>
+    </header>
+
+    <main role="main" class="container-fluid max-width-1920">
+
+      <div class="row">
+        <div class="col-md-3">
+          <div class="content-section">
+            <h3 class="text-wrap">Panel nawigacyjny</h3>
+            <div class="navigation-list">
+              <div class="list-group">
+                <a href="{% url 'intranet:home' %}" class="list-group-item list-group-item-action">Strona główna</a>
+                <a href="{% url 'company_structure:employees' %}" class="list-group-item list-group-item-action">Pracownicy</a>
+
+                {% for nav_object in nav_objects_list %}
+
+                  {% if nav_object.type == NAV_OBJECT_TYPES_LIST.PAGE %}
+                    <a href="{% url 'custom_pages:page' nav_object.url %}" class="list-group-item list-group-item-action">{{ nav_object.title }}</a>
+                  {% else %}
+                    <button class="list-group-item list-group-item-action d-flex justify-content-between collapse-tab collapse-toggle" type="button" data-toggle="collapse" data-target="#{{ nav_object.area_name }}" aria-expanded="false" aria-controls="{{ nav_object.area_name }}">
+                      <div>{{ nav_object.title }}</div>
+                      <div>
+                        <i class="fa fa-plus-square-o toggle-expand d-inline-block" aria-hidden="true"></i>
+                        <i class="fa fa-minus-square-o toggle-collapse d-none" aria-hidden="true"></i>
+                      </div>
+                    </button>
+
+                    <div class="collapse" id="{{ nav_object.area_name }}">
+                      {% for subpage in nav_object.subpages %}
+                        <a href="{% url 'custom_pages:page' subpage.url %}" class="list-group-item list-group-item-light list-group-item-action rounded-0 collapse-tab-item">{{ subpage.title }}</a>
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+
+                {% endfor %}
+                
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {% block full-content %}
+          <div class="col-md-6">
+              {% if messages %}
+                {% for message in messages %}
+                  <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                {% endfor %}
+              {% endif %}
+
+            {% block content %}{% endblock %}
+          </div>
+        {% endblock %}
+      </div>
+    </main>
+
+    {% if user.is_authenticated %}
+      <div id="notificationsContainer" class="content-section">
+        <i class="d-inline fa fa-times" id="notificationsCloseButton" aria-hidden="true"></i>
+        <div class="d-flex flex-column h-100">
+          <div>
+            <h5 class="text-center">Powiadomienia</h5>
+            <div class="border-bottom mb-3"></div>
+          </div>
+          <div class="flex-fill overflow-auto" id="notificationsList">
+            {% for notification in user_notifications %}
+              <div class="notification mb-2 p-2" id="notification" data-id="{{ notification.id }}" data-url="{{ notification.redirect_url }}" data-checked="{{ notification.checked }}">
+                <div class="notification-content">
+                  <i class="fa fa-times notification-remove-button" aria-hidden="true"></i>
+                  <i class="fa fa-exclamation-circle {% if not notification.checked %}text-primary{% endif %}" aria-hidden="true"></i>
+                  <small class="text-muted">{{ notification.date_created }}</small>
+                  <h6 class="mr-auto mb-0 text-truncate text-overflow-truncate">{{ notification.title }}</h6>
+                  <div class="text-wrap line-height-1em small pt-2 pl-1 pr-1">{{ notification.description|safe }}</div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+          <div class="text-center">
+            <div class="border-bottom mb-2 mt-3"></div>
+            <button type="button" class="btn btn-primary btn-sm" id="clearNotificationsButton">Wyczyść wszystkie</button>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
+    {% block bottom-js %}
+      <!--JQuery-->
+      <script src="{% static 'intranet/jquery/jquery-3.4.1.min.js' %}"></script>
+      <script src="{% static 'intranet/popper/popper.min.js' %}"></script>
+      <!--Bootstrap-->
+      <script src="{% static 'intranet/bootstrap-4.4.1-dist/js/bootstrap.min.js' %}"></script>
+      <!--FlatPickr-->
+      <script src="{% static 'intranet/flatpickr/4.6.6/js/flatpickr.js' %}"></script>
+      <script src="{% static 'intranet/flatpickr/4.6.6/locale/pl.min.js' %}"></script>
+      
+      <script defer src="{% static 'intranet/js/common.js' %}"></script>
+
+      <!--Images viewer-->
+      <script src="{% static 'intranet/viewer-1.1.0/dist/viewer.js' %}"></script>
+      <link rel="stylesheet" href="{% static 'intranet/viewer-1.1.0/dist/viewer.css' %}">
+      <script>$('.image-container').viewer();</script>
+
+      {% if user.is_authenticated %}
+        <script defer src="{% static 'intranet/js/reconnecting-websocket.js' %}"></script>
+        <script defer src="{% static 'intranet/js/ws-notifications.js' %}" data-id="wsNotifications" data-url="{{ NOTIFIER_WS_URLS.notifications }}"></script>
+        <script defer src="{% static 'intranet/js/notifications.js' %}"></script>
+      {% endif %}
+
+      {% block flatpickr-default %}
+        <script>
+          $('input[type="date"]').flatpickr({
+            dateFormat: "{{ date_input_format }}",
+            locale: "{{ language_code }}",
+            allowInput: true,
+          });
+
+          $('input[type="datetime-local"]').flatpickr({
+            dateFormat: "{{ datetime_input_format }}",
+            locale: "{{ language_code }}",
+            allowInput: true,
+            enableTime: true,
+          });
+        </script>
+      {% endblock %}
+    {% endblock %}
+  </body>
+{% endblock %}
+
+</html>

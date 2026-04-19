@@ -1,0 +1,115 @@
+{% extends "intranet/base.html" %}
+{% load static %}
+{% load intranet_tags %}
+
+{% block head-css %}
+  <link rel="stylesheet" href="{% static 'intranet/css/posts.css' %}">
+
+  {{ block.super }}
+{% endblock %}
+
+{% block full-content %}
+  <div class="col-md-9">
+    {% for post in posts %}
+      <article class="media content-section">
+        <div class="post-container">
+          <div class="post-body">
+            <div class="post-avatar-side-container">
+              <div class="mr-3">
+                {% if post.author.profile.image %}
+                  <img class="rounded-circle w-50-h-50" src="{{ post.author.profile.image.url }}">
+                {% else %}
+                  <img src="{% static 'intranet/images/profile-avatar-default.svg' %}" alt="Avatar" class="w-50-h-50">
+                {% endif %}
+              </div>
+            </div>
+            <div class="post-content-side-container">
+              
+              <div class="post-header-container article-metadata">
+                <div class="post-header-container-text">
+                  <div>
+                    {% if post.pinned %}
+                      <i class="fa fa-thumb-tack font-color-pinned" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="Ten wpis jest przypięty.">&nbsp;</i>
+                    {% endif %}
+                    {% url 'users:profile_detail' post.author.profile.id as profile_url %}
+                    <a class="link-blue-on-hover {% if post.pinned %}font-color-pinned{% else %}font-color-grey{% endif %} text-wrap" href="{% if profile_url %}{{ profile_url }}{% else %}#{% endif %}"><b>{{ post.author.profile.get_name }}</b></a>
+                  </div>
+                  <div>
+                    <small class="text-muted"><a class="link-blue-on-hover font-color-grey text-wrap" href="{% url 'intranet:post_detail' post.id %}">{{ post.publication_date|date:"j E, Y H:i" }}</a></small>
+                  </div>
+                </div>
+                {% if user.is_authenticated %}
+                  {% if perms.intranet.can_pin_post or post.author == user %}
+                    <div class="dropdown dropbottom float-right pos-static">
+                      <a class="btn btn-sm btn-no-outline" href="#" role="button" id="postDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-ellipsis-v float-right" aria-hidden="true"></i>
+                      </a>
+
+                      <div class="dropdown-menu" aria-labelledby="postDropdownMenuLink">
+                        {% if perms.intranet.can_pin_post %}
+                          <a class="dropdown-item" href="{% url 'intranet:post_toggle_pinned_state' post.id %}">{% if post.pinned %}Odepnij{% else %}Przypnij{% endif %}</a>
+                        {% endif %}
+                        {% if post.author == user %}
+                          <a class="dropdown-item" href="{% url 'intranet:post_update' post.id %}">Edytuj</a>
+                          <a class="dropdown-item" href="{% url 'intranet:post_delete' post.id %}">Usuń</a>
+                        {% endif %}
+                      </div>
+                    </div>
+                  {% endif %}
+                {% endif %}
+              </div>
+              
+              <div class="article-content post-content text-wrap image-container">
+                {{ post.content|safe }}
+              </div>
+            </div>
+          </div>
+          <div class="post-footer mt-3">
+            <div></div>
+            <div class="post-footer-end">
+              {% if post.edit_date %}
+                <div class="mr-2">
+                  <small class="text-muted">edytowany {{ post.edit_date|date:"j E, Y H:i" }}</small>
+                </div>
+              {% endif %}
+              {% if post.likes_allowed %}
+                {% if user.is_authenticated %}
+                  {% user_liked_object user post as post_liked %}
+                  <div class="d-inline mr-2 like-button-area {% if post_liked %}like-button-area-liked{% else %}like-button-area-not-liked{% endif %}" data-id="{{ post.id }}">
+                    <button type="button" class="like-button {% if post_liked %}like-button-liked{% else %}like-button-not-liked{% endif %}" data-url="{% url 'intranet:post_toggle_like_state_ajax' post.id %}" data-id="{{ post.id }}" data-indicator-id="post-{{post.id}}">
+                      <i class="fa fa-heart" aria-hidden="true"></i>
+                    </button><small class="font-weight-bold likes-indicator" data-id="post-{{ post.id }}">{{ post.get_likes }}</small>
+                  </div>
+                {% else %}
+                  <div class="d-inline mr-2 like-button-area like-button-area-not-liked">
+                      <i class="fa fa-heart" aria-hidden="true">&nbsp;</i><small class="font-weight-bold likes-indicator">{{ post.get_likes }}</small>
+                  </div>
+                {% endif %}
+              {% endif %}
+              {% if post.comments_allowed %}
+                <a href="{% url 'intranet:post_detail' post.id %}#comments_section" class="link-blue-on-hover font-color-grey">
+                  <i class="fa fa-comments-o" aria-hidden="true">&nbsp;</i><small><b>Komentarze ({{ post.comments.count }})</b></small>
+                </a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </article>
+    {% endfor %}
+
+    {% include "intranet/pagination_template.html" %}
+  </div>
+
+{% endblock full-content %}
+
+{% block bottom-js %}
+  {{ block.super }}
+
+  <script>
+    var csrfToken = '{{ csrf_token }}';
+    $('[data-toggle="tooltip"]').tooltip();
+  </script>
+  <script defer src="{% static 'intranet/js/ajax_navigation_back_forward_refresh.js' %}"></script>
+  <script defer src="{% static 'intranet/js/posts.js'%}"></script>
+
+{% endblock bottom-js %}

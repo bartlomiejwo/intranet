@@ -1,0 +1,4 @@
+MORE_OR_LESS_THAN_ONE_OBJECT_LIKED = 'more_or_less_than_one_object_liked'
+POST_HAS_COMMENTS_TURNED_OFF = 'post_has_comments_turned_off'
+POST_HAS_LIKES_TURNED_OFF = 'post_has_likes_turned_off'
+EXPIRATION_DATE_EARLIER_THAN_PUBLICATION_DATE = 'expiration_date_earlier_than_publication_date'

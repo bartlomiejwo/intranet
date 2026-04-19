@@ -1,0 +1,38 @@
+{% extends "intranet/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block full-content %}
+  <div class="col-md-9">
+    <div class="content-section">
+
+      <form method="POST">
+        {% csrf_token %}
+
+        <fieldset class="form-group">
+          <legend class="border-bottom mb-4">Edycja komentarza</legend>
+          {{ form|crispy }}
+        </fieldset>
+
+        <div class="form-group">
+          <button class="btn btn-outline-primary" type="submit">Zatwierdź</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+{% endblock full-content %}
+{% block bottom-js %}
+  {{ block.super }}
+
+  <script>
+    var csrfToken = '{{ csrf_token }}';
+    var fileUploadUrl = "{% url 'files_management:upload_file_ajax' %}";
+  </script>
+
+  <script src="{% static 'tinymce/tinymce.min.js' %}"></script>
+  <script src="{% static 'tinymce/jquery.tinymce.min.js' %}"></script>
+  <script src="{% static 'intranet/js/tinymce_callbacks.js' %}"></script>
+  <script src="{% static 'intranet/js/tinymce_init_for_comment.js' %}"></script>
+
+{% endblock bottom-js %}

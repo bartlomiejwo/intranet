@@ -1,0 +1,25 @@
+{% load intranet_tags %}
+
+{% if is_paginated %}
+
+  <div class="d-flex flex-wrap justify-content-center">
+    {% if page_obj.has_previous %}
+      <a class="btn btn-outline-primary btn-sm mb-4 ml-1" href="?{% url_replace page=1 %}">Pierwsza</a>
+      <a class="btn btn-outline-primary btn-sm mb-4 ml-1" href="?{% url_replace page=page_object.previous_page_number %}">Poprzednia</a>
+    {% endif %}
+
+    {% for page_number in page_obj.paginator.page_range %}
+      {% if page_obj.number == page_number %}
+        <a class="btn btn-primary btn-sm mb-4 ml-1" href="?{% url_replace page=page_number %}">{{ page_number }}</a>
+      {% elif page_number > page_obj.number|add:'-5' and page_number < page_obj.number|add:'5' %}
+        <a class="btn btn-outline-primary btn-sm mb-4 ml-1" href="?{% url_replace page=page_number %}">{{ page_number }}</a>
+      {% endif %}
+    {% endfor %}
+
+    {% if page_obj.has_next %}
+      <a class="btn btn-outline-primary btn-sm mb-4 ml-1" href="?{% url_replace page=page_obj.next_page_number %}">Następna</a>
+      <a class="btn btn-outline-primary btn-sm mb-4 ml-1" href="?{% url_replace page=page_obj.paginator.num_pages %}">Ostatnia</a>
+    {% endif %}
+  </div>
+
+{% endif %}

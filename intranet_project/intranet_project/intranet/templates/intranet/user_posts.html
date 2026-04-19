@@ -1,0 +1,45 @@
+{% extends "intranet/base.html" %}
+{% load static %}
+
+{% block full-content %}
+  <div class="col-md-9">
+    <div class="alert alert-primary mt-2 {% if posts %}d-none{% endif %}" id="listEmptyInfo" role="alert">
+      Nie dodano jeszcze żadnych wpisów.
+    </div>
+
+    <div class="content-section">
+      <h4 class="border-bottom pb-1 mb-4">Moje wpisy</h4>
+      <table class="table table-responsive-lg table-sm table-bordered table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Utworzono</th>
+            <th scope="col">Opublikowany</th>
+            <th scope="col">Publikacja</th>
+            <th scope="col">Wygasa</th>
+            <th scope="col">Edycja</th>
+            <th scope="col">Komentarze</th>
+            <th scope="col">Polubienia</th>
+            <th scope="col">Przypięty</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for post in posts %}
+            <tr>
+              <td><a href="{% url 'intranet:post_detail' post.id %}" class="link-blue-on-hover font-color-grey">{{ post.date_created|date:"Y-m-d H:i" }}</a></td>
+              <td>{% if post.published %}Tak{% else %}Nie{% endif %}</td>
+              <td>{{ post.publication_date|date:"Y-m-d H:i" }}</td>
+              <td>{{ post.expiration_date|date:"Y-m-d H:i" }}</td>
+              <td>{{ post.edit_date|date:"Y-m-d H:i" }}</td>
+              <td>{% if post.comments_allowed %}Tak{% else %}Nie{% endif %}</td>
+              <td>{% if post.likes_allowed %}Tak{% else %}Nie{% endif %}</td>
+              <td>{% if post.pinned %}Tak{% else %}Nie{% endif %}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      {% include "intranet/pagination_template.html" %}
+    </div>
+  </div>
+
+{% endblock full-content %}
