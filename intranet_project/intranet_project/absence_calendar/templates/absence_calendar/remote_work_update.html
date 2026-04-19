@@ -1,0 +1,82 @@
+{% extends "intranet/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+  <div class="content-section">
+
+    <h4 class="border-bottom pb-1 mb-4">Edycja wniosku o pracę zdalną</h4>
+
+    <form method="POST">
+      {% csrf_token %}
+
+      {{ form|as_crispy_errors }}
+      
+      {% for field in form.hidden_fields %}
+        {{ field }}
+      {% endfor %}
+
+      <fieldset class="form-group">
+        <div class="form-group">
+          {{ form.start_date|as_crispy_field }}
+        </div>
+        <div class="form-group">
+          {{ form.end_date|as_crispy_field }}
+        </div>
+        <div class="form-group">
+          {{ form.number_of_days|as_crispy_field }}
+        </div>
+        <div class="form-group mb-3 mt-5">
+          <h6>Adres, pod którym wykonywana będzie praca zdalna</h6>
+          <div class="form-group">
+            {{ form.country|as_crispy_field }}
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-4">
+              {{ form.street|as_crispy_field }}
+            </div>
+            <div class="form-group col-md-4">
+              {{ form.house_number|as_crispy_field }}
+            </div>
+            <div class="form-group col-md-4">
+              {{ form.apartment_number|as_crispy_field }}
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-4">
+              {{ form.postal_code|as_crispy_field }}
+            </div>
+            <div class="form-group col-md-8">
+              {{ form.city|as_crispy_field }}
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          {{ form.date_of_completion|as_crispy_field }}
+        </div>
+        <div class="form-group">
+          {{ form.decisive_person|as_crispy_field }}
+        </div>
+        <div class="form-group">
+          {{ form.message_for_decisive_person|as_crispy_field }}
+        </div>
+      </fieldset>
+
+      <p><b>Oświadczam</b>, że na stanowisku pracy zdalnej w ww. miejscu są zapewnione bezpieczne i higieniczne warunki tej pracy.</p>
+      <p>
+        <b>Oświadczam</b>, że zapoznałam/em się z przygotowaną przez pracodawcę:
+        <ol>
+          <li><a href="{{risk_assessment_url}}" class="default-link link-blue-on-hover">oceną ryzyka zawodowego</a>,</li>
+          <li><a href="{{safety_rules_url}}" class="default-link link-blue-on-hover">informacją zawierającą zasady bezpiecznego i higienicznego wykonywania pracy zdalnej</a>,</li>
+          <li><a href="{{personal_data_protection_url}}" class="default-link link-blue-on-hover">informacją określającą procedury ochrony danych osobowych</a> (potwierdzam, że przeszedłem w tym zakresie szkolenie).</li>
+        </ol>
+        oraz <b>zobowiązuję się</b> do przestrzegania informacji, procedur, wskazówek i wniosków wynikających z tych dokumentów.
+      </p>
+
+      <div class="form-group">
+        <button class="btn btn-outline-primary" type="submit">Akceptuj</button>
+      </div>
+    </form>
+
+  </div>
+{% endblock content %}

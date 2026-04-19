@@ -1,0 +1,118 @@
+{% extends "intranet/base.html" %}
+{% load static %}
+
+{% block head-css %}
+  <link rel="stylesheet" href="{% static 'absence_calendar/css/absence_calendar.css' %}">
+
+  {{ block.super }}
+{% endblock %}
+
+{% block content %}
+
+  <article class="media content-section">
+    <div class="media-body">
+      <h4 class="border-bottom pb-1 mb-4">Praca zdalna - {{ object.absent.profile.get_name }}</h4>
+
+      <div class="mb-2">
+        <div class="mb-1"><i class="fa fa-calendar mr-2" aria-hidden="true"></i><b>Zakres nieobecności</b></div>
+        <div class="date-range ml-4">
+          {% if object.start_date == object.end_date %}
+            <div class="absence-calendar-data-display">{{ object.start_date }}</div>
+          {% else %}
+            <div class="date-range-from-label">Od</div>
+            <div class="date-range-from text-wrap">{{ object.start_date }}</div>
+            <div class="date-range-to-label">do</div>
+            <div class="date-range-to text-wrap">{{ object.end_date }}</div>
+          {% endif%}
+        </div>
+      </div>
+
+      {% if request.user == object.absent or request.user == object.decisive_person %}
+        <div class="mb-2">
+         
+          <div><i class="fa fa-info-circle mr-2" aria-hidden="true"></i><b>Liczba dni</b></div>
+          <div class="absence-calendar-data-display d-inline-block ml-4">{{ object.number_of_days }}</div>
+
+          <div><i class="fa fa-info-circle mr-2" aria-hidden="true"></i><b>Adres, pod którym wykonywana będzie praca zdalna</b></div>
+          <div class="absence-calendar-data-display d-inline-block ml-4">ul. {{ object.street }} {{ object.house_number }}{% if object.apartment_number %} {{ object.apartment_number }}{% endif %}, {{ object.postal_code }} {{ object.city }}, {{ object.country }}</div>
+
+          <div><i class="fa fa-user-circle-o mr-2" aria-hidden="true"></i><b>Osoba decydująca</b></div>
+          <div class="absence-calendar-data-display d-inline-block ml-4 text-wrap">{{ object.decisive_person.profile.get_name }}</div>
+
+          {% if object.message_for_decisive_person %}
+            <div><i class="fa fa-comment mr-2" aria-hidden="true"></i><b>Wiadomość dla osoby decydującej</b></div>
+            <div class="absence-calendar-data-display ml-4 text-wrap d-inline-block">{{ object.message_for_decisive_person }}</div>
+          {% endif %}
+
+          {% if object.is_pending_to_finish_earlier %}
+            <div><i class="fa fa-info-circle mr-2" aria-hidden="true"></i><b>Nowa data zakończenia nieobecności</b></div>
+            <div class="absence-calendar-data-display d-inline-block ml-4">{{ object.pending_end_date }}</div>
+
+            <div><i class="fa fa-info-circle mr-2" aria-hidden="true"></i><b>Nowa liczba dni</b></div>
+            <div class="absence-calendar-data-display d-inline-block ml-4">{{ object.pending_number_of_days }}</div>
+          {% endif %}
+        </div>
+      {% endif %}
+
+      {% if request.user == object.absent or request.user == object.decisive_person %}
+        <p class="d-flex justify-content-center text-muted small">Data wypełnienia wniosku: {{ object.date_of_completion }}</p>
+      {% endif %}
+
+      {% if request.user == object.absent %}
+        <hr class="w-25">
+        <div class="d-flex flex-column mb-2">
+          <a class="btn btn-info btn-sm mb-1 {% if not object.can_update %}disabled{% endif %}" href="{% url 'absence_calendar:remote_work_update' object.id %}"><b>Edytuj</b></a>
+          <a class="btn btn-info btn-sm mb-1 {% if not object.can_finish_earlier %}disabled{% endif %}" href="{% url 'absence_calendar:remote_work_finish_earlier' object.id %}"><b>Zakończ wcześniej</b></a>
+          {% if object.is_accepted %}
+            <a class="btn btn-danger btn-sm mb-1 {% if not object.can_cancel %}disabled{% endif %}" href="{% url 'absence_calendar:remote_work_cancel' object.id %}"><b>Odwołaj</b></a>
+          {% else %}
+            <a class="btn btn-danger btn-sm mb-1 {% if not object.can_delete %}disabled{% endif %}" href="{% url 'absence_calendar:remote_work_delete' object.id %}"><b>Usuń</b></a>
+          {% endif %}
+        </div>
+      {% endif %}
+
+      {% if request.user == object.absent or request.user == object.decisive_person %}
+        {% if object.is_pending %}
+          <div class="alert alert-info text-wrap" role="alert">Wniosek oczekuje na decyzję</div>
+        {% elif object.is_pending_to_cancel %}
+          <div class="alert alert-warning text-wrap" role="alert">Wniosek oczekuje na akceptację odwołania</div>
+        {% elif object.is_pending_to_finish_earlier %}
+          <div class="alert alert-warning text-wrap" role="alert">Wniosek oczekuje na akceptację prośby o wcześniejsze zakończenie</div>
+        {% elif object.is_accepted %}
+          <div class="alert alert-success" role="alert">
+            <p class="text-wrap p-0 m-0">
+              Wniosek został zaakceptowany przez
+              <b>{{ object.decisive_person.profile.get_name }}</b>
+              {% if object.rejection_reason %}
+                </br>
+                {% if object.pending_end_date and object.pending_number_of_days %}
+                  Decyzja o wcześniejszym zakończeniu pracy zdalnej rozpatrzona negatywnie z następującego powodu: </br>
+                {% else %}
+                  Decyzja o odwołaniu pracy zdalnej została rozpatrzona negatywnie z następującego powodu: </br>
+                {% endif %}
+                <i>{{ object.rejection_reason }}</i>
+              {% endif %}
+            </p>
+          </div>
+        {% elif object.is_rejected %}
+          <div class="alert alert-danger" role="alert">
+            <p class="small text-muted text-wrap p-0 m-0">
+              Wniosek został odrzucony przez
+              <b>{{ object.decisive_person.profile.get_name }}</b>
+            </p>
+            <p class="text-wrap p-0 m-0">
+              {% if object.rejection_reason %}
+                {{ object.rejection_reason }}
+              {% else %}
+                Nie został podany powód odrzucenia wniosku
+              {% endif %}
+            </p>
+          </div>
+        {% elif object.is_canceled %}
+          <div class="alert alert-danger text-wrap" role="alert">Ta praca zdalna została odwołana</div>
+        {% endif %}
+      {% endif %}
+    </div>
+  </article>
+
+{% endblock content %}

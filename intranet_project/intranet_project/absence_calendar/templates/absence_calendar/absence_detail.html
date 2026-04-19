@@ -1,0 +1,53 @@
+{% extends "intranet/base.html" %}
+{% load static %}
+
+{% block head-css %}
+  <link rel="stylesheet" href="{% static 'absence_calendar/css/absence_calendar.css' %}">
+
+  {{ block.super }}
+{% endblock %}
+
+{% block content %}
+
+  <article class="media content-section">
+    <div class="media-body">
+      <h4 class="border-bottom pb-1 mb-4 text-wrap">{{ object.absence_type.text }} - {{ object.absent.profile.get_name }}</h4>
+
+      <div class="mb-2">
+        <div class="mb-1"><i class="fa fa-calendar mr-2" aria-hidden="true"></i><b>Zakres nieobecności</b></div>
+        <div class="date-range ml-4">
+          {% if object.start_date == object.end_date %}
+            <div class="absence-calendar-data-display">{{ object.start_date }}</div>
+          {% else %}
+            <div class="date-range-from-label">Od</div>
+            <div class="date-range-from">{{ object.start_date }}</div>
+            <div class="date-range-to-label">do</div>
+            <div class="date-range-to">{{ object.end_date }}</div>
+          {% endif%}
+        </div>
+      </div>
+
+      {% if object.additional_information %}
+        <div>
+          <div><i class="fa fa-align-justify mr-2" aria-hidden="true"></i><b>Dodatkowe informacje</b></div>
+          <div class="absence-calendar-data-display ml-4 text-wrap d-inline-block">{{ object.additional_information }}</div>
+        </div>
+      {% endif %}
+
+      {% if request.user == object.absent %}
+        <hr class="w-25">
+        <div class="d-flex flex-column">
+          <a class="btn btn-info btn-sm mb-1 {% if not object.can_update %}disabled{% endif %}" href="{% url 'absence_calendar:absence_update' object.id %}"><b>Edytuj</b></a>
+          <a class="btn btn-info btn-sm mb-1 {% if not object.can_finish_earlier %}disabled{% endif %}" href="{% url 'absence_calendar:absence_finish_earlier' object.id %}"><b>Zakończ wcześniej</b></a>
+          <a class="btn btn-danger btn-sm mb-1 {% if not object.can_delete %}disabled{% endif %}" href="{% url 'absence_calendar:absence_delete' object.id %}"><b>Odwołaj</b></a>
+        </div>
+      {% elif request.user.id in object.absent.employee.get_supervisor_users_ids %}
+        <hr class="w-25">
+        <div class="d-flex flex-column">
+          <a class="btn btn-danger btn-sm mb-1 {% if not object.can_delete %}disabled{% endif %}" href="{% url 'absence_calendar:absence_by_manager_delete' object.id %}"><b>Usuń</b></a>
+        </div>
+      {% endif %}
+    </div>
+  </article>
+
+{% endblock content %}

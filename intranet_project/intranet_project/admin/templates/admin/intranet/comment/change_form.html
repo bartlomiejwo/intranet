@@ -1,0 +1,16 @@
+{% extends "admin/change_form.html" %}
+{% load static %}
+
+{% block extrahead %}
+  <script src="{% static 'intranet/jquery/jquery-3.4.1.min.js' %}"></script>
+  <script src="{% static 'intranet/popper/popper.min.js' %}"></script>
+
+  <script>
+    var csrfToken = '{{ csrf_token }}';
+    var fileUploadUrl = "{% url 'files_management:upload_file_ajax' %}";
+    var showFileUploadLoading = false;
+  </script>
+
+  {{ block.super }}
+
+{% endblock extrahead %}

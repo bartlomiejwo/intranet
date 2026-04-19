@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>StellaNet - Wniosek o pracę zdalną</title>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <style>
+    .width-950 {
+      width: 950px;
+    }
+
+    .header {
+      width: 100%;
+      height: 10%;
+      text-align: center;
+    }
+
+    .application-title {
+      width: 100%;
+      text-align: center;
+    }
+
+    .margin-padding-0 {
+      margin: 0;
+      padding: 0;
+    }
+
+    .margin-top-10 {
+      margin-top: 10px;
+    }
+
+    .margin-top-20 {
+      margin-top: 20px;
+    }
+
+    .margin-left-40 {
+      margin-left: 40px;
+    }
+
+    .margin-0 {
+      margin: 0;
+    }
+
+    .padding-0-10 {
+      padding: 0 10px;
+    }
+
+    .padding-horizontal-80 {
+      padding: 0 80px;
+    }
+
+    .padding-horizontal-60 {
+      padding: 0 60px;
+    }
+
+    .padding-horizontal-100 {
+      padding: 0 100px;
+    }
+
+    .font-10 {
+      font-size: 10px;
+    }
+
+    .font-14 {
+      font-size: 14px;
+    }
+
+    .font-16 {
+      font-size: 16px;
+    }
+
+    .content {
+      padding: 3px 5%;
+    }
+
+    .left-side {
+      float: left;
+      width: 49.5%;
+    }
+    .right-side {
+      float: left;
+      width: 50%;
+    }
+
+    .data-field {
+      border-bottom: 1px dashed black;
+    }
+
+    .data-field-centered {
+      text-align: center;
+      border-bottom: 1px dashed black;
+    }
+
+    .width-140 {
+      width: 140px;
+    }
+
+    .width-190 {
+      width: 190px;
+    }
+
+    .width-220 {
+      width: 220px;
+    }
+
+    .width-400 {
+      width: 400px;
+    }
+
+    .height-70 {
+      height: 70px;
+    }
+
+    .left-400 {
+      left: 400px;
+    }
+
+    .top-50 {
+      top: 50px;
+    }
+
+    .text-align-right {
+      text-align: right;
+    }
+
+    .display-inline {
+      display: inline;
+    }
+
+    .float-right {
+      float: right;
+    }
+
+    .float-left {
+      float: left;
+    }
+
+    .position-relative {
+      position: relative;
+    }
+
+    .application-id {
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+
+    .clear-both {
+      clear: both;
+    }
+
+    .button {
+      font-size: 12px;
+      font-weight: bold;
+      text-decoration: none;
+      color: #000000;
+      border: 1px solid #000000;
+      border-radius: 5px;
+      padding: 0px 4px;
+    }
+
+    .button:hover {
+      color: #428bca;
+      border: 1px solid #428bca;
+    }
+  </style>
+</head>
+<body>
+  <div class="width-950 position-relative">
+    {% if remote_work.document %}
+      <span class="application-id font-10">{{ remote_work.document.document_id }}</span>
+      <div class="header">
+        <h3>WNIOSEK O WYKONYWANIE OKAZJONALNEJ PRACY ZDALNEJ</h3>
+      </div>
+
+      <div class="content">
+        <div class="left-side">
+          <div class="width-190">
+            <p class="font-14 data-field width-190 margin-padding-0">{% if remote_work.document.registration_number %}{{ remote_work.document.registration_number }}{% else %}&nbsp;{% endif %}</p>
+            <p class="font-14 margin-padding-0"><b>Numer&nbsp;ewidencyjny</b></p>
+          </div>
+          <div class="width-220 margin-top-10">
+            <p class="font-14 data-field width-220 margin-padding-0">{{ remote_work.document.absent_name }}</p>
+            <p class="font-14 margin-padding-0"><b>Nazwisko i imię</b></p>
+          </div>
+        </div>
+
+        <div class="right-side">
+          <div class="display-inline float-right">
+            <div class="font-14 margin-padding-0 display-inline"><b>{{ city }}, dnia</b></div>
+            <div class="font-14 data-field margin-padding-0 display-inline padding-0-10">{{ remote_work.document.date_of_completion|date:"d.m.Y" }}</div>
+          </div>
+        </div>
+
+        <div class="clear-both">
+          <p class="display-inline position-relative left-400"><b>KIEROWNIK DZIAŁU</b></p>
+        </div>
+
+        <div class="margin-top-10 width-400 float-left">
+          <p class="font-14 data-field width-190 margin-padding-0">{{ remote_work.document.department_name }}</p>
+          <p class="font-14 margin-padding-0"><b>Dział</b></p>
+        </div>
+        <div class="margin-top-10 float-left">
+          <p class="font-14 data-field width-220 margin-padding-0">{{ remote_work.document.department_manager_name }}&nbsp;</p>
+        </div>
+
+        <div class="clear-both"></div>
+        <div class="margin-top-20">
+          <p class="display-inline font-16"><b>Wnioskuję o wykonywanie okazjonalnej pracy zdalnej</b> w ilości</p>
+          <div class="font-14 data-field margin-0 padding-horizontal-80 display-inline">{{ remote_work.document.number_of_days }}</div>
+          <p class="display-inline font-16">dni w dniach</p>
+          <br>
+          <p class="display-inline font-16">od dnia</p>
+          <div class="font-14 data-field margin-0 padding-horizontal-100 display-inline">{{ remote_work.document.start_date|date:"d.m.Y" }}</div>
+          <p class="display-inline font-16">do dnia</p>
+          <div class="font-14 data-field margin-0 padding-horizontal-100 display-inline">{{ remote_work.document.end_date|date:"d.m.Y" }}</div>
+          <p class="display-inline font-16">,</p>
+          <br>
+          <p class="display-inline font-16">którą będę wykonywał/ała pod następującym adresem:</p>
+          <br><br>
+          <p class="display-inline font-16">ul. {{ remote_work.document.address_street }} {{ remote_work.document.address_house_number }}{% if remote_work.document.address_apartment_number %} {{ remote_work.document.address_apartment_number }}{% endif %}</p>
+          <br>
+          <p class="display-inline font-16">{{ remote_work.document.address_postal_code }} {{ remote_work.document.address_city }}</p>
+          <br>
+          <p class="display-inline font-16">{{ remote_work.document.address_country }}</p>
+        </div>
+        <br>
+        <p class="display-inline font-16"><b>Oświadczam, że</b> na stanowisku pracy zdalnej w ww. miejscu są zapewnione bezpieczne i higieniczne <br>warunki tej pracy.</p>
+        <br><br>
+        <p class="display-inline font-16"><b>Oświadczam, że</b> zapoznałem/łam się z przygotowaną przez pracodawcę:</p>
+        <ol>
+          <li>oceną ryzyka zawodowego,</li>
+          <li>informacją zawierającą zasady bezpiecznego i higienicznego wykonywania pracy zdalnej,</li>
+          <li>informacją określającą procedury ochrony danych osobowych (<b>potwierdzam, że</b><br> przeszedłem/przeszłam w tym zakresie szkolenie).</li>
+        </ol>
+        <p class="display-inline font-16">oraz <b>zobowiązuję się</b> do przestrzegania informacji, procedur, wskazówek i wniosków wynikających z <br>tych dokumentów.</p>
+        <br><br>
+        <div class="margin-top-10">
+          <div class="float-right">
+            <div class="font-14 data-field-centered margin-padding-0">{{ remote_work.document.absent_name }}</div>
+            <div class="margin-top-10 padding-horizontal-100"><b>Podpis pracownika</b></div>
+          </div>
+        </div>
+        <div class="clear-both"></div>
+        <div class="float-right height-70">
+          <p class="text-align-right padding-horizontal-60"><b>DECYZJA PRZEŁOŻONEGO/DYREKTORA PIONU</b></p>
+          <div class="font-14 data-field-centered margin-padding-0">Zaakceptowany przez: {{ remote_work.document.decisive_name }}</div>
+        </div>
+        
+        <div class="clear-both"></div>
+      </div>
+    {% else %}
+      <span class="application-id font-10">{{ remote_work.id }}</span>
+      <div class="header">
+        <h3>WNIOSEK O WYKONYWANIE OKAZJONALNEJ PRACY ZDALNEJ</h3>
+      </div>
+
+      <div class="content">
+        <div class="left-side">
+          <div class="width-190">
+            <p class="font-14 data-field width-190 margin-padding-0">{% if remote_work.absent.employee.registration_number %}{{ remote_work.absent.employee.registration_number }}{% else %}&nbsp;{% endif %}</p>
+            <p class="font-14 margin-padding-0"><b>Numer&nbsp;ewidencyjny</b></p>
+          </div>
+          <div class="width-220 margin-top-10">
+            <p class="font-14 data-field width-220 margin-padding-0">{{ remote_work.absent.profile.get_name }}</p>
+            <p class="font-14 margin-padding-0"><b>Nazwisko i imię</b></p>
+          </div>
+        </div>
+
+        <div class="right-side">
+          <div class="display-inline float-right">
+            <div class="font-14 margin-padding-0 display-inline"><b>{{ city }}, dnia</b></div>
+            <div class="font-14 data-field margin-padding-0 display-inline padding-0-10">{{ remote_work.date_of_completion|date:"d.m.Y" }}</div>
+          </div>
+        </div>
+
+        <div class="clear-both">
+          <p class="display-inline position-relative left-400"><b>KIEROWNIK DZIAŁU</b></p>
+        </div>
+
+        <div class="margin-top-10 width-400 float-left">
+          <p class="font-14 data-field width-190 margin-padding-0">{{ remote_work.absent.employee.get_department_name }}</p>
+          <p class="font-14 margin-padding-0"><b>Dział</b></p>
+        </div>
+        <div class="margin-top-10 float-left">
+          <p class="font-14 data-field width-220 margin-padding-0">{{ remote_work.absent.employee.get_department_manager_name }}&nbsp;</p>
+        </div>
+
+        <div class="clear-both"></div>
+        <div class="margin-top-20">
+          <p class="display-inline font-16"><b>Wnioskuję o wykonywanie okazjonalnej pracy zdalnej</b> w ilości</p>
+          <div class="font-14 data-field margin-0 padding-horizontal-80 display-inline">{{ remote_work.number_of_days }}</div>
+          <p class="display-inline font-16">dni w dniach</p>
+          <br>
+          <p class="display-inline font-16">od dnia</p>
+          <div class="font-14 data-field margin-0 padding-horizontal-100 display-inline">{{ remote_work.start_date|date:"d.m.Y" }}</div>
+          <p class="display-inline font-16">do dnia</p>
+          <div class="font-14 data-field margin-0 padding-horizontal-100 display-inline">{{ remote_work.end_date|date:"d.m.Y" }}</div>
+          <p class="display-inline font-16">,</p>
+          <br>
+          <p class="display-inline font-16">którą będę wykonywał/ała pod następującym adresem:</p>
+          <br><br>
+          <p class="display-inline font-16">ul. {{ remote_work.street }} {{ remote_work.house_number }}{% if remote_work.apartment_number %} {{ remote_work.apartment_number }}{% endif %}</p>
+          <br>
+          <p class="display-inline font-16">{{ remote_work.postal_code }} {{ remote_work.city }}</p>
+          <br>
+          <p class="display-inline font-16">{{ remote_work.country }}</p>
+        </div>
+        <br>
+        <p class="display-inline font-16"><b>Oświadczam, że</b> na stanowisku pracy zdalnej w ww. miejscu są zapewnione bezpieczne i higieniczne <br>warunki tej pracy.</p>
+        <br><br>
+        <p class="display-inline font-16"><b>Oświadczam, że</b> zapoznałem/łam się z przygotowaną przez pracodawcę:</p>
+        <ol>
+          <li>oceną ryzyka zawodowego,</li>
+          <li>informacją zawierającą zasady bezpiecznego i higienicznego wykonywania pracy zdalnej,</li>
+          <li>informacją określającą procedury ochrony danych osobowych (<b>potwierdzam, że</b><br> przeszedłem/przeszłam w tym zakresie szkolenie).</li>
+        </ol>
+        <p class="display-inline font-16">oraz <b>zobowiązuję się</b> do przestrzegania informacji, procedur, wskazówek i wniosków wynikających z <br>tych dokumentów.</p>
+        <br><br>
+        <div class="margin-top-10">
+          <div class="float-right">
+            <div class="font-14 data-field-centered margin-padding-0">{{ remote_work.absent.profile.get_name }}</div>
+            <div class="margin-top-10 padding-horizontal-100"><b>Podpis pracownika</b></div>
+          </div>
+        </div>
+        <div class="clear-both"></div>
+        <div class="float-right height-70">
+          <p class="text-align-right padding-horizontal-60"><b>DECYZJA PRZEŁOŻONEGO/DYREKTORA PIONU</b></p>
+          <div class="font-14 data-field-centered margin-padding-0">Zaakceptowany przez: {{ remote_work.decisive_person.profile.get_name }}</div>
+        </div>
+        
+        <div class="clear-both"></div>
+      </div>
+    {% endif %}
+  </div>
+
+  {% if not download_mode %}
+    <div class="margin-top-20 margin-left-40">
+      <a class="button" href="{% url 'absence_calendar:remote_work_application_pdf' remote_work.id %}">Wygeneruj PDF</a>
+    </div>
+  {% endif %}
+
+</body>
+</html>

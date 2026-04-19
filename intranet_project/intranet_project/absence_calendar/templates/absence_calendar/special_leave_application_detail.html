@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>StellaNet - Wniosek urlopowy</title>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <style>
+    .width-950 {
+      width: 950px;
+    }
+
+    .width-195 {
+      width: 195px;
+    }
+
+    .width-210 {
+      width: 210px;
+    }
+
+    .width-290 {
+      width: 290px;
+    }
+
+    .width-250 {
+      width: 250px;
+    }
+
+    .width-360 {
+      width: 360px;
+    }
+
+    .width-450 {
+      width: 450px;
+    }
+
+    .width-320 {
+      width: 320px;
+    }
+
+    .width-420 {
+      width: 420px;
+    }
+
+    .height-25 {
+      height: 25px;
+    }
+
+    .data-field {
+      border-bottom: 1px dashed black;
+    }
+
+    .data-field-centered {
+      text-align: center;
+      border-bottom: 1px dashed black;
+    }
+
+    .font-10 {
+      font-size: 10px;
+    }
+
+    .font-12 {
+      font-size: 12px;
+    }
+
+    .font-14 {
+      font-size: 14px;
+    }
+
+    .font-16 {
+      font-size: 16px;
+    }
+
+    .margin-padding-0 {
+      margin: 0;
+      padding: 0;
+    }
+
+    .content {
+      margin: 30px {% if download_mode %}60px{% else %}200px{% endif %} 0 100px;
+    }
+
+    .margin-top-20 {
+      margin-top: 20px;
+    }
+
+    .margin-top-30 {
+      margin-top: 30px;
+    }
+
+    .padding-0-10 {
+      padding: 0 10px;
+    }
+
+    .padding-0-40 {
+      padding: 0 40px;
+    }
+
+    .padding-horizontal-55 {
+      padding: 0 55px;
+    }
+
+    .padding-horizontal-65 {
+      padding: 0 65px;
+    }
+
+    .padding-horizontal-70 {
+      padding: 0 70px;
+    }
+
+    .padding-horizontal-90 {
+      padding: 0 110px;
+    }
+
+    .display-inline {
+      display: inline;
+    }
+
+    .display-inline-block {
+      display: inline-block;
+    }
+
+    .float-left {
+      float: left;
+    }
+
+    .float-right {
+      float: right;
+    }
+
+    .text-align-center {
+      text-align: center;
+    }
+
+    .vertical-align-top {
+      vertical-align: top;
+    }
+
+    .padding-5 {
+      padding: 5px;
+    }
+
+    .clear-both {
+      clear: both;
+    }
+
+    .margin-left-100 {
+      margin-left: 100px;
+    }
+
+    .position-relative {
+      position: relative;
+    }
+
+    .application-id {
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+
+    .button {
+      font-size: 12px;
+      font-weight: bold;
+      text-decoration: none;
+      color: #000000;
+      border: 1px solid #000000;
+      border-radius: 5px;
+      padding: 0px 4px;
+    }
+
+    .button:hover {
+      color: #428bca;
+      border: 1px solid #428bca;
+    }
+  </style>
+</head>
+<body>
+  <div class="width-950 position-relative">
+    {% if special_leave.document %}
+      <span class="application-id font-10">{{ special_leave.document.document_id }}</span>
+      <div class="content">
+        <div>
+          <div class="width-250 display-inline float-left">
+            <p class="font-14 data-field width-250 margin-padding-0">{{ special_leave.document.absent_name }}</p>
+            <p class="font-12 margin-padding-0">(imię i nazwisko pracownika)</p>
+          </div>
+          <div class="display-inline float-right">
+            <div class="font-14 data-field padding-0-10">{{ special_leave.document.city }}, {{ special_leave.document.date_of_completion|date:"d.m.Y" }}</div>
+            <div class="font-12 text-align-center">(miejscowość i data)</div>
+          </div>
+        </div>
+        <div class="clear-both"></div>
+        <div class="width-250 margin-top-20">
+          <p class="font-14 data-field width-250 margin-padding-0">{% if special_leave.document.registration_number is not None %}{{ special_leave.document.registration_number }}{% else %}{% endif %}</p>
+          <p class="font-12 margin-padding-0">(nr teczki)</p>
+        </div>
+        <div class="float-right">
+          <div class="font-14 data-field padding-0-40">{{ special_leave.document.company_name }}</div>
+          <div class="font-12 text-align-center">(nazwa pracodawcy)</div>
+        </div>
+        <div class="clear-both"></div>
+        <div class="margin-top-30 text-align-center font-16">
+          <b>Wniosek o udzielenie urlopu okolicznościowego</b>
+        </div>
+        <div class="margin-top-20 font-16">
+          <b>
+            <p class="font-16 margin-padding-0">Proszę o udzielenie urlopu okolicznościowego w przysługującym mi wymiarze</p>
+            <p class="display-inline font-16">
+              {% if special_leave.document.number_of_days == 1 %}
+                jednego dnia
+              {% elif special_leave.document.number_of_days == 2 %}
+                dwóch dni
+              {% elif special_leave.document.number_of_days == 3 %}
+                trzech dni
+              {% elif special_leave.document.number_of_days == 4 %}
+                czterech dni
+              {% elif special_leave.document.number_of_days == 5 %}
+                pięciu dni
+              {% elif special_leave.document.number_of_days == 6 %}
+                sześciu dni
+              {% elif special_leave.document.number_of_days == 7 %}
+                siedmiu dni
+              {% elif special_leave.document.number_of_days == 8 %}
+                ośmiu dni
+              {% elif special_leave.document.number_of_days == 9 %}
+                dziewięciu dni
+              {% elif special_leave.document.number_of_days == 10 %}
+                dziesięciu dni
+              {% else %}
+                {{ special_leave.document.number_of_days }} dni
+              {% endif %}
+              z tytułu
+            </p>
+            <div class="font-12 data-field margin-0 display-inline-block text-align-center {% if download_mode %}width-450{% else %}width-360{% endif %}">{{ special_leave.document.reason }}</div>
+            <br>
+            <p class="display-inline font-16">w terminie od</p>
+            <div class="font-16 data-field margin-0 {% if download_mode %}padding-horizontal-65{% else %}padding-horizontal-55{% endif %} display-inline">{{ special_leave.document.start_date|date:"d.m.Y" }}</div>
+            <p class="display-inline font-16">do</p>
+            <div class="font-16 data-field margin-0 {% if download_mode %}padding-horizontal-65{% else %}padding-horizontal-55{% endif %} display-inline">{{ special_leave.document.end_date|date:"d.m.Y" }}</div>
+          </b>
+        </div>
+        <div class="margin-top-30 float-right">
+          <div class="font-14 data-field width-250 text-align-center">{{ special_leave.document.absent_name }}</div>
+          <div class="font-12 text-align-center">(podpis pracownika)</div>
+        </div>
+        <div class="clear-both"></div>
+        <div class="margin-top-30 float-right">
+          <div class="display-inline-block font-12 height-25 vertical-align-top padding-5">
+            <b>Akceptacja przełożonego:</b>
+          </div>
+          <div class="display-inline-block">
+            <div class="font-14 data-field width-250 text-align-center">{{ special_leave.document.decisive_name }}</div>
+            <div class="font-12 text-align-center">(podpis przełożonego)</div>
+          </div>
+        </div>
+        <div class="clear-both"></div>
+        <div class="margin-top-30">
+          <p class="font-12 margin-padding-0 display-inline">W/w okoliczność potwierdzono na podstawie</p>
+          <div class="font-12 data-field margin-0 display-inline-block text-align-center {% if download_mode %}width-420{% else %}width-320{% endif %}">{% if special_leave.document.confirmation_document_name is not None %}{{ special_leave.document.confirmation_document_name }}{% else %}{% endif %}</div>
+          <br>
+          <p class="display-inline font-12">Nr dokumentu</p>
+          <div class="font-12 data-field margin-0 text-align-center {% if download_mode %}width-210{% else %}width-195{% endif %} display-inline-block">{% if special_leave.document.confirmation_document_number is not None %}{{ special_leave.document.confirmation_document_number }}{% else %}{% endif %}</div>
+          <p class="display-inline font-12">wydanego dnia</p>
+          <div class="font-12 data-field margin-0 text-align-center {% if download_mode %}width-290{% else %}width-195{% endif %} display-inline-block">{% if special_leave.document.confirmation_document_issue_date is not None %}{{ special_leave.document.confirmation_document_issue_date }}{% else %}{% endif %}</div>
+        </div>
+        <div class="margin-top-30 float-right">
+          <div class="font-14 data-field width-250 text-align-center">{{ special_leave.document.confirming_person_name }}</div>
+          <div class="font-12 text-align-center">(podpis osoby potwierdzającej)</div>
+        </div>
+        <div class="clear-both"></div>
+      </div>
+    {% else %}
+      <span class="application-id font-10">{{ special_leave.id }}</span>
+      <div class="content">
+        <div>
+          <div class="width-250 display-inline float-left">
+            <p class="font-14 data-field width-250 margin-padding-0">{{ special_leave.absent.profile.get_name }}</p>
+            <p class="font-12 margin-padding-0">(imię i nazwisko pracownika)</p>
+          </div>
+          <div class="display-inline float-right">
+            <div class="font-14 data-field padding-0-10">{{ city }}, {{ special_leave.date_of_completion|date:"d.m.Y" }}</div>
+            <div class="font-12 text-align-center">(miejscowość i data)</div>
+          </div>
+        </div>
+        <div class="clear-both"></div>
+        <div class="width-250 margin-top-20">
+          <p class="font-14 data-field width-250 margin-padding-0">{% if special_leave.absent.employee.registration_number is not None %}{{ special_leave.absent.employee.registration_number }}{% else %}{% endif %}</p>
+          <p class="font-12 margin-padding-0">(nr teczki)</p>
+        </div>
+        <div class="float-right">
+          <div class="font-14 data-field padding-0-40">{{ company_name }}</div>
+          <div class="font-12 text-align-center">(nazwa pracodawcy)</div>
+        </div>
+        <div class="clear-both"></div>
+        <div class="margin-top-30 text-align-center font-16">
+          <b>Wniosek o udzielenie urlopu okolicznościowego</b>
+        </div>
+        <div class="margin-top-20 font-16">
+          <b>
+            <p class="font-16 margin-padding-0">Proszę o udzielenie urlopu okolicznościowego w przysługującym mi wymiarze</p>
+            <p class="display-inline font-16">
+              {% if special_leave.number_of_days == 1 %}
+                jednego dnia
+              {% elif special_leave.number_of_days == 2 %}
+                dwóch dni
+              {% elif special_leave.number_of_days == 3 %}
+                trzech dni
+              {% elif special_leave.number_of_days == 4 %}
+                czterech dni
+              {% elif special_leave.number_of_days == 5 %}
+                pięciu dni
+              {% elif special_leave.number_of_days == 6 %}
+                sześciu dni
+              {% elif special_leave.number_of_days == 7 %}
+                siedmiu dni
+              {% elif special_leave.number_of_days == 8 %}
+                ośmiu dni
+              {% elif special_leave.number_of_days == 9 %}
+                dziewięciu dni
+              {% elif special_leave.number_of_days == 10 %}
+                dziesięciu dni
+              {% else %}
+                {{ special_leave.number_of_days }} dni
+              {% endif %}
+              z tytułu
+            </p>
+            <div class="font-12 data-field margin-0 display-inline-block text-align-center {% if download_mode %}width-450{% else %}width-360{% endif %}">{{ special_leave.reason.text_in_application }}</div>
+            <br>
+            <p class="display-inline font-16">w terminie od</p>
+            <div class="font-16 data-field margin-0 {% if download_mode %}padding-horizontal-65{% else %}padding-horizontal-55{% endif %} display-inline">{{ special_leave.start_date|date:"d.m.Y" }}</div>
+            <p class="display-inline font-16">do</p>
+            <div class="font-16 data-field margin-0 {% if download_mode %}padding-horizontal-65{% else %}padding-horizontal-55{% endif %} display-inline">{{ special_leave.end_date|date:"d.m.Y" }}</div>
+          </b>
+        </div>
+        <div class="margin-top-30 float-right">
+          <div class="font-14 data-field width-250 text-align-center">{{ special_leave.absent.profile.get_name }}</div>
+          <div class="font-12 text-align-center">(podpis pracownika)</div>
+        </div>
+        <div class="clear-both"></div>
+        <div class="margin-top-30 float-right">
+          <div class="display-inline-block font-12 height-25 vertical-align-top padding-5">
+            <b>Akceptacja przełożonego:</b>
+          </div>
+          <div class="display-inline-block">
+            <div class="font-14 data-field width-250 text-align-center">{{ special_leave.decisive_person.profile.get_name }}</div>
+            <div class="font-12 text-align-center">(podpis przełożonego)</div>
+          </div>
+        </div>
+        <div class="clear-both"></div>
+        <div class="margin-top-30">
+          <p class="font-12 margin-padding-0 display-inline">W/w okoliczność potwierdzono na podstawie</p>
+          <div class="font-12 data-field margin-0 display-inline-block text-align-center {% if download_mode %}width-420{% else %}width-320{% endif %}">{% if special_leave.confirmation_document_name.text_in_application is not None %}{{ special_leave.confirmation_document_name.text_in_application }}{% else %}{% endif %}</div>
+          <br>
+          <p class="display-inline font-12">Nr dokumentu</p>
+          <div class="font-12 data-field margin-0 text-align-center {% if download_mode %}width-210{% else %}width-195{% endif %} display-inline-block">{% if special_leave.confirmation_document_number is not None %}{{ special_leave.confirmation_document_number }}{% else %}{% endif %}</div>
+          <p class="display-inline font-12">wydanego dnia</p>
+          <div class="font-12 data-field margin-0 text-align-center {% if download_mode %}width-290{% else %}width-195{% endif %} display-inline-block">{% if special_leave.confirmation_document_issue_date is not None %}{{ special_leave.confirmation_document_issue_date }}{% else %}{% endif %}</div>
+        </div>
+        <div class="margin-top-30 float-right">
+          <div class="font-14 data-field width-250 text-align-center">{% if special_leave.is_confirmed %}{{ special_leave.confirming_person.profile.get_name }}{% endif %}</div>
+          <div class="font-12 text-align-center">(podpis osoby potwierdzającej)</div>
+        </div>
+        <div class="clear-both"></div>
+      </div>
+    {% endif %}
+  </div>
+
+  {% if not download_mode %}
+    <div class="margin-top-20 margin-left-100">
+      <a class="button" href="{% url 'absence_calendar:special_leave_application_pdf' special_leave.id %}">Wygeneruj PDF</a>
+    </div>
+  {% endif %}
+
+</body>
+</html>

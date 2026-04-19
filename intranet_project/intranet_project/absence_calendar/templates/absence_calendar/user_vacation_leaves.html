@@ -1,0 +1,223 @@
+{% extends "intranet/base.html" %}
+{% load static %}
+
+{% block head-css %}
+  <link rel="stylesheet" href="{% static 'absence_calendar/css/absence_calendar.css' %}">
+
+  {{ block.super }}
+{% endblock %}
+
+{% block content %}
+  <div class="content-section">
+
+    <h4 class="border-bottom pb-1 mb-4">Moje urlopy wypoczynkowe</h4>
+    <select class="form-control" name="leaveType" id="leaveType">
+      <option value="{% url 'absence_calendar:user_vacation_leaves' %}" selected>Urlopy wypoczynkowe</option>
+      <option value="{% url 'absence_calendar:user_special_leaves' %}">Urlopy okolicznościowe</option>
+      <option value="{% url 'absence_calendar:user_absences' %}">Nieobecności</option>
+      <option value="{% url 'absence_calendar:user_remote_works' %}">Wnioski o pracę zdalną</option>
+    </select>
+
+    <div class="text-right">
+      <button class="btn btn-link default-link collapse-toggle" type="button" id="filtersToggle" data-toggle="collapse" data-target="#filtersCollapse" aria-expanded="false" aria-controls="filtersCollapse">
+        <div class="toggle-expand small d-inline-block"><i class="fa fa-search mr-1" aria-hidden="true"></i>Pokaż wyszukiwarkę</div>
+        <div class="toggle-collapse small d-none"><i class="fa fa-search mr-1" aria-hidden="true"></i>Ukryj wyszukiwarkę</div>
+      </button>
+    </div>
+
+    <div class="collapse mb-2" id="filtersCollapse">
+      <form class="mt-4" action="{% url 'absence_calendar:user_vacation_leaves' %}" method="get">
+        <div class="form-inline mt-1">
+          <div class="col-md-4 form-group">
+            <label for="decisiveFirstName" class="small">Imię decydującego</label>
+            <input type="text" name="decisiveFirstName" id="decisiveFirstName" class="form-control col-md-12" value="{{ request.GET.decisiveFirstName }}">
+          </div>
+          <div class="col-md-4 form-group">
+            <label for="decisiveLastName" class="small">Nazwisko decydującego</label>
+            <input type="text" name="decisiveLastName" id="decisiveLastName" class="form-control col-md-12" value="{{ request.GET.decisiveLastName }}">
+          </div>
+          <div class="col-md-4 form-group">
+            <label for="leaveForYear" class="small">Urlop za rok</label>
+            <input type="number" min="1970" name="leaveForYear" id="leaveForYear" class="form-control col-md-12" value="{{ request.GET.leaveForYear }}">
+          </div>
+        </div>
+        <div class="form-inline mt-1">
+          <div class="col-md-4 form-group">
+            <label for="leaveRangeDateStart" class="small">Początkowa data urlopu</label>
+            <input type="date" name="leaveRangeDateStart" id="leaveRangeDateStart" class="form-control col-md-12" value="{{ request.GET.leaveRangeDateStart }}">
+          </div>
+          <div class="col-md-4 form-group">
+            <label for="leaveRangeDateEnd" class="small">Końcowa data urlopu</label>
+            <input type="date" name="leaveRangeDateEnd" id="leaveRangeDateEnd" class="form-control col-md-12" value="{{ request.GET.leaveRangeDateEnd }}">
+          </div>
+          <div class="col-md-4 form-group">
+            <label for="onDemand" class="small">Typ urlopu</label>
+            <select class="form-control col-md-12" id="vacationLeaveType" name="vacationLeaveType">
+              <option value="" {% if request.GET.vacationLeaveType == ""%}selected{% endif %}></option>
+              {% for vacation_leave_type in vacation_leave_types %}
+                <option value="{{ vacation_leave_type.id }}" {% if request.GET.vacationLeaveType == vacation_leave_type.id|stringformat:"i" %}selected{% endif %}>{{ vacation_leave_type.text }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <div class="form-inline mt-1">
+          <div class="col-md-6 form-group">
+            <label for="completionDateStart" class="small">Początkowa data wypełnienia wniosku</label>
+            <input type="date" name="completionDateStart" id="completionDateStart" class="form-control col-md-12" value="{{ request.GET.completionDateStart }}">
+          </div>
+          <div class="col-md-6 form-group">
+            <label for="completionDateEnd" class="small">Końcowa data wypełnienia wniosku</label>
+            <input type="date" name="completionDateEnd" id="completionDateEnd" class="form-control col-md-12" value="{{ request.GET.completionDateEnd }}">
+          </div>
+        </div>
+        <div class="form-inline mt-1">
+          <div class="col-md-6 form-group">
+            <label for="leaveStatus" class="small">Stan</label>
+            <select class="form-control col-md-12" id="leaveStatus" name="leaveStatus">
+              <option value="" {% if request.GET.leaveStatus == ""%}selected{% endif %}></option>
+              <option value="{{ status_choices.PENDING.value }}" {% if request.GET.leaveStatus == status_choices.PENDING.value|stringformat:"i" %}selected{% endif %}>{{ status_choices.PENDING.representation }}</option>
+              <option value="{{ status_choices.ACCEPTED.value }}" {% if request.GET.leaveStatus == status_choices.ACCEPTED.value|stringformat:"i" %}selected{% endif %}>{{ status_choices.ACCEPTED.representation }}</option>
+              <option value="{{ status_choices.REJECTED.value }}" {% if request.GET.leaveStatus == status_choices.REJECTED.value|stringformat:"i" %}selected{% endif %}>{{ status_choices.REJECTED.representation }}</option>
+              <option value="{{ status_choices.CANCELED.value }}" {% if request.GET.leaveStatus == status_choices.CANCELED.value|stringformat:"i" %}selected{% endif %}>{{ status_choices.CANCELED.representation }}</option>
+              <option value="{{ status_choices.CANCELED_BY_DECISIVE.value }}" {% if request.GET.leaveStatus == status_choices.CANCELED_BY_DECISIVE.value|stringformat:"i" %}selected{% endif %}>{{ status_choices.CANCELED_BY_DECISIVE.representation }}</option>
+              <option value="{{ status_choices.PENDING_TO_CANCEL.value }}" {% if request.GET.leaveStatus == status_choices.PENDING_TO_CANCEL.value|stringformat:"i" %}selected{% endif %}>{{ status_choices.PENDING_TO_CANCEL.representation }}</option>
+              <option value="{{ status_choices.PENDING_TO_FINISH_EARLIER.value }}" {% if request.GET.leaveStatus == status_choices.PENDING_TO_FINISH_EARLIER.value|stringformat:"i" %}selected{% endif %}>{{ status_choices.PENDING_TO_FINISH_EARLIER.representation }}</option>
+            </select>
+          </div>
+          <div class="col-md-6 form-group">
+            <label for="vacationLeaveId" class="small">Identyfikator</label>
+            <input type="number" min="1" name="vacationLeaveId" id="vacationLeaveId" class="form-control col-md-12" value="{{ request.GET.vacationLeaveId }}">
+          </div>
+        </div>
+        <div class="text-right mt-2">
+          <input type="submit" value="Wyszukaj" class="btn btn-primary btn-sm mr-3">
+        </div>
+      </form>
+    </div>
+
+    {% if not vacation_leaves %}
+      {% if request.GET %}
+        <div class="alert alert-danger mt-2" role="alert">
+          Nie znaleziono urlopów wypoczynkowych.
+        </div>
+      {% else %}
+        <div class="alert alert-primary mt-2" role="alert">
+          Brak urlopów wypoczynkowych.
+        </div>
+      {% endif %}
+    {% else %}
+      <div class="alert alert-info mt-2" role="alert">
+        Liczba wykorzystanych dni urlopowych w podanym okresie: <b>{{ sum_of_vacation_days }}</b>
+      </div>
+    {% endif %}
+
+    {% for vacation_leave in vacation_leaves %}
+      <hr class="mt-0">
+      <div class="mb-4">
+        <h4><a class="article-title" href="{% url 'absence_calendar:vacation_leave_detail' vacation_leave.id %}">Urlop wypoczynkowy</a></h4>
+        <div class="vacation-leave-controls-area">
+          <div class="dropdown dropleft float-right pos-static">
+            <a class="btn btn-sm btn-no-outline" href="#" role="button" id="vacationLeaveDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fa fa-ellipsis-v float-right" aria-hidden="true"></i>
+            </a>
+
+            <div class="dropdown-menu" aria-labelledby="vacationLeaveDropdownMenuLink">
+              <a class="dropdown-item" href="{% url 'absence_calendar:vacation_leave_detail' vacation_leave.id %}">Pokaż szczegóły</a>
+            </div>
+          </div>
+        </div>
+        <div class="mb-2">
+          <div class="mb-1"><i class="fa fa-calendar mr-2" aria-hidden="true"></i><b>Zakres nieobecności</b></div>
+          <div class="date-range ml-4">
+            {% if vacation_leave.start_date == vacation_leave.end_date %}
+              <div class="absence-calendar-data-display">{{ vacation_leave.start_date }}</div>
+            {% else %}
+              <div class="date-range-from-label">Od</div>
+              <div class="date-range-from text-wrap">{{ vacation_leave.start_date }}</div>
+              <div class="date-range-to-label">do</div>
+              <div class="date-range-to text-wrap">{{ vacation_leave.end_date }}</div>
+            {% endif%}
+          </div>
+        </div>
+
+        <div class="mb-2">
+          <div><i class="fa fa-info-circle mr-2" aria-hidden="true"></i><b>Liczba dni</b></div>
+          <div class="absence-calendar-data-display d-inline-block ml-4">{{ vacation_leave.number_of_days }}</div>
+
+          <div><i class="fa fa-info-circle mr-2" aria-hidden="true"></i><b>Typ urlopu</b></div>
+          <div class="absence-calendar-data-display d-inline-block ml-4">{{ vacation_leave.vacation_leave_type.text }}</div>
+
+          <div><i class="fa fa-info-circle mr-2" aria-hidden="true"></i><b>Urlop za rok</b></div>
+          <div class="absence-calendar-data-display d-inline-block ml-4">{{ vacation_leave.leave_for_year }}</div>
+
+          <div><i class="fa fa-user-circle-o mr-2" aria-hidden="true"></i><b>Osoba decydująca</b></div>
+          <div class="absence-calendar-data-display d-inline-block ml-4 text-wrap">{{ vacation_leave.decisive_person.profile.get_name }}</div>
+
+          {% if vacation_leave.message_for_decisive_person %}
+            <div><i class="fa fa-comment mr-2" aria-hidden="true"></i><b>Wiadomość dla osoby decydującej</b></div>
+            <div class="absence-calendar-data-display ml-4 text-wrap d-inline-block">{{ vacation_leave.message_for_decisive_person }}</div>
+          {% endif %}
+
+          {% if vacation_leave.is_pending_to_finish_earlier %}
+            <div><i class="fa fa-info-circle mr-2" aria-hidden="true"></i><b>Nowa data zakończenia nieobecności</b></div>
+            <div class="absence-calendar-data-display d-inline-block ml-4">{{ vacation_leave.pending_end_date }}</div>
+
+            <div><i class="fa fa-info-circle mr-2" aria-hidden="true"></i><b>Nowa liczba dni</b></div>
+            <div class="absence-calendar-data-display d-inline-block ml-4">{{ vacation_leave.pending_number_of_days }}</div>
+          {% endif %}
+        </div>
+
+        <p class="d-flex justify-content-center text-muted small">Data wypełnienia wniosku: {{ vacation_leave.date_of_completion }}</p>
+
+        {% if vacation_leave.is_pending %}
+          <div class="alert alert-info text-wrap" role="alert">Urlop wypoczynkowy oczekuje na decyzję</div>
+        {% elif vacation_leave.is_pending_to_cancel %}
+          <div class="alert alert-warning text-wrap" role="alert">Urlop wypoczynkowy oczekuje na akceptację odwołania</div>
+        {% elif vacation_leave.is_pending_to_finish_earlier %}
+          <div class="alert alert-warning text-wrap" role="alert">Urlop wypoczynkowy oczekuje na akceptację prośby o wcześniejsze zakończenie</div>
+        {% elif vacation_leave.is_accepted %}
+          <div class="alert alert-success" role="alert">
+            <p class="text-wrap p-0 m-0">
+              Urlop wypoczynkowy został zaakceptowany przez
+              <b>{{ vacation_leave.decisive_person.profile.get_name }}</b>
+              {% if vacation_leave.rejection_reason %}
+                </br>
+                {% if vacation_leave.pending_end_date and vacation_leave.pending_number_of_days %}
+                  Decyzja o wcześniejszym zakończeniu urlopu została rozpatrzona negatywnie z następującego powodu: </br>
+                {% else %}
+                  Decyzja o odwołaniu urlopu została rozpatrzona negatywnie z następującego powodu: </br>
+                {% endif %}
+                <i>{{ vacation_leave.rejection_reason }}</i>
+              {% endif %}
+            </p>
+          </div>
+        {% elif vacation_leave.is_rejected %}
+          <div class="alert alert-danger" role="alert">
+            <p class="small text-muted text-wrap p-0 m-0">
+              Urlop wypoczynkowy został odrzucony przez
+              <b>{{ vacation_leave.decisive_person.profile.get_name }}</b>
+            </p>
+            <p class="text-wrap p-0 m-0">
+              {% if vacation_leave.rejection_reason %}
+                {{ vacation_leave.rejection_reason }}
+              {% else %}
+                Nie został podany powód odrzucenia urlopu wypoczynkowego
+              {% endif %}
+            </p>
+          </div>
+        {% elif vacation_leave.is_canceled %}
+          <div class="alert alert-danger text-wrap" role="alert">Ten urlop wypoczynkowy został odwołany</div>
+        {% endif%}
+      </div>
+    {% endfor %}
+
+    {% include "intranet/pagination_template.html" %}
+  </div>
+
+{% endblock content %}
+
+{% block bottom-js %}
+  {{ block.super }}
+  <script defer src="{% static 'intranet/js/filter_collapse.js'%}"></script>
+  <script defer src="{% static 'absence_calendar/js/absences.js' %}"></script>
+{% endblock bottom-js %}

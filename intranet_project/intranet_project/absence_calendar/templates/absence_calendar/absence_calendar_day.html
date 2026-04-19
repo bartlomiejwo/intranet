@@ -1,0 +1,103 @@
+{% extends "intranet/base.html" %}
+{% load static %}
+
+{% block head-css %}
+  <link rel="stylesheet" href="{% static 'absence_calendar/css/absence_calendar.css' %}">
+
+  {{ block.super }}
+{% endblock %}
+
+{% block content %}
+
+  <article class="media content-section">
+    <div class="media-body pb-3">
+      <div class="border-bottom d-flex justify-content-between mb-4">
+        <a href="{% url 'absence_calendar:absence_calendar_day' previous_day.year previous_day.month previous_day.day %}"><img src="{% static 'intranet/images/chevron-left.svg' %}" alt="Poprzedni dzień"></a>
+        <h4>{{ displayed_day|date:"j E Y, l" }}</h4>
+        <a href="{% url 'absence_calendar:absence_calendar_day' next_day.year next_day.month next_day.day %}"><img src="{% static 'intranet/images/chevron-right.svg' %}" alt="Następny dzień"></a>
+      </div>
+
+      {% if not events and not vacation_leaves and not special_leaves and not absences and not remote_works %}
+        <div class="alert alert-primary mt-2" role="alert">
+          Brak zaplanowanych wydarzeń.
+        </div>
+      {% endif %}
+      
+      {% if events %}
+        <div class="absence-calendar-day-absence-header d-flex justify-content-between collapse-toggle" type="button" data-toggle="collapse" data-target="#events_collapse" aria-expanded="true" aria-controls="vacation_leaves_collapse">
+          <b>Wydarzenie</b>
+          <div>
+            <i class="fa fa-plus-square-o toggle-expand d-none" aria-hidden="true"></i>
+            <i class="fa fa-minus-square-o toggle-collapse d-inline-block" aria-hidden="true"></i>
+          </div>
+        </div>
+        <div class="collapse show ml-3" id="events_collapse">
+          {% for event in events %}
+            <a href="{% url 'absence_calendar:event_detail' event.id %}" class="default-link"><div class="absence-calendar-day-absence-item mt-1">{{ event.title }}</div></a>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if vacation_leaves %}
+        <div class="absence-calendar-day-absence-header d-flex justify-content-between collapse-toggle" type="button" data-toggle="collapse" data-target="#vacation_leaves_collapse" aria-expanded="true" aria-controls="vacation_leaves_collapse">
+          <b>Urlop wypoczynkowy</b>
+          <div>
+            <i class="fa fa-plus-square-o toggle-expand d-none" aria-hidden="true"></i>
+            <i class="fa fa-minus-square-o toggle-collapse d-inline-block" aria-hidden="true"></i>
+          </div>
+        </div>
+        <div class="collapse show ml-3" id="vacation_leaves_collapse">
+          {% for vacation_leave in vacation_leaves %}
+            <a href="{% url 'absence_calendar:vacation_leave_detail' vacation_leave.id %}" class="default-link"><div class="absence-calendar-day-absence-item mt-1">{{ vacation_leave.absent_name }}</div></a>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if special_leaves %}
+        <div class="absence-calendar-day-absence-header d-flex justify-content-between mt-1 collapse-toggle" type="button" data-toggle="collapse" data-target="#special_leaves_collapse" aria-expanded="true" aria-controls="special_leaves_collapse">
+          <b>Urlop okolicznościowy</b>
+          <div>
+            <i class="fa fa-plus-square-o toggle-expand d-none" aria-hidden="true"></i>
+            <i class="fa fa-minus-square-o toggle-collapse d-inline-block" aria-hidden="true"></i>
+          </div>
+        </div>
+        <div class="collapse show ml-3" id="special_leaves_collapse">
+          {% for special_leave in special_leaves %}
+            <a href="{% url 'absence_calendar:special_leave_detail' special_leave.id %}" class="default-link"><div class="absence-calendar-day-absence-item mt-1">{{ special_leave.absent_name }}</div></a>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if remote_works %}
+        <div class="absence-calendar-day-absence-header d-flex justify-content-between collapse-toggle" type="button" data-toggle="collapse" data-target="#remote_works_collapse" aria-expanded="true" aria-controls="remote_works_collapse">
+          <b>Praca zdalna</b>
+          <div>
+            <i class="fa fa-plus-square-o toggle-expand d-none" aria-hidden="true"></i>
+            <i class="fa fa-minus-square-o toggle-collapse d-inline-block" aria-hidden="true"></i>
+          </div>
+        </div>
+        <div class="collapse show ml-3" id="remote_works_collapse">
+          {% for remote_work in remote_works %}
+            <a href="{% url 'absence_calendar:remote_work_detail' remote_work.id %}" class="default-link"><div class="absence-calendar-day-absence-item mt-1">{{ remote_work.absent_name }}</div></a>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if absences %}
+        <div class="absence-calendar-day-absence-header d-flex justify-content-between mt-1 collapse-toggle" type="button" data-toggle="collapse" data-target="#absences_collapse" aria-expanded="true" aria-controls="absences_collapse">
+          <b>Nieobecność</b>
+          <div>
+            <i class="fa fa-plus-square-o toggle-expand d-none" aria-hidden="true"></i>
+            <i class="fa fa-minus-square-o toggle-collapse d-inline-block" aria-hidden="true"></i>
+          </div>
+        </div>
+        <div class="collapse show ml-3" id="absences_collapse">
+          {% for absence in absences %}
+            <a href="{% url 'absence_calendar:absence_detail' absence.id %}" class="default-link"><div class="absence-calendar-day-absence-item mt-1">{{ absence.absent_name }} - {{ absence.absence_type }}</div></a>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  </article>
+
+{% endblock content %}

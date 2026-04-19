@@ -1,0 +1,253 @@
+{% extends "intranet/base.html" %}
+{% load static %}
+
+{% block head-css %}
+  <link rel="stylesheet" href="{% static 'absence_calendar/css/absence_calendar.css' %}">
+
+  {{ block.super }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="content-section">
+    <h4 class="border-bottom pb-1 mb-4">Przetworzone wnioski o pracę zdalną</h4>
+
+    <div class="buttons-column-menu">
+      <a class="btn btn-primary min-w-130 btn-column-top" href="{% url 'absence_calendar:vacation_leaves_previously_processed' %}">
+        Przetworzone urlopy wypoczynkowe
+      </a>
+      <a class="btn btn-primary min-w-130 btn-column-middle" href="{% url 'absence_calendar:special_leaves_previously_processed' %}">
+        Przetworzone urlopy okolicznościowe
+      </a>
+      <a class="btn btn-primary min-w-130 btn-column-bottom  font-weight-bold active" href="{% url 'absence_calendar:remote_works_previously_processed' %}" id="remoteWorksButton" data-active="false">
+        Przetworzone prace zdalne
+      </a>
+    </div>
+    <div class="d-flex justify-content-center">
+      <a class="small text-wrap default-link text-primary" href="{% url 'absence_calendar:remote_work_moderation' %}">
+        Moderacja wniosków o pracę zdalną
+      </a>
+    </div>
+
+    <div class="text-right">
+      <button class="btn btn-link default-link collapse-toggle" type="button" id="filtersToggle" data-toggle="collapse" data-target="#filtersCollapse" aria-expanded="false" aria-controls="filtersCollapse">
+        <div class="toggle-expand small d-inline-block"><i class="fa fa-search mr-1" aria-hidden="true"></i>Pokaż wyszukiwarkę</div>
+        <div class="toggle-collapse small d-none"><i class="fa fa-search mr-1" aria-hidden="true"></i>Ukryj wyszukiwarkę</div>
+      </button>
+    </div>
+
+    <div class="collapse mb-2" id="filtersCollapse">
+      <form class="mt-4" action="{% url 'absence_calendar:remote_works_previously_processed' %}" method="get">
+        <div class="form-inline mt-1">
+          <div class="col-md-6 form-group">
+            <label for="absentFirstName" class="small">Imię wnioskującego</label>
+            <input type="text" name="absentFirstName" id="absentFirstName" class="form-control col-md-12" value="{{ request.GET.absentFirstName }}">
+          </div>
+          <div class="col-md-6 form-group">
+            <label for="absentLastName" class="small">Nazwisko wnioskującego</label>
+            <input type="text" name="absentLastName" id="absentLastName" class="form-control col-md-12" value="{{ request.GET.absentLastName }}">
+          </div>
+        </div>
+        <div class="form-inline mt-1">
+          <div class="col-md-6 form-group">
+            <label for="leaveRangeDateStart" class="small">Początkowa data pracy zdalnej</label>
+            <input type="date" name="leaveRangeDateStart" id="leaveRangeDateStart" class="form-control col-md-12" value="{{ request.GET.leaveRangeDateStart }}">
+          </div>
+          <div class="col-md-6 form-group">
+            <label for="leaveRangeDateEnd" class="small">Końcowa data pracy zdalnej</label>
+            <input type="date" name="leaveRangeDateEnd" id="leaveRangeDateEnd" class="form-control col-md-12" value="{{ request.GET.leaveRangeDateEnd }}">
+          </div>
+        </div>
+        <div class="form-inline mt-1">
+          <div class="col-md-6 form-group">
+            <label for="completionDateStart" class="small">Początkowa data wypełnienia wniosku</label>
+            <input type="date" name="completionDateStart" id="completionDateStart" class="form-control col-md-12" value="{{ request.GET.completionDateStart }}">
+          </div>
+          <div class="col-md-6 form-group">
+            <label for="completionDateEnd" class="small">Końcowa data wypełnienia wniosku</label>
+            <input type="date" name="completionDateEnd" id="completionDateEnd" class="form-control col-md-12" value="{{ request.GET.completionDateEnd }}">
+          </div>
+        </div>
+        <div class="form-inline mt-1">
+          <div class="col-md-6 form-group">
+            <label for="leaveStatus" class="small">Stan</label>
+            <select class="form-control col-md-12" id="leaveStatus" name="leaveStatus">
+              <option value="" {% if request.GET.leaveStatus == ""%}selected{% endif %}></option>
+              <option value="{{ status_choices.ACCEPTED.value }}" {% if request.GET.leaveStatus == status_choices.ACCEPTED.value|stringformat:"i" %}selected{% endif %}>{{ status_choices.ACCEPTED.representation }}</option>
+              <option value="{{ status_choices.REJECTED.value }}" {% if request.GET.leaveStatus == status_choices.REJECTED.value|stringformat:"i" %}selected{% endif %}>{{ status_choices.REJECTED.representation }}</option>
+              <option value="{{ status_choices.CANCELED.value }}" {% if request.GET.leaveStatus == status_choices.CANCELED.value|stringformat:"i" %}selected{% endif %}>{{ status_choices.CANCELED.representation }}</option>
+              <option value="{{ status_choices.CANCELED_BY_DECISIVE.value }}" {% if request.GET.leaveStatus == status_choices.CANCELED_BY_DECISIVE.value|stringformat:"i" %}selected{% endif %}>{{ status_choices.CANCELED_BY_DECISIVE.representation }}</option>
+            </select>
+          </div>
+          <div class="col-md-6 form-group">
+            <label for="remoteWorkId" class="small">Identyfikator</label>
+            <input type="number" min="1" name="remoteWorkId" id="remoteWorkId" class="form-control col-md-12" value="{{ request.GET.remoteWorkId }}">
+          </div>
+        </div>
+        <div class="text-right mt-2">
+          <input type="submit" value="Wyszukaj" class="btn btn-primary btn-sm mr-3">
+        </div>
+      </form>
+    </div>
+
+    {% if not remote_works %}
+      {% if request.GET %}
+        <div class="alert alert-danger mt-2" role="alert">
+          Nie znaleziono przetworzonych wniosków o pracę zdalną.
+        </div>
+      {% else %}
+        <div class="alert alert-primary mt-2" role="alert">
+          Nie ma żadnych przetworzonych wniosków o pracę zdalną.
+        </div>
+      {% endif %}
+    {% endif %}
+
+    <div class="mb-2" id="leavesDecisions">
+      {% for remote_work in remote_works %}
+        <div class="mb-2">
+          <hr class="mt-0">
+          <div class="mb-2">
+            <div><i class="fa fa-user-circle-o mr-2" aria-hidden="true"></i><b>Osoba</b></div>
+            <div class="absence-calendar-data-display d-inline-block ml-4 text-wrap">{{ remote_work.absent.profile.get_name }}</div>
+
+            <div class="mb-1"><i class="fa fa-calendar mr-2" aria-hidden="true"></i><b>Zakres nieobecności</b></div>
+            <div class="date-range ml-4">
+              {% if remote_work.start_date == remote_work.end_date %}
+                <div class="absence-calendar-data-display text-wrap">{{ remote_work.start_date }}</div>
+              {% else %}
+                <div class="date-range-from-label">Od</div>
+                <div class="date-range-from text-wrap">{{ remote_work.start_date }}</div>
+                <div class="date-range-to-label">do</div>
+                <div class="date-range-to text-wrap">{{ remote_work.end_date }}</div>
+              {% endif%}
+            </div>
+          </div>
+
+          <div class="mb-2">
+            <div><i class="fa fa-info-circle mr-2" aria-hidden="true"></i><b>Liczba dni</b></div>
+            <div class="absence-calendar-data-display d-inline-block ml-4">{{ remote_work.number_of_days }}</div>
+
+            <div><i class="fa fa-info-circle mr-2" aria-hidden="true"></i><b>Adres, pod którym wykonywana będzie praca zdalna</b></div>
+            <div class="absence-calendar-data-display d-inline-block ml-4">ul. {{ remote_work.street }} {{ remote_work.house_number }}{% if remote_work.apartment_number %} {{ remote_work.apartment_number }}{% endif %}, {{ remote_work.postal_code }} {{ remote_work.city }}, {{ remote_work.country }}</div>
+
+            {% if remote_work.message_for_decisive_person %}
+              <div><i class="fa fa-comment mr-2" aria-hidden="true"></i><b>Wiadomość dla osoby decydującej</b></div>
+              <div class="absence-calendar-data-display ml-4 text-wrap d-inline-block">{{ remote_work.message_for_decisive_person }}</div>
+            {% endif %}
+          </div>
+
+          <p class="d-flex justify-content-center text-muted small">Data wypełnienia wniosku: {{ remote_work.date_of_completion }}</p>
+          
+          <div class="alert {% if remote_work.is_accepted %}alert-success{% elif remote_work.is_rejected %}alert-danger{% elif remote_work.is_canceled %}alert-danger{% endif %}" id="leaveDecisionAlert" data-id="{{ remote_work.id }}">
+            Wniosek o pracę zdalną został
+            {% if remote_work.is_accepted %}
+              zaakceptowany
+              {% if remote_work.can_change_decision %}
+                <button type="button" class="btn btn-sm btn-danger ml-1 leave-change-decision" data-id="{{ remote_work.id }}" data-accepted="true" 
+                  data-reject-url="{% url 'absence_calendar:remote_work_change_decision_reject_ajax' remote_work.id %}" data-accept-url="{% url 'absence_calendar:remote_work_change_decision_accept_ajax' remote_work.id %}">
+                  Zmień decyzję - odmów
+                </button>
+              {% endif %}
+            {% elif remote_work.is_rejected %}
+              odrzucony
+              {% if remote_work.rejection_reason %}
+                z następującego powodu:<br>{{ remote_work.rejection_reason }}<br>
+              {% endif %}
+              {% if remote_work.can_change_decision %}
+                <button type="button" class="btn btn-sm btn-success leave-change-decision" data-id="{{ remote_work.id }}" data-accepted="false" 
+                  data-accept-url="{% url 'absence_calendar:remote_work_change_decision_accept_ajax' remote_work.id %}" data-reject-url="{% url 'absence_calendar:remote_work_change_decision_reject_ajax' remote_work.id %}">
+                  Zmień decyzję - akceptuj
+                </button>
+              {% endif %}
+            {% elif remote_work.is_canceled %}
+              odwołany przez pracownika
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-center">
+          <div class="toast hide position-fixed bottom-0" role="alert" aria-live="assertive" aria-atomic="true" data-delay="2000" id="successToast" data-id="{{ remote_work.id }}">
+            <div class="toast-header">
+              <strong class="mr-auto text-success">Wykonano poprawnie</strong>
+              <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="toast-body" id="successToastText" data-id="{{ remote_work.id }}"></div>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-center">
+          <div class="toast hide position-fixed bottom-0" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="false" id="errorToast" data-id="{{ remote_work.id }}">
+            <div class="toast-header">
+              <strong class="mr-auto text-danger">Błąd</strong>
+              <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="toast-body" id="errorToastText" data-id="{{ remote_work.id }}"></div>
+          </div>
+        </div>
+      {% endfor %}
+
+      <div class="modal fade" id="acceptModal" tabindex="-1" role="dialog" aria-labelledby="acceptModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="acceptModalLabel">Akceptowanie wniosku o pracę zdalną</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p class="d-inline">Czy na pewno chcesz zaakceptować ten wniosek o pracę zdalną?</p>
+              <p class="text-danger small">Ta akcja spowoduje ponowne rozesłanie powiadomień do odpowiednich osób.</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Zamknij</button>
+              <button type="button" class="btn btn-success" id="modalAcceptLeaveButton">Akceptuj</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal fade" id="rejectModal" tabindex="-1" role="dialog" aria-labelledby="rejectModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="rejectModalLabel">Odrzucanie wniosku o pracę zdalną</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p class="d-inline">Czy na pewno chcesz odrzucić ten wniosek o pracę zdalną?</p>
+              <p class="text-danger small">Ta akcja spowoduje ponowne rozesłanie powiadomień do odpowiednich osób.</p>
+              <p class="small text-muted">Opcjonalnie możesz podać powód odrzucenia podania:</p>
+              <textarea class="w-100" id="rejectionReason"></textarea>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Zamknij</button>
+              <button type="button" class="btn btn-danger" id="modalRejectLeaveButton">Odrzuć</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    {% include "intranet/pagination_template.html" %}
+  </div>
+
+{% endblock content %}
+
+{% block bottom-js %}
+  {{ block.super }}
+
+  <script>
+    var csrfToken = '{{ csrf_token }}';
+  </script>
+  <script defer src="{% static 'intranet/js/ajax_navigation_back_forward_refresh.js' %}"></script>
+  <script defer src="{% static 'absence_calendar/js/processed_leaves.js'%}"></script>
+  <script defer src="{% static 'intranet/js/filter_collapse.js'%}"></script>
+
+{% endblock bottom-js %}

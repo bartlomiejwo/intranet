@@ -1,0 +1,22 @@
+button.multiselect {
+    background-color: initial;
+    border: 1px solid #ced4da;
+}
+
+.multiselect-container  > li {
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+    padding-left: 5px !important;
+}
+
+.multiselect-container  > li > a > label {
+    padding: 0px !important;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.multiselect-container  > li > a > label > input {
+    margin: 0px !important;
+}

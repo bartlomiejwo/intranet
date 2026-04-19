@@ -1,0 +1,23 @@
+{% extends "intranet/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+  <div class="content-section">
+
+    <form method="POST">
+      {% csrf_token %}
+
+      <fieldset class="form-group">
+        <legend class="border-bottom mb-4">Usuwanie wydarzenia</legend>
+        <h5>
+          Czy na pewno chcesz usunąć to wydarzenie ({{ object.title }})?
+        </h5>
+      </fieldset>
+
+      <div class="form-group">
+        <button class="btn btn-outline-danger" type="submit">Tak, usuń</button>
+        <a class="btn btn-outline-secondary" href="{% url 'absence_calendar:event_detail' object.id %}">Anuluj</a>
+      </div>
+    </form>
+
+  </div>
+{% endblock content %}

@@ -1,0 +1,207 @@
+{% extends "intranet/base.html" %}
+{% load static %}
+
+{% block head-css %}
+  <link rel="stylesheet" href="{% static 'absence_calendar/css/absence_calendar.css' %}">
+
+  {{ block.super }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="content-section">
+    <h4 class="border-bottom pb-1 mb-4">Moderacja urlopów okolicznościowych</h4>
+
+    <div class="buttons-menu">
+      <a class="btn btn-primary min-w-130 btn-left" href="{% url 'absence_calendar:vacation_leaves_moderation' %}" id="vacationLeavesButton" data-active="false">
+        Urlopy wypoczynkowe
+        <div class="d-inline"><span class="badge badge-light">{{ vacation_leaves_to_moderate }}</span></div>
+      </a>
+      <a class="btn btn-primary min-w-130 font-weight-bold active btn-middle" href="{% url 'absence_calendar:special_leaves_moderation' %}" id="specialLeavesButton" data-active="true">
+        Urlopy okolicznościowe
+        <div class="d-inline"><span class="badge badge-light">{{ special_leaves_to_moderate }}</span></div>
+      </a>
+      <a class="btn btn-primary min-w-130 btn-right" href="{% url 'absence_calendar:remote_work_moderation' %}" id="remoteWorksButton" data-active="false">
+        Prace zdalne
+        <div class="d-inline"><span class="badge badge-light">{{ remote_works_to_moderate }}</span></div>
+      </a>
+    </div>
+
+    <div class="d-flex justify-content-center">
+      <a class="small text-wrap default-link text-primary" href="{% url 'absence_calendar:special_leaves_previously_processed' %}">
+        Poprzednio przetworzone urlopy okolicznościowe
+      </a>
+    </div>
+
+    <div class="alert alert-primary mt-2 {% if special_leaves %}d-none{% endif %}" id="listEmptyInfo" role="alert">
+      Nie ma żadnych urlopów okolicznościowych do przetworzenia.
+    </div>
+
+    <div class="mb-2" id="leavesDecisions">
+      {% for special_leave in special_leaves %}
+        <div class="mb-2" id="leaveDecision" data-id="{{ special_leave.id }}">
+          <hr/>
+          {% if special_leave.is_pending_to_cancel %}
+            <div class="alert alert-warning text-wrap" role="alert">Pracownik chce odwołać zaakceptowany urlop</div>
+          {% elif special_leave.is_pending_to_finish_earlier %}
+            <div class="alert alert-warning text-wrap" role="alert">Pracownik chce zakończyć ten urlop wcześniej ({{ special_leave.pending_end_date }})</div>
+          {% else %}
+            <div class="alert alert-info text-wrap" role="alert">Ten urlop okolicznościowy oczekuje na decyzję</div>
+          {% endif %}
+          <div class="mb-2">
+            <div><i class="fa fa-user-circle-o mr-2" aria-hidden="true"></i><b>Osoba</b></div>
+            <div class="absence-calendar-data-display d-inline-block ml-4 text-wrap">{{ special_leave.absent.profile.get_name }}</div>
+
+            <div class="mb-1"><i class="fa fa-calendar mr-2" aria-hidden="true"></i><b>Zakres nieobecności</b></div>
+            <div class="date-range ml-4">
+              {% if special_leave.start_date == special_leave.end_date %}
+                <div class="absence-calendar-data-display text-wrap">{{ special_leave.start_date }}</div>
+              {% else %}
+                <div class="date-range-from-label">Od</div>
+                <div class="date-range-from text-wrap">{{ special_leave.start_date }}</div>
+                <div class="date-range-to-label">do</div>
+                <div class="date-range-to text-wrap">{{ special_leave.end_date }}</div>
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="mb-2">
+            <div><i class="fa fa-info-circle mr-2" aria-hidden="true"></i><b>Liczba dni</b></div>
+            <div class="absence-calendar-data-display d-inline-block ml-4">{{ special_leave.number_of_days }}</div>
+
+            <div><i class="fa fa-exclamation-circle mr-2" aria-hidden="true"></i><b>Powód</b></div>
+            <div class="absence-calendar-data-display ml-4 text-wrap d-inline-block">{{ special_leave.reason.text }}</div>
+
+            {% if special_leave.message_for_decisive_person %}
+              <div><i class="fa fa-comment mr-2" aria-hidden="true"></i><b>Wiadomość dla osoby decydującej</b></div>
+              <div class="absence-calendar-data-display ml-4 text-wrap d-inline-block">{{ special_leave.message_for_decisive_person }}</div>
+            {% endif %}
+            {% if special_leave.is_pending_to_finish_earlier %}
+              <div><i class="fa fa-info-circle mr-2" aria-hidden="true"></i><b>Nowa data zakończenia nieobecności</b></div>
+              <div class="absence-calendar-data-display d-inline-block ml-4">{{ special_leave.pending_end_date }}</div>
+
+              <div><i class="fa fa-info-circle mr-2" aria-hidden="true"></i><b>Nowa liczba dni</b></div>
+              <div class="absence-calendar-data-display d-inline-block ml-4">{{ special_leave.pending_number_of_days }}</div>
+            {% endif %}
+          </div>
+          <p class="d-flex justify-content-center text-muted small">Data wypełnienia wniosku: {{ special_leave.date_of_completion }}</p>
+
+          <div class="d-flex justify-content-center">
+            {% if special_leave.is_pending_to_cancel %}
+              <button type="button" class="btn btn-sm btn-success leave-accept-cancel" data-id="{{ special_leave.id }}" data-url="{% url 'absence_calendar:special_leave_accept_cancelation_ajax' special_leave.id %}">Akceptuj odwołanie</button>
+              <button type="button" class="btn btn-sm btn-danger ml-1 leave-reject-cancel" data-id="{{ special_leave.id }}" data-url="{% url 'absence_calendar:special_leave_reject_cancelation_ajax' special_leave.id %}">Odrzuć odwołanie</button>
+            {% elif special_leave.is_pending_to_finish_earlier %}
+              <button type="button" class="btn btn-sm btn-success leave-accept-finish-earlier" data-id="{{ special_leave.id }}" data-url="{% url 'absence_calendar:special_leave_accept_finish_earlier_ajax' special_leave.id %}">Akceptuj prośbę</button>
+              <button type="button" class="btn btn-sm btn-danger ml-1 leave-reject-finish-earlier" data-id="{{ special_leave.id }}" data-url="{% url 'absence_calendar:special_leave_reject_finish_earlier_ajax' special_leave.id %}">Odrzuć prośbę</button>
+            {% else %}
+              <button type="button" class="btn btn-sm btn-primary leave-accept" data-id="{{ special_leave.id }}" data-url="{% url 'absence_calendar:special_leave_accept_ajax' special_leave.id %}">Akceptuj</button>
+              <button type="button" class="btn btn-sm btn-danger ml-1 leave-reject" data-id="{{ special_leave.id }}" data-url="{% url 'absence_calendar:special_leave_reject_ajax' special_leave.id %}">Odmów</button>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-center">
+          <div class="toast hide position-fixed bottom-0" role="alert" aria-live="assertive" aria-atomic="true" data-delay="2000" id="successToast" data-id="{{ special_leave.id }}">
+            <div class="toast-header">
+              <strong class="mr-auto text-success">Wykonano poprawnie</strong>
+              <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="toast-body" id="successToastText" data-id="{{ special_leave.id }}"></div>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-center">
+          <div class="toast hide position-fixed bottom-0" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="false" id="errorToast" data-id="{{ special_leave.id }}">
+            <div class="toast-header">
+              <strong class="mr-auto text-danger">Błąd</strong>
+              <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="toast-body" id="errorToastText" data-id="{{ special_leave.id }}"></div>
+          </div>
+        </div>
+      {% endfor %}
+
+      <div class="modal fade" id="rejectModal" tabindex="-1" role="dialog" aria-labelledby="rejectModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="rejectModalLabel">Odrzucanie urlopu okolicznościowego</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p>Czy na pewno chcesz odrzucić to podanie o urlop okolicznościowy?</p>
+              <p class="small text-muted">Opcjonalnie możesz podać powód odrzucenia podania:</p>
+              <textarea class="w-100" id="rejectionReason"></textarea>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Nie odrzucaj</button>
+              <button type="button" class="btn btn-danger" id="modalRejectLeaveButton">Odrzuć</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal fade" id="rejectCancelationModal" tabindex="-1" role="dialog" aria-labelledby="rejectCancelationModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="rejectCancelationModalLabel">Odrzucanie odwołania urlopu okolicznościowego</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p>Czy na pewno chcesz odrzucić to podanie o odwołanie urlopu okolicznościowego?</p>
+              <p class="small text-muted">Opcjonalnie możesz podać powód odrzucenia podania:</p>
+              <textarea class="w-100" id="cancelationRejectionReason"></textarea>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Nie odrzucaj</button>
+              <button type="button" class="btn btn-danger" id="modalRejectLeaveCancelationButton">Odrzuć</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal fade" id="rejectFinishEarlierModal" tabindex="-1" role="dialog" aria-labelledby="rejectFinishEarlierModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="rejectFinishEarlierModalLabel">Odrzucanie prośby o wcześniejsze zakończenie urlopu okolicznościowego</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p>Czy na pewno chcesz odrzucić tę prośbę o wcześniejsze zakończenie urlopu okolicznościowego?</p>
+              <p class="small text-muted">Opcjonalnie możesz podać powód odrzucenia podania:</p>
+              <textarea class="w-100" id="finishEarlierRejectionReason"></textarea>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Nie odrzucaj</button>
+              <button type="button" class="btn btn-danger" id="modalRejectFinishLeaveEarlierButton">Odrzuć</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    {% include "intranet/pagination_template.html" %}
+  </div>
+
+{% endblock content %}
+
+{% block bottom-js %}
+  {{ block.super }}
+
+  <script>
+    var csrfToken = '{{ csrf_token }}';
+  </script>
+  <script defer src="{% static 'intranet/js/ajax_navigation_back_forward_refresh.js' %}"></script>
+  <script defer src="{% static 'absence_calendar/js/leaves_moderation.js'%}"></script>
+
+{% endblock bottom-js %}

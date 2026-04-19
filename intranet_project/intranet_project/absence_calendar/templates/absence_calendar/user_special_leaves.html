@@ -1,0 +1,259 @@
+{% extends "intranet/base.html" %}
+{% load static %}
+
+{% block head-css %}
+  <link rel="stylesheet" href="{% static 'absence_calendar/css/absence_calendar.css' %}">
+
+  {{ block.super }}
+{% endblock %}
+
+{% block content %}
+  <div class="content-section">
+
+    <h4 class="border-bottom pb-1 mb-4">Moje urlopy okolicznościowe</h4>
+    <select class="form-control" name="leaveType" id="leaveType">
+      <option value="{% url 'absence_calendar:user_vacation_leaves' %}">Urlopy wypoczynkowe</option>
+      <option value="{% url 'absence_calendar:user_special_leaves' %}" selected>Urlopy okolicznościowe</option>
+      <option value="{% url 'absence_calendar:user_absences' %}">Nieobecności</option>
+      <option value="{% url 'absence_calendar:user_remote_works' %}">Wnioski o pracę zdalną</option>
+    </select>
+
+    <div class="text-right">
+      <button class="btn btn-link default-link collapse-toggle" type="button" id="filtersToggle" data-toggle="collapse" data-target="#filtersCollapse" aria-expanded="false" aria-controls="filtersCollapse">
+        <div class="toggle-expand small d-inline-block"><i class="fa fa-search mr-1" aria-hidden="true"></i>Pokaż wyszukiwarkę</div>
+        <div class="toggle-collapse small d-none"><i class="fa fa-search mr-1" aria-hidden="true"></i>Ukryj wyszukiwarkę</div>
+      </button>
+    </div>
+
+    <div class="collapse mb-2" id="filtersCollapse">
+      <form class="mt-4" action="{% url 'absence_calendar:user_special_leaves' %}" method="get">
+        <div class="form-inline mt-1">
+          <div class="col-md-4 form-group">
+            <label for="decisiveFirstName" class="small">Imię decydującego</label>
+            <input type="text" name="decisiveFirstName" id="decisiveFirstName" class="form-control col-md-12" value="{{ request.GET.decisiveFirstName }}">
+          </div>
+          <div class="col-md-4 form-group">
+            <label for="decisiveLastName" class="small">Nazwisko decydującego</label>
+            <input type="text" name="decisiveLastName" id="decisiveLastName" class="form-control col-md-12" value="{{ request.GET.decisiveLastName }}">
+          </div>
+          <div class="col-md-4 form-group">
+            <label for="leaveStatus" class="small">Stan</label>
+            <select class="form-control col-md-12" id="leaveStatus" name="leaveStatus">
+              <option value="" {% if request.GET.leaveStatus == ""%}selected{% endif %}></option>
+              <option value="{{ status_choices.PENDING.value }}" {% if request.GET.leaveStatus == status_choices.PENDING.value|stringformat:"i" %}selected{% endif %}>{{ status_choices.PENDING.representation }}</option>
+              <option value="{{ status_choices.ACCEPTED.value }}" {% if request.GET.leaveStatus == status_choices.ACCEPTED.value|stringformat:"i" %}selected{% endif %}>{{ status_choices.ACCEPTED.representation }}</option>
+              <option value="{{ status_choices.CONFIRMED.value }}" {% if request.GET.leaveStatus == status_choices.CONFIRMED.value|stringformat:"i" %}selected{% endif %}>{{ status_choices.CONFIRMED.representation }}</option>
+              <option value="{{ status_choices.REJECTED.value }}" {% if request.GET.leaveStatus == status_choices.REJECTED.value|stringformat:"i" %}selected{% endif %}>{{ status_choices.REJECTED.representation }}</option>
+              <option value="{{ status_choices.CANCELED.value }}" {% if request.GET.leaveStatus == status_choices.CANCELED.value|stringformat:"i" %}selected{% endif %}>{{ status_choices.CANCELED.representation }}</option>
+              <option value="{{ status_choices.CANCELED_BY_DECISIVE.value }}" {% if request.GET.leaveStatus == status_choices.CANCELED_BY_DECISIVE.value|stringformat:"i" %}selected{% endif %}>{{ status_choices.CANCELED_BY_DECISIVE.representation }}</option>
+              <option value="{{ status_choices.PENDING_TO_CANCEL.value }}" {% if request.GET.leaveStatus == status_choices.PENDING_TO_CANCEL.value|stringformat:"i" %}selected{% endif %}>{{ status_choices.PENDING_TO_CANCEL.representation }}</option>
+              <option value="{{ status_choices.PENDING_TO_FINISH_EARLIER.value }}" {% if request.GET.leaveStatus == status_choices.PENDING_TO_FINISH_EARLIER.value|stringformat:"i" %}selected{% endif %}>{{ status_choices.PENDING_TO_FINISH_EARLIER.representation }}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-inline mt-1">
+          <div class="col-md-4 form-group">
+            <label for="leaveRangeDateStart" class="small">Początkowa data urlopu</label>
+            <input type="date" name="leaveRangeDateStart" id="leaveRangeDateStart" class="form-control col-md-12" value="{{ request.GET.leaveRangeDateStart }}">
+          </div>
+          <div class="col-md-4 form-group">
+            <label for="leaveRangeDateEnd" class="small">Końcowa data urlopu</label>
+            <input type="date" name="leaveRangeDateEnd" id="leaveRangeDateEnd" class="form-control col-md-12" value="{{ request.GET.leaveRangeDateEnd }}">
+          </div>
+          <div class="col-md-4 form-group">
+            <label for="specialLeaveReason" class="small">Powód</label>
+            <select class="form-control col-md-12" id="specialLeaveReason" name="specialLeaveReason">
+              <option value="" {% if request.GET.specialLeaveReason == ""%}selected{% endif %}></option>
+              {% for special_leave_reason in special_leave_reasons %}
+                <option value="{{ special_leave_reason.id }}" {% if request.GET.specialLeaveReason == special_leave_reason.id|stringformat:"i" %}selected{% endif %}>{{ special_leave_reason.text }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <div class="form-inline mt-1">
+          <div class="col-md-6 form-group">
+            <label for="completionDateStart" class="small">Początkowa data wypełnienia wniosku</label>
+            <input type="date" name="completionDateStart" id="completionDateStart" class="form-control col-md-12" value="{{ request.GET.completionDateStart }}">
+          </div>
+          <div class="col-md-6 form-group">
+            <label for="completionDateEnd" class="small">Końcowa data wypełnienia wniosku</label>
+            <input type="date" name="completionDateEnd" id="completionDateEnd" class="form-control col-md-12" value="{{ request.GET.completionDateEnd }}">
+          </div>
+        </div>
+        <div class="form-inline mt-1">
+          <div class="col-md-4 form-group">
+            <label for="confirmativeFirstName" class="small">Imię potwierdzającego</label>
+            <input type="text" name="confirmativeFirstName" id="confirmativeFirstName" class="form-control col-md-12" value="{{ request.GET.confirmativeFirstName }}">
+          </div>
+          <div class="col-md-4 form-group">
+            <label for="confirmativeLastName" class="small">Nazwisko potwierdzającego</label>
+            <input type="text" name="confirmativeLastName" id="confirmativeLastName" class="form-control col-md-12" value="{{ request.GET.confirmativeLastName }}">
+          </div>
+          <div class="col-md-4 form-group">
+            <label for="specialLeaveId" class="small">Identyfikator</label>
+            <input type="number" min="1" name="specialLeaveId" id="specialLeaveId" class="form-control col-md-12" value="{{ request.GET.specialLeaveId }}">
+          </div>
+        </div>
+        <div class="text-right mt-2">
+          <input type="submit" value="Wyszukaj" class="btn btn-primary btn-sm mr-3">
+        </div>
+      </form>
+    </div>
+
+    {% if not special_leaves %}
+      {% if request.GET %}
+        <div class="alert alert-danger mt-2" role="alert">
+          Nie znaleziono urlopów okolicznościowych.
+        </div>
+      {% else %}
+        <div class="alert alert-primary mt-2" role="alert">
+          Brak urlopów okolicznościowych.
+        </div>
+      {% endif %}
+    {% else %}
+      <div class="alert alert-info mt-2" role="alert">
+        Liczba wykorzystanych dni urlopu okolicznościowego w podanym okresie: <b>{{ sum_of_special_leave_days }}</b>
+      </div>
+    {% endif %}
+
+    {% for special_leave in special_leaves %}
+      <hr class="mt-0">
+      <div class="mb-4">
+        <h4><a class="article-title" href="{% url 'absence_calendar:special_leave_detail' special_leave.id %}">Urlop okolicznościowy</a></h4>
+        <div class="special-leave-controls-area">
+          <div class="dropdown dropleft float-right pos-static">
+            <a class="btn btn-sm btn-no-outline" href="#" role="button" id="specialLeaveDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fa fa-ellipsis-v float-right" aria-hidden="true"></i>
+            </a>
+
+            <div class="dropdown-menu" aria-labelledby="specialLeaveDropdownMenuLink">
+              <a class="dropdown-item" href="{% url 'absence_calendar:special_leave_detail' special_leave.id %}">Pokaż szczegóły</a>
+            </div>
+          </div>
+        </div>
+        <div class="mb-2">
+          <div class="mb-1"><i class="fa fa-calendar mr-2" aria-hidden="true"></i><b>Zakres nieobecności</b></div>
+          <div class="date-range ml-4">
+            {% if special_leave.start_date == special_leave.end_date %}
+              <div class="absence-calendar-data-display">{{ special_leave.start_date }}</div>
+            {% else %}
+              <div class="date-range-from-label">Od</div>
+              <div class="date-range-from text-wrap">{{ special_leave.start_date }}</div>
+              <div class="date-range-to-label">do</div>
+              <div class="date-range-to text-wrap">{{ special_leave.end_date }}</div>
+            {% endif%}
+          </div>
+        </div>
+
+        <div class="mb-2">
+          <div><i class="fa fa-info-circle mr-2" aria-hidden="true"></i><b>Liczba dni</b></div>
+          <div class="absence-calendar-data-display d-inline-block ml-4">{{ special_leave.number_of_days }}</div>
+
+          <div><i class="fa fa-exclamation-circle mr-2 text-wrap" aria-hidden="true"></i><b>Powód</b></div>
+          <div class="absence-calendar-data-display ml-4 text-wrap d-inline-block">{{ special_leave.reason.text }}</div>
+          <div><i class="fa fa-user-circle-o mr-2" aria-hidden="true"></i><b>Osoba decydująca</b></div>
+          <div class="absence-calendar-data-display d-inline-block ml-4 text-wrap">{{ special_leave.decisive_person.profile.get_name }}</div>
+
+          <div><i class="fa fa-info-circle mr-2" aria-hidden="true"></i><b>Nazwa dokumentu potwierdzającego</b></div>
+          <div class="absence-calendar-data-display ml-4 text-wrap d-inline-block">
+            {% if special_leave.confirmation_document_name %}
+              {{ special_leave.confirmation_document_name }}
+            {% else %}
+              Nie uzupełniono
+            {% endif %}
+          </div>
+
+          <div><i class="fa fa-info-circle mr-2" aria-hidden="true"></i><b>Numer dokumentu potwierdzającego</b></div>
+          <div class="absence-calendar-data-display d-inline-block ml-4">
+            {% if special_leave.confirmation_document_number %}
+              {{ special_leave.confirmation_document_number }}
+            {% else %}
+              Nie uzupełniono
+            {% endif %}
+          </div>
+
+          <div><i class="fa fa-info-circle mr-2" aria-hidden="true"></i><b>Data wydania dokumentu potwierdzającego</b></div>
+          <div class="absence-calendar-data-display d-inline-block ml-4">
+            {% if special_leave.confirmation_document_issue_date %}
+              {{ special_leave.confirmation_document_issue_date }}
+            {% else %}
+              Nie uzupełniono
+            {% endif %}
+          </div>
+
+          <div><i class="fa fa-info-circle mr-2" aria-hidden="true"></i><b>Osoba potwierdzająca</b></div>
+          <div class="absence-calendar-data-display d-inline-block ml-4">
+            {% if special_leave.is_confirmed %}
+              {{ special_leave.confirming_person.profile.get_name }}
+            {% else %}
+              Dokument nie został potwierdzony
+            {% endif %}
+          </div>
+          {% if special_leave.message_for_decisive_person %}
+            <div><i class="fa fa-comment mr-2" aria-hidden="true"></i><b>Wiadomość dla osoby decydującej</b></div>
+            <div class="absence-calendar-data-display ml-4 text-wrap d-inline-block">{{ special_leave.message_for_decisive_person }}</div>
+          {% endif %}
+
+          {% if special_leave.is_pending_to_finish_earlier %}
+            <div><i class="fa fa-info-circle mr-2" aria-hidden="true"></i><b>Nowa data zakończenia nieobecności</b></div>
+            <div class="absence-calendar-data-display d-inline-block ml-4">{{ special_leave.pending_end_date }}</div>
+
+            <div><i class="fa fa-info-circle mr-2" aria-hidden="true"></i><b>Nowa liczba dni</b></div>
+            <div class="absence-calendar-data-display d-inline-block ml-4">{{ special_leave.pending_number_of_days }}</div>
+          {% endif %}
+        </div>
+
+        <p class="d-flex justify-content-center text-muted small">Data wypełnienia wniosku: {{ special_leave.date_of_completion }}</p>
+
+        {% if special_leave.is_pending %}
+          <div class="alert alert-info text-wrap" role="alert">Urlop okolicznościowy oczekuje na decyzję</div>
+        {% elif special_leave.is_pending_to_cancel %}
+          <div class="alert alert-warning text-wrap" role="alert">Urlop okolicznościowy oczekuje na akceptację odwołania</div>
+        {% elif special_leave.is_pending_to_finish_earlier %}
+          <div class="alert alert-warning text-wrap" role="alert">Urlop okolicznościowy oczekuje na akceptację prośby o wcześniejsze zakończenie</div>
+        {% elif special_leave.is_accepted or special_leave.is_confirmed %}
+          <div class="alert alert-success" role="alert">
+            <p class="text-wrap p-0 m-0">
+              Urlop okolicznościowy został zaakceptowany przez
+              <b>{{ special_leave.decisive_person.profile.get_name }}</b>
+              {% if special_leave.rejection_reason %}
+                </br>
+                {% if special_leave.pending_end_date and special_leave.pending_number_of_days %}
+                  Decyzja o wcześniejszym zakończeniu urlopu została rozpatrzona negatywnie z następującego powodu: </br>
+                {% else %}
+                  Decyzja o odwołaniu urlopu została rozpatrzona negatywnie z następującego powodu: </br>
+                {% endif %}
+                <i>{{ special_leave.rejection_reason }}</i>
+              {% endif %}
+            </p>
+          </div>
+        {% elif special_leave.is_rejected %}
+          <div class="alert alert-danger" role="alert">
+            <p class="small text-muted text-wrap p-0 m-0">
+              Urlop okolicznościowy został odrzucony przez
+              <b>{{ special_leave.decisive_person.profile.get_name }}</b>
+            </p>
+            <p class="text-wrap p-0 m-0">
+              {% if special_leave.rejection_reason %}
+                {{ special_leave.rejection_reason }}
+              {% else %}
+                Nie został podany powód odrzucenia urlopu okolicznościowego
+              {% endif %}
+            </p>
+          </div>
+        {% elif special_leave.is_canceled %}
+          <div class="alert alert-danger text-wrap" role="alert">Ten urlop okolicznościowy został odwołany</div>
+        {% endif%}
+      </div>
+    {% endfor %}
+
+    {% include "intranet/pagination_template.html" %}
+  </div>
+
+{% endblock content %}
+
+{% block bottom-js %}
+  {{ block.super }}
+  <script defer src="{% static 'intranet/js/filter_collapse.js'%}"></script>
+  <script defer src="{% static 'absence_calendar/js/absences.js' %}"></script>
+{% endblock bottom-js %}

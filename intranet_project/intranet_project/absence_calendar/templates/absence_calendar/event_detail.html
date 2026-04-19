@@ -1,0 +1,44 @@
+{% extends "intranet/base.html" %}
+{% load static %}
+
+{% block head-css %}
+  <link rel="stylesheet" href="{% static 'absence_calendar/css/absence_calendar.css' %}">
+
+  {{ block.super }}
+{% endblock %}
+
+{% block content %}
+
+  <article class="media content-section">
+    <div class="media-body">
+      <div class="border-bottom mb-4 d-flex flex-row justify-content-between">
+        <h4 class="text-wrap mb-0 pb-1">{{ object.title }}</h4>
+        {% if object.created_by == request.user %}
+          <div class="dropdown dropleft pos-static">
+            <a class="btn btn-sm btn-no-outline" href="#" role="button" id="eventDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+            </a>
+
+            <div class="dropdown-menu" aria-labelledby="eventDropdownMenuLink">
+              <a class="dropdown-item" href="{% url 'absence_calendar:event_update' object.id %}">Edytuj</a>
+              <a class="dropdown-item" href="{% url 'absence_calendar:event_delete' object.id %}">Usuń</a>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="mb-2">
+        <div class="mb-1"><i class="fa fa-calendar mr-2" aria-hidden="true"></i><b>Data</b></div>
+        <div class="date-range ml-4">
+          <div class="absence-calendar-data-display">{{ object.date }}</div>
+        </div>
+        {% if object.description %}
+          <div><i class="fa fa-comment mr-2" aria-hidden="true"></i><b>Opis</b></div>
+          <div class="absence-calendar-data-display ml-4 text-wrap d-inline-block">{{ object.description }}</div>
+        {% endif %}
+      </div>
+    </div>
+    
+  </article>
+
+{% endblock content %}

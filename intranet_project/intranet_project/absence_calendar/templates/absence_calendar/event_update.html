@@ -1,0 +1,22 @@
+{% extends "intranet/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+  <div class="content-section">
+
+    <h4 class="border-bottom pb-1 mb-4">Edycja wydarzenia</h4>
+
+    <form method="POST">
+      {% csrf_token %}
+
+      <fieldset class="form-group">
+        {{ form|crispy }}
+      </fieldset>
+
+      <div class="form-group">
+        <button class="btn btn-outline-primary" type="submit">Utwórz</button>
+      </div>
+    </form>
+
+  </div>
+{% endblock content %}

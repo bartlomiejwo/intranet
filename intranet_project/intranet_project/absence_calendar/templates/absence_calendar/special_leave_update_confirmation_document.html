@@ -1,0 +1,61 @@
+{% extends "intranet/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block head-css %}
+  <link rel="stylesheet" href="{% static 'absence_calendar/css/absence_calendar.css' %}">
+
+  {{ block.super }}
+{% endblock %}
+
+{% block content %}
+  <div class="content-section">
+
+    <h4 class="border-bottom pb-1 mb-4">Aktualizacja informacji o dokumencie potwierdzającym wniosek o urlop okolicznościowy</h4>
+
+    <div class="media-body">
+      <div><i class="fa fa-user-circle-o mr-2" aria-hidden="true"></i><b>Osoba wnioskująca</b></div>
+      <div class="absence-calendar-data-display d-inline-block ml-4 text-wrap">{{ object.absent.profile.get_name }}</div>
+      <div class="mb-1">
+        <div class="mb-1"><i class="fa fa-calendar mr-2" aria-hidden="true"></i><b>Zakres nieobecności</b></div>
+        <div class="date-range ml-4">
+          {% if object.start_date == object.end_date %}
+            <div class="absence-calendar-data-display">{{ object.start_date }}</div>
+          {% else %}
+            <div class="date-range-from-label">Od</div>
+            <div class="date-range-from text-wrap">{{ object.start_date }}</div>
+            <div class="date-range-to-label">do</div>
+            <div class="date-range-to text-wrap">{{ object.end_date }}</div>
+          {% endif%}
+        </div>
+      </div>
+
+      <div class="mb-2">
+        <div><i class="fa fa-info-circle mr-2" aria-hidden="true"></i><b>Liczba dni</b></div>
+        <div class="absence-calendar-data-display d-inline-block ml-4">{{ object.number_of_days }}</div>
+        <div><i class="fa fa-exclamation-circle mr-2 text-wrap" aria-hidden="true"></i><b>Powód</b></div>
+        <div class="absence-calendar-data-display ml-4 text-wrap d-inline-block">{{ object.reason.text }}</div>
+        <div><i class="fa fa-user-circle-o mr-2" aria-hidden="true"></i><b>Osoba decydująca</b></div>
+        <div class="absence-calendar-data-display d-inline-block ml-4 text-wrap">{{ object.decisive_person.profile.get_name }}</div>
+      </div>
+
+      <p class="d-flex justify-content-center text-muted small">Data wypełnienia wniosku: {{ object.date_of_completion }}</p>
+    </div>
+
+    <hr class="w-25">
+
+    <form method="POST">
+      {% csrf_token %}
+
+      <fieldset class="form-group">
+        {{ form|crispy }}
+        <input type="hidden" name="next" value="{{ request.path }}">
+      </fieldset>
+
+      <div class="form-group">
+        <button class="btn btn-outline-primary" type="submit">Akceptuj</button>
+      </div>
+    </form>
+
+  </div>
+{% endblock content %}

@@ -1,0 +1,35 @@
+{% extends "intranet/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+  <div class="content-section">
+
+    <h4 class="border-bottom pb-1 mb-4">Planowanie urlopu okolicznościowego</h4>
+    <select class="form-control mb-4" name="leaveType" id="leaveType">
+      <option value="{% url 'absence_calendar:vacation_leave_create' %}">Urlop wypoczynkowy</option>
+      <option value="{% url 'absence_calendar:special_leave_create' %}" selected>Urlop okolicznościowy</option>
+      <option value="{% url 'absence_calendar:absence_create' %}">Nieobecność</option>
+      <option value="{% url 'absence_calendar:remote_work_create' %}">Wniosek o pracę zdalną</option>
+    </select>
+    <hr class="w-25">
+
+    <form method="POST">
+      {% csrf_token %}
+
+      <fieldset class="form-group">
+        {{ form|crispy }}
+      </fieldset>
+
+      <div class="form-group">
+        <button class="btn btn-outline-primary" type="submit">Dodaj</button>
+      </div>
+    </form>
+
+  </div>
+{% endblock content %}
+
+{% block bottom-js %}
+  {{ block.super }}
+  <script defer src="{% static 'absence_calendar/js/absences.js' %}"></script>
+{% endblock bottom-js %}

@@ -1,0 +1,180 @@
+{% extends "intranet/base.html" %}
+{% load static %}
+
+{% block head-css %}
+  <link rel="stylesheet" href="{% static 'absence_calendar/css/absence_calendar.css' %}">
+
+  {{ block.super }}
+{% endblock %}
+
+{% block head-js %}
+  {{ block.super }}
+
+  <script>let displayedUrl = "{% url 'absence_calendar:absence_calendar' displayed_date.year displayed_date.month %}";</script>
+{% endblock %}
+
+{% block full-content %}
+
+<div class="col-md-9">
+  <div class="absence-calendar-content-section">
+    <div class="border-bottom d-flex justify-content-between">
+      <div>
+        <a href="{% url 'absence_calendar:absence_calendar' previous_date.year previous_date.month %}"><img src="{% static 'intranet/images/chevron-left.svg' %}" alt="Poprzedni miesiąc"></a>
+        <i class="fa fa-calendar c-pointer ml-2 mr-1" aria-hidden="true" id="absencesMonthPickerIcon"></i><input type="text" id="absencesMonthPicker">
+      </div>
+      <div>
+        {% if user.is_authenticated %}
+          <div class="dropdown dropleft pos-static d-inline">
+            <a class="btn btn-sm btn-no-outline" href="#" role="button" id="conferenceRoomsDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fa fa-ellipsis-v float-right" aria-hidden="true"></i>
+            </a>
+              <div class="dropdown-menu" aria-labelledby="conferenceRoomsDropdownMenuLink">
+                {% if perms.absence_calendar.add_event %}
+                  <a class="dropdown-item" href="{% url 'absence_calendar:event_create' %}">Utwórz wydarzenie</a>
+                  <div class="dropdown-divider"></div>
+                {% endif %}
+                <a class="dropdown-item" href="{% url 'absence_calendar:absence_create' %}">Zaplanuj nieobecność</a>
+                <a class="dropdown-item" href="{% url 'absence_calendar:vacation_leave_create' %}">Zaplanuj urlop wypoczynkowy</a>
+                <a class="dropdown-item" href="{% url 'absence_calendar:special_leave_create' %}">Zaplanuj urlop okolicznościowy</a>
+                <a class="dropdown-item" href="{% url 'absence_calendar:remote_work_create' %}">Zaplanuj pracę zdalną</a>
+                {% if user.employee %}
+                  {% if user.employee.is_manager or user.employee.is_deputy_manager %}
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="{% url 'absence_calendar:absence_by_manager_create' %}">Dodaj nieobecność pracownika</a>
+                  {% endif %}
+                {% endif %}
+              </div>
+          </div>
+        {% endif %}
+        <a href="{% url 'absence_calendar:absence_calendar' next_date.year next_date.month %}"><img src="{% static 'intranet/images/chevron-right.svg' %}" alt="Następny miesiąc"></a>
+      </div>
+    </div>
+
+    <div class="absence-calendar-scrollable">
+      <div class="absence-calendar">
+        <div class="absence-calendar-header intranet-r-border">Poniedziałek</div>
+        <div class="absence-calendar-header intranet-r-border">Wtorek</div>
+        <div class="absence-calendar-header intranet-r-border">Środa</div>
+        <div class="absence-calendar-header intranet-r-border">Czwartek</div>
+        <div class="absence-calendar-header intranet-r-border">Piątek</div>
+        <div class="absence-calendar-header intranet-r-border">Sobota</div>
+        <div class="absence-calendar-header">Niedziela</div>
+
+        {% for day in days %}
+          <div class="absence-calendar-item {% if not day.displayed_month %}text-secondary{% endif %} intranet-t-border {% if not forloop.counter|divisibleby:7 %}intranet-r-border{% endif %} {% if day.current_day %}current-day{% endif %}">
+            {% if day.displayed_month %}
+              <p class="absence-calendar-day-number font-weight-bold">
+                <a class="default-link" href={% url 'absence_calendar:absence_calendar_day' displayed_date.year displayed_date.month day.number %}>{{ day.number }}</a>
+              </p>
+            {% else %}
+              <p class="absence-calendar-day-number text-muted">
+                {% if day.number < 8 %}
+                  <a class="default-link text-muted" href={% url 'absence_calendar:absence_calendar_day' next_date.year next_date.month day.number %}>{{ day.number }}</a>
+                {% else %}
+                  <a class="default-link text-muted" href={% url 'absence_calendar:absence_calendar_day' previous_date.year previous_date.month day.number %}>{{ day.number }}</a>
+                {% endif %}
+              </p>
+            {% endif %}
+            <div class="absence-calendar-day-content">
+              {% if day.events %}
+                <b><u>Wydarzenie</u></b>
+                <div class="pl-1">
+                  {% for event in day.events %}
+                    <a href={% url 'absence_calendar:event_detail' event.id %} class="default-link small">{{ event.title }}</a><br>
+                  {% endfor %}
+                </div>
+              {% endif %}
+              {% if day.vacation_leaves %}
+                <b><u>Urlop wypoczynkowy</u></b>
+                <div class="pl-1">
+                  {% for vacation_leave in day.vacation_leaves %}
+                    <a href={% url 'absence_calendar:vacation_leave_detail' vacation_leave.id %} class="default-link small">{{ vacation_leave.absent_name }}</a><br>
+                  {% endfor %}
+                </div>
+              {% endif %}
+              {% if day.special_leaves %}
+                <b><u>Urlop okolicznościowy</u></b>
+                <div class="pl-1">
+                  {% for special_leave in day.special_leaves %}
+                    <a href={% url 'absence_calendar:special_leave_detail' special_leave.id %} class="default-link small">{{ special_leave.absent_name }}</a><br>
+                  {% endfor %}
+                </div>
+              {% endif %}
+              {% if day.remote_works %}
+                <b><u>Praca zdalna</u></b>
+                <div class="pl-1">
+                  {% for remote_work in day.remote_works %}
+                    <a href={% url 'absence_calendar:remote_work_detail' remote_work.id %} class="default-link small">{{ remote_work.absent_name }}</a><br>
+                  {% endfor %}
+                </div>
+              {% endif %}
+              {% if day.absences %}
+                <b><u>Nieobecność</u></b>
+                <div class="pl-1">
+                  {% for absence in day.absences %}
+                    <a href={% url 'absence_calendar:absence_detail' absence.id %} class="default-link small">{{ absence.absent_name }}</a><br>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </div>
+            <div class="day-details-button-container">
+              {% if day.displayed_month %}
+                <a class="day-details-button" href={% url 'absence_calendar:absence_calendar_day' displayed_date.year displayed_date.month day.number %}>Więcej ...</a>
+              {% else %}
+                {% if day.number < 8 %}
+                  <a class="day-details-button" href={% url 'absence_calendar:absence_calendar_day' next_date.year next_date.month day.number %}>Więcej ...</a>
+                {% else %}
+                  <a class="day-details-button" href={% url 'absence_calendar:absence_calendar_day' previous_date.year previous_date.month day.number %}>Więcej ...</a>
+                {% endif %}
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock full-content %}
+
+{% block bottom-js %}
+  {{ block.super }}
+  <script>
+    const flatPicker = flatpickr("#absencesMonthPicker", {
+      dateFormat: "F Y",
+      locale: "{{ language_code }}",
+      weekNumbers: true,
+      defaultDate: new Date("{{ displayed_date.year }}", "{{ displayed_date.month }}" - 1, 1),
+      onChange: function(selectedDates, dateStr, instance) {
+        if(flatPicker.currentYear != "{{ displayed_date.year }}" ||
+            (flatPicker.currentMonth + 1) != "{{ displayed_date.month }}") {
+          let slashesFound = 0;
+          let urlRequiredPartPos = displayedUrl.length;
+
+          for (let i=displayedUrl.length-1; i>=0; i--) {
+            if (displayedUrl.charAt(i) == '/') {
+              slashesFound += 1;
+            }
+
+            if (slashesFound == 3) {
+              urlRequiredPartPos = i;
+              break;
+            }
+          }
+          document.location.href = displayedUrl.substring(0, urlRequiredPartPos) + '/' 
+                                + instance.currentYear + '/' + (instance.currentMonth+1) + '/';
+        }
+      }
+    });
+
+    $('#absencesMonthPickerIcon').on('click', function() {
+      event.stopPropagation();
+      if (flatPicker.isOpen) {
+        flatPicker.close();
+      } else {
+        flatPicker.open();
+      }
+    });
+  </script>
+  <script defer src="{% static 'absence_calendar/js/absence_calendar.js' %}"></script>
+{% endblock %}

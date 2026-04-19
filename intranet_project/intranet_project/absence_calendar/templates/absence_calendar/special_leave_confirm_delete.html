@@ -1,0 +1,28 @@
+{% extends "intranet/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+  <div class="content-section">
+
+    <form method="POST">
+      {% csrf_token %}
+
+      <fieldset class="form-group">
+        <legend class="border-bottom mb-4">Usuwanie urlopu okolicznościowego</legend>
+        <h2>
+          Czy na pewno chcesz usunąć ten urlop okolicznościowy<br>
+          {% if object.start_date == object.end_date %}
+            ({{ object.start_date }})?
+          {% else %}
+            ({{ object.start_date }} - {{ object.end_date }})?
+          {% endif %}
+        </h2>
+      </fieldset>
+
+      <div class="form-group">
+        <button class="btn btn-outline-danger" type="submit">Tak, usuń</button>
+        <a class="btn btn-outline-secondary" href="{% url 'absence_calendar:special_leave_detail' object.id %}">Anuluj</a>
+      </div>
+    </form>
+
+  </div>
+{% endblock content %}
