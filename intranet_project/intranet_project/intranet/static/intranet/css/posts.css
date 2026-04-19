@@ -1,0 +1,217 @@
+.post-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+}
+
+.post-body {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow: auto;
+}
+
+.post-avatar-side-container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+}
+
+.post-content-side-container {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    flex-grow: 1;
+}
+
+.post-header-container {
+    display: flex;
+    flex-direction: row;
+    align-content: flex-end;
+    justify-content: space-between;
+}
+
+.post-header-container-text {
+    display: flex;
+    flex-direction: row;
+    align-content: flex-end;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.post-content {
+    overflow: auto;
+}
+
+.post-content p {
+    overflow-wrap: break-all;
+    word-wrap: break-all;
+    -ms-word-break: break-word;
+    word-break: break-word;
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+}
+
+.post-content div {
+    overflow-wrap: break-all;
+    word-wrap: break-all;
+    -ms-word-break: break-word;
+    word-break: break-word;
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+}
+
+.post-footer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: flex-end;
+    justify-content: space-between;
+}
+
+.post-footer-end {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    text-align: center;
+}
+
+.comment-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+}
+
+.comment-body {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+.comment-avatar-side-container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+}
+
+.comment-content-side-container {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    flex-grow: 1;
+}
+
+.comment-header-container {
+    display: flex;
+    flex-direction: row;
+    align-content: flex-end;
+    justify-content: space-between;
+}
+
+.comment-header-container-text {
+    display: flex;
+    flex-direction: row;
+    align-content: flex-end;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.comment-footer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: flex-end;
+    justify-content: space-between;
+}
+
+.comment-footer-end {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    text-align: center;
+}
+
+.like-button-area-liked {
+    color: #fb3958;
+}
+
+.like-button-area-not-liked {
+    color: #000;
+}
+
+.like-button {
+    color: inherit;
+    border: none;
+    background: none;
+}
+
+.like-button:hover {
+    border: none;
+    outline: none;
+}
+
+.like-button:focus {
+    border: none;
+    outline: none;
+}
+
+.like-button:active {
+    border: none;
+    outline: none;
+}
+
+.like-button-liked:active {
+    color: #000;
+    transition: all .2s ease-in-out;
+}
+
+.like-button-not-liked:active {
+    color: #fb3958;
+    transform: scale(1.5);
+    transition: all .1s ease-in-out;
+}
+
+.font-color-pinned {
+    color: #fb3958;
+}
+
+@media ( max-width: 500px) {
+    .post-avatar-side-container {
+        display: none;
+    }
+    .comment-avatar-side-container {
+        display: none;
+    }
+    .post-header-container-text {
+        flex-direction: column;
+    }
+    .post-footer {
+        flex-direction: column;
+        flex-wrap: wrap;
+        align-content: center;
+    }
+    .post-footer-end {
+        flex-direction: column;
+    }
+    .comment-footer {
+        flex-direction: column;
+        flex-wrap: wrap;
+        align-content: center;
+    }
+    .comment-footer-end {
+        flex-direction: column;
+    }
+    .comment-header-container-text {
+        flex-direction: column;
+    }
+}
