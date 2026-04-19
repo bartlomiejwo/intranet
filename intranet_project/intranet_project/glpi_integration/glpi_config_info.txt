@@ -1,0 +1,21 @@
+In order to make it work, in GLPI you have to:
+-add user with API Token and assign this API Token to "Authorization" in GlpiIntegrationSettings with "user_token" prefix
+-create an app: GLPI Settings > General > API:
+    -turn on REST API
+    -add API client (ip address = Intranet server ip address)
+    -assign app_token of client to "App token" in GlpiIntegrationSettings
+    -disable login duplicates in GLPI: Settings > Fields integrity > Add user field uniqueness
+    -create three groups:
+        -first for user account sync
+        -second for user data sync
+        -third for user data sync from comment
+    Then fill those groups names in GlpiIntegrationSetting
+
+Then define other things in GlpiIntegrationSetting
+Let's suppose that Comment data start separator is "INTRANET{" and Comment data end separator is "}INTRANET" then additional data in
+GLPI in user comment should look like this:
+INTRANET{{
+  "fieldA": "ValueA",
+  "fieldB": "ValueB",
+  "fieldC": "ValueC"
+}}INTRANET

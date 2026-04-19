@@ -1,0 +1,32 @@
+{% extends "intranet/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+  <div class="content-section">
+    <form method="POST">
+      {% csrf_token %}
+
+      <fieldset class="form-group">
+        <h4 class="border-bottom pb-1 mb-4">Nowe spotkanie</h4>
+        <select class="form-control mb-4" name="location" id="location">
+          {% for location in locations %}
+            {% if request.GET.location %}
+              <option value="{% url 'conference_rooms:meeting_create' %}?location={{ location.id }}" {% if location.id|stringformat:"i" == request.GET.location %}selected{% endif %}>{{ location.name }}</option>
+            {% else %}
+              <option value="{% url 'conference_rooms:meeting_create' %}?location={{ location.id }}" {% if location.id == object.location.id %}selected{% endif %}>{{ location.name }}</option>
+            {% endif %}
+          {% endfor %}
+        </select>
+        <hr class="w-25">
+        {% crispy form %}
+      </fieldset>
+      
+    </form>
+
+  </div>
+{% endblock content %}
+
+{% block bottom-js %}
+  {{ block.super }}
+  <script defer src="{% static 'conference_rooms/js/create_meetings.js' %}"></script>
+{% endblock bottom-js %}

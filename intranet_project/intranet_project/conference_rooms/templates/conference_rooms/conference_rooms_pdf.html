@@ -1,0 +1,98 @@
+{% extends "intranet/base.html" %}
+
+{% block head-css %}
+
+  <link rel="stylesheet" href="{{ SCHEME }}://{{ HTTP_HOST }}/static/conference_rooms/css/conference_rooms.css">
+  <link rel="stylesheet" href="{{ SCHEME }}://{{ HTTP_HOST }}/static/intranet/css/style.css">
+  <link rel="stylesheet" href="{{ SCHEME }}://{{ HTTP_HOST }}/static/intranet/bootstrap-4.4.1-dist/css/bootstrap.min.css">
+
+{% endblock %}
+
+{% block full-body %}
+  <body class="m-0 p-0 white-background">
+    <main role="main" class="container-fluid m-0 p-0">
+
+      <div class="col-md-9">
+        <div class="conference-rooms-content-section">
+          <div class="border-bottom d-flex justify-content-between">
+            <div>
+              <h5 class="pl-1 d-inline">Sale konferencyjne {{ display_date }}</h5>
+            </div>
+          </div>
+
+          <div class="conference-rooms-scrollable" id="conferenceRoomsScrollable">
+
+            <table class="conference-rooms-table">
+              <thead>
+                <tr>
+                  <th scope="col" class="conference-rooms-table-column-header-empty-corner">&nbsp;</th>
+                  {% for header in table_headers %}
+                    <th scope="col" class="conference-rooms-table-column-header text-wrap">{{ header.name }}</th>
+                  {% endfor %}
+                </tr>
+              </thead>
+
+              <tbody>
+                {% for row in table %}
+                  <tr class="conference-rooms-row">
+                    
+                    {% if row.header %}
+                      <th scope="row" class="conference-rooms-table-row-header-pdf" rowspan="4">{{ row.header }}</th>
+                    {% endif %}
+
+                    {% for cell in row.cells %}
+                      {% if cell.active %}
+
+                          {% if cell.reserved %}
+                            <td rowspan="{{ cell.rowspan }}" class="room-meeting-background text-wrap border-right-1" style="background: {{ cell.color }};">
+                              <a href="{% url 'conference_rooms:meeting_detail' cell.meeting_id %}">
+                                <div>
+                                  {% if cell.rowspan == 1 %}
+                                    <p class="font-weight-bold d-inline">{{ cell.time }}</p>
+                                    <p class="font-weight-bold d-inline">{{ cell.title }}</p>
+                                  {% elif cell.rowspan <= 3 %}
+                                    <p class="font-weight-bold">{{ cell.time }}</p>
+                                    <p class="font-weight-bold">{{ cell.title }}</p>
+                                  {% elif cell.rowspan == 4 %}
+                                    <p class="font-weight-bold">{{ cell.time }}</p>
+                                    <p class="font-weight-bold">{{ cell.title }}</p>
+                                    {% if cell.participants|length > 0 %}
+                                      <p class="mt-1">
+                                        {% for participant in cell.participants %}
+                                          {{ participant }},
+                                        {% endfor %}
+                                      </p>
+                                    {% endif %}
+                                  {% else %}
+                                    <p class="font-weight-bold">{{ cell.time }}</p>
+                                    <p class="font-weight-bold">{{ cell.title }}</p>
+                                    <p>{{ cell.description }}</p>
+                                    {% if cell.participants|length > 0 %}
+                                      <p class="mt-1">
+                                        {% for participant in cell.participants %}
+                                          {{ participant }},
+                                        {% endfor %}
+                                      </p>
+                                    {% endif %}
+                                  {% endif %}
+                                </div>
+                              </a>
+                            </td>
+                          {% else %}
+                            <td class="border-right-1" rowspan="1">&nbsp;</td>
+                          {% endif %}
+
+                      {% endif %}
+                    {% endfor %}
+
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+
+{% endblock full-body %}

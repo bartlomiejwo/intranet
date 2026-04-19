@@ -1,0 +1,3 @@
+FILE_ALREADY_POSTED_BEFORE = 'file_already_posted_before'
+MAXIMUM_FILE_SIZE_EXCEEDED = 'maximum_file_size_exceeded'
+FILES_CAPACITY_LIMIT_EXCEEDED = 'files_capacity_limit_exceeded'

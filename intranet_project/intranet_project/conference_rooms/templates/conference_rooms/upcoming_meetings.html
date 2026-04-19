@@ -1,0 +1,33 @@
+{% extends "intranet/base.html" %}
+{% block content %}
+
+  <div class="content-section">
+
+    <h4 class="border-bottom pb-1 mb-4">Nadchodzące spotkania</h4>
+
+    {% if not meetings %}
+      <div class="alert alert-primary mt-2" role="alert">
+        Brak nadchodzących spotkań
+      </div>
+    {% else %}
+      {% for meeting in meetings %}
+        <a class="default-link" href="{% url 'conference_rooms:meeting_detail' meeting.id %}">
+          <div class="rounded mb-3 p-2" style="background-color: {{ meeting.conference_room.color }};">
+            <div>
+              <h6 class="d-inline">{{meeting.conference_room.location.name}}, {{ meeting.conference_room.name }}</h6> 
+              <p class="d-inline small">{{ meeting.date }}</p>
+              <p class="d-inline small">{{ meeting.start_time }}-{{ meeting.end_time }}</p>
+            </div>
+            <div>
+              <p class="text-wrap m-0 p-0">{{ meeting.title }}</p>
+            </div>
+          </div>
+        </a>
+      {% endfor %}
+    {% endif %}
+
+    {% include "intranet/pagination_template.html" %}
+
+  </div>
+
+{% endblock content %}

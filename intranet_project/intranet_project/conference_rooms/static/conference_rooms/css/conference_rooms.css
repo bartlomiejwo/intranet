@@ -1,0 +1,226 @@
+.conference-rooms-content-section {
+    background: #ffffff;
+    padding: 3px 0px 0px 0px;
+    border: 1px solid #dddddd;
+    border-radius: 3px;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.conference-rooms-scrollable {
+    overflow: scroll;
+    overflow-x: auto;
+    overflow-y: hidden;
+    margin: 0px;
+    padding: 0px;
+}
+
+#currentTimeIndicator {
+    border: 2px dashed #000000;
+    border-radius: 3px;
+    position: absolute;
+    height: 18px;
+    opacity: 0.0;
+    pointer-events: none;
+    background: none !important;
+    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='dummy.png', sizingMethod='scale');
+}
+
+table.conference-rooms-table {
+    border-collapse: separate !important;
+    border-spacing: 0px;
+    padding:0 ;
+    margin: 0;
+    table-layout: fixed;
+}
+
+table.conference-rooms-table tr:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+table.conference-rooms-table tr:nth-child(even) {
+    background-color: #f6f4f4;
+}
+
+.conference-rooms-table-column-header-empty-corner {
+    background-color: #ffffff;
+    min-width: 35px;
+    width: 35px;
+    max-width: 35px;
+}
+
+.conference-rooms-table-column-header {
+    background-color: #ffffff;
+    text-align: center;
+    font-weight: bold;
+    min-width: 175px;
+    width: 100%;
+    font-size: 12px;
+}
+
+.conference-rooms-table-row-header {
+    background-color: #ffffff;
+    border-top: 1px solid #f6f4f4;
+    text-align: center;
+    vertical-align: top;
+    font-weight: bold;
+    font-size: 12px;
+    min-width: 35px;
+    width: 35px;
+    max-width: 35px;
+    min-height: 72px;
+    height: 72px;
+    max-height: 72px;
+}
+
+.conference-rooms-table-row-header-pdf {
+    background-color: #ffffff;
+    border-top: 1px solid #f6f4f4;
+    text-align: center;
+    vertical-align: top;
+    font-weight: bold;
+    font-size: 12px;
+    min-width: 40x;
+    width: 40px;
+    max-width: 40px;
+    min-height: 72px;
+    height: 72px;
+    max-height: 72px;
+}
+
+table.conference-rooms-table td {
+    font-size: 11px;
+    height: 18px;
+    min-height: 18px;
+    max-height: 18px;
+}
+
+@-moz-document url-prefix() {
+    table.conference-rooms-table td {
+        height: 100%;
+     }
+ }
+
+.border-right-1 {
+    border-right: 1px solid #ffffff;
+}
+
+.w-1 {
+    width: 1px;
+    max-width: 1px;
+}
+
+.room-meeting-background {
+    text-align: center;
+    border-bottom: 1px solid #f6f4f4;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.room-meeting-background a {
+    height: 100%;
+    width: 100%;
+    display: table;
+    position: relative;
+}
+
+.room-meeting-background a:link {
+    color: #000000;
+    text-decoration: none;
+}
+
+.room-meeting-background a:visited {
+    color: #000000;
+}
+
+.room-meeting-background a:hover {
+    color: #000000;
+}
+
+.room-meeting-background a:active {
+    color: #000000;
+}
+
+.room-meeting-background a div {
+    max-height: 50px;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+}
+
+.room-meeting-background a div p {
+    margin: 0;
+    font-size: 12px;
+}
+
+.meeting-calendar-card {
+    border-radius: 20px;
+    overflow: hidden;
+    float: left;
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.meeting-calendar-card-header-text {
+    padding: 3px 10px;
+    margin: 0;
+    font-size: 13px;
+    text-align: center;
+}
+
+.meeting-calendar-card-middle {
+    text-align: center;
+    vertical-align: center;
+    font-size: 50px;
+    background-color: #f9f9f9;
+}
+
+.meeting-calendar-card-middle p {
+    padding: 0;
+    margin: 0;
+}
+
+.meeting-calendar-card-footer {
+    text-align: center;
+    font-size: 16px;
+    background-color: #f9f9f9;
+}
+
+.meeting-calendar-card-footer p {
+    padding: 0 10px;
+    margin: 0;
+}
+
+.meeting-participants-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.meeting-participants-item {
+    border-radius: 5px;
+    padding: 0px 4px;
+    margin: 1px 2px;
+}
+
+.meeting-controls-area {
+    float: right;
+}
+
+#conferenceRoomsDatePicker {
+    width: 80px;
+    border: none;
+    background: transparent;
+    outline: none;
+}
+
+.conference-rooms-title-and-date {
+    flex-direction: row;
+}
+
+@media ( max-width: 500px) {
+    .conference-rooms-title-and-date {
+        flex-direction: column;
+    }
+}

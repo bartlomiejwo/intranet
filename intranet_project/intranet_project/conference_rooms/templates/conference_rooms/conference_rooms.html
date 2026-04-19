@@ -1,0 +1,189 @@
+{% extends "intranet/base.html" %}
+{% load static %}
+
+{% block head-css %}
+
+  <link rel="stylesheet" href="{% static 'conference_rooms/css/conference_rooms.css' %}">
+
+  {{ block.super }}
+{% endblock %}
+
+{% block head-js %}
+  <script>let displayDateUrl = "{% url 'conference_rooms:conference_rooms' display_date %}{% if request.GET.location %}?location={{ request.GET.location }}{% endif %}";</script>
+
+  {% if current_time_index != None %}
+    {{ current_time_index|json_script:"currentTimeIndexData" }}
+    {{ ms_until_time_indicator_move|json_script:"msUntilTimeIndicatorMoveData" }}
+  {% endif %}
+  {% if table_headers != None %}
+    {{ table_headers|length|json_script:"conferenceRoomsNumberData" }}
+    <script defer src="{% static 'conference_rooms/js/equal_width_columns.js'%}"></script>
+  {% endif %}
+  <script defer src="{% static 'conference_rooms/js/current_hour.js' %}"></script>
+
+  {{ block.super }}
+{% endblock head-js %}
+
+{% block full-content %}
+
+<div class="col-md-9">
+
+  <div class="conference-rooms-content-section">
+    <div class="border-bottom d-flex justify-content-between">
+      <div>
+        <a href="{% url 'conference_rooms:conference_rooms' previous_date %}{% if request.GET.location %}?location={{ request.GET.location }}{% endif %}"><img src="{% static 'intranet/images/chevron-left.svg' %}" alt="Poprzedni dzień"></a>
+        <div class="d-inline-flex conference-rooms-title-and-date">
+          <h6 class="pl-2 d-inline mt-1">Sale konferencyjne</h6>
+          <div class="d-inline-block">
+            <i class="fa fa-calendar c-pointer ml-2" aria-hidden="true" id="conferenceRoomsDatePickerIcon"></i><input class="small ml-1" type="text" id="conferenceRoomsDatePicker">
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="dropdown dropleft pos-static d-inline">
+          <a class="btn btn-sm btn-no-outline" href="#" role="button" id="locationsDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-map-marker float-right" aria-hidden="true"></i>
+          </a>
+          <div class="dropdown-menu" aria-labelledby="locationsDropdownMenuLink">
+            <h6 class="dropdown-header"><b>Lokalizacje</b></h6>
+            <div class="dropdown-divider"></div>
+            {% for location in locations %}
+              {% if request.GET.location %}
+                {% if request.GET.location == location.id|stringformat:"i" %}
+                  <h6 class="dropdown-header">{{ location.name }}</h6>
+                {% else %}
+                  <a class="dropdown-item" href="{% url 'conference_rooms:conference_rooms' display_date %}?location={{ location.id }}">{{ location.name }}</a>
+                {% endif%}
+              {% else %}
+                {% if location.default %}
+                  <h6 class="dropdown-header">{{ location.name }}</h6>
+                {% else %}
+                  <a class="dropdown-item" href="{% url 'conference_rooms:conference_rooms' display_date %}?location={{ location.id }}">{{ location.name }}</a>
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+        <div class="dropdown dropleft pos-static d-inline">
+          <a class="btn btn-sm btn-no-outline" href="#" role="button" id="conferenceRoomsDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-ellipsis-v float-right" aria-hidden="true"></i>
+          </a>
+          <div class="dropdown-menu" aria-labelledby="conferenceRoomsDropdownMenuLink">
+            {% if user.is_authenticated %}<a class="dropdown-item" href="{% url 'conference_rooms:meeting_create' %}{% if request.GET.location %}?location={{ request.GET.location }}{% endif %}">Zarezerwuj spotkanie</a>{% endif %}
+            <a class="dropdown-item" href="{% url 'conference_rooms:upcoming_meetings' %}">Nadchodzące spotkania</a>
+            <a class="dropdown-item" href="{% url 'conference_rooms:conference_rooms_pdf' display_date %}{% if request.GET.location %}?location={{ request.GET.location }}{% endif %}">Generuj PDF</a>
+          </div>
+        </div>
+        <a href="{% url 'conference_rooms:conference_rooms' next_date %}{% if request.GET.location %}?location={{ request.GET.location }}{% endif %}"><img src="{% static 'intranet/images/chevron-right.svg' %}" alt="Następny dzień"></a>
+      </div>
+    </div>
+
+    <div class="conference-rooms-scrollable" id="conferenceRoomsScrollable">
+
+      {% if current_time_index != None %}
+        <div id="currentTimeIndicator"></div>
+      {% endif %}
+
+      <table class="conference-rooms-table">
+        <thead>
+          <tr>
+            <th scope="col" class="conference-rooms-table-column-header-empty-corner">&nbsp;</th>
+            {% for header in table_headers %}
+              <th scope="col" class="conference-rooms-table-column-header text-wrap"><a class="default-link" href="{% url 'conference_rooms:conference_room' header.id display_date %}">{{ header.name }}</a></th>
+            {% endfor %}
+            <th scope="col" class="w-1 column-for-current-time-indicator-calculations"></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for row in table %}
+            <tr class="conference-rooms-row">
+              
+              {% if row.header %}
+                <th scope="row" class="conference-rooms-table-row-header" rowspan="4">{{ row.header }}</th>
+              {% endif %}
+
+              {% for cell in row.cells %}
+                {% if cell.active %}
+
+                    {% if cell.reserved %}
+                      <td rowspan="{{ cell.rowspan }}" class="room-meeting-background text-wrap border-right-1" style="background: {{ cell.color }};">
+                        <a href="{% url 'conference_rooms:meeting_detail' cell.meeting_id %}">
+                          <div>
+                            {% if cell.rowspan == 1 %}
+                              <p class="font-weight-bold d-inline">{{ cell.time }}</p>
+                              <p class="font-weight-bold d-inline">{{ cell.title }}</p>
+                            {% elif cell.rowspan <= 3 %}
+                              <p class="font-weight-bold">{{ cell.time }}</p>
+                              <p class="font-weight-bold">{{ cell.title }}</p>
+                            {% elif cell.rowspan == 4 %}
+                              <p class="font-weight-bold">{{ cell.time }}</p>
+                              <p class="font-weight-bold">{{ cell.title }}</p>
+                              {% if cell.participants|length > 0 %}
+                                <p class="mt-1">
+                                  {% for participant in cell.participants %}
+                                    {{ participant }},
+                                  {% endfor %}
+                                </p>
+                              {% endif %}
+                            {% else %}
+                              <p class="font-weight-bold">{{ cell.time }}</p>
+                              <p class="font-weight-bold">{{ cell.title }}</p>
+                              <p>{{ cell.description }}</p>
+                              {% if cell.participants|length > 0 %}
+                                <p class="mt-1">
+                                  {% for participant in cell.participants %}
+                                    {{ participant }},
+                                  {% endfor %}
+                                </p>
+                              {% endif %}
+                            {% endif %}
+                          </div>
+                        </a>
+                      </td>
+                    {% else %}
+                      <td class="border-right-1" rowspan="1">&nbsp;</td>
+                    {% endif %}
+
+                {% endif %}
+              {% endfor %}
+              <td rowspan="1" class="column-for-current-time-indicator-calculations"></td>
+              
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+{% endblock full-content %}
+
+{% block bottom-js %}
+  {{ block.super }}
+
+  <script>
+    $(document).ready(function(){
+      const flatPicker = flatpickr("#conferenceRoomsDatePicker", {
+        dateFormat: "{{ date_input_format }}",
+        locale: "{{ language_code }}",
+        defaultDate: "{{ display_date }}",
+        onChange: function(selectedDates, dateStr, instance) {
+          if (dateStr != "{{ display_date }}") {
+            document.location.href = displayDateUrl.replace("{{ display_date }}", dateStr);
+          }
+        }
+      });
+
+      $('#conferenceRoomsDatePickerIcon').on('click', function() {
+        event.stopPropagation();
+        if (flatPicker.isOpen) {
+          flatPicker.close();
+        } else {
+          flatPicker.open();
+        }
+      });
+    });
+  </script>
+
+{% endblock bottom-js %}

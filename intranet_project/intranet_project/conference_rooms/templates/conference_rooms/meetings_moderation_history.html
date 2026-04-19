@@ -1,0 +1,210 @@
+{% extends "intranet/base.html" %}
+{% load static %}
+
+{% block head-css %}
+
+  <link rel="stylesheet" href="{% static 'conference_rooms/css/conference_rooms.css' %}">
+
+  {{ block.super }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="content-section">
+    <h4 class="border-bottom pb-1 mb-4">Historia moderacji spotkań</h4>
+
+    <div class="d-flex justify-content-center">
+      <a class="small text-wrap default-link text-primary" href="{% url 'conference_rooms:meetings_moderation' %}">
+        <b>Spotkania oczekujące na decyzję</b>
+      </a>
+    </div>
+
+    <div class="text-right mt-2">
+      <button class="btn btn-link default-link collapse-toggle" type="button" id="filtersToggle" data-toggle="collapse" data-target="#filtersCollapse" aria-expanded="false" aria-controls="filtersCollapse">
+        <div class="toggle-expand small d-inline-block"><i class="fa fa-search mr-1" aria-hidden="true"></i>Pokaż wyszukiwarkę</div>
+        <div class="toggle-collapse small d-none"><i class="fa fa-search mr-1" aria-hidden="true"></i>Ukryj wyszukiwarkę</div>
+      </button>
+    </div>
+
+    <div class="collapse mb-1" id="filtersCollapse">
+      <form class="mt-4" action="{% url 'conference_rooms:meetings_moderation_history' %}" method="get">
+        <div class="form-inline mt-1">
+          <div class="col-md-4 form-group">
+            <label for="meetingOrganizerFirstName" class="small">Imię organizatora</label>
+            <input type="text" name="meetingOrganizerFirstName" id="meetingOrganizerFirstName" class="form-control col-md-12" value="{{ request.GET.meetingOrganizerFirstName }}">
+          </div>
+          <div class="col-md-4 form-group">
+            <label for="meetingOrganizerLastName" class="small">Nazwisko organizatora</label>
+            <input type="text" name="meetingOrganizerLastName" id="meetingOrganizerLastName" class="form-control col-md-12" value="{{ request.GET.meetingOrganizerLastName }}">
+          </div>
+          <div class="col-md-4 form-group">
+            <label for="conferenceRoom" class="small">Sala konferencyjna</label>
+            <select class="form-control col-md-12" id="conferenceRoom" name="conferenceRoom">
+              <option value="" {% if request.GET.conferenceRoom == ""%}selected{% endif %}></option>
+              {% for conference_room in conference_rooms %}
+                <option value="{{ conference_room.id }}" {% if request.GET.conferenceRoom == conference_room.id|stringformat:"i" %}selected{% endif %}>{{ conference_room.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <div class="form-inline mt-1">
+          <div class="col-md-4 form-group">
+            <label for="meetingTitle" class="small">Tytuł</label>
+            <input type="text" name="meetingTitle" id="meetingTitle" class="form-control col-md-12" value="{{ request.GET.meetingTitle }}">
+          </div>
+          <div class="col-md-4 form-group">
+            <label for="meetingRangeDateStart" class="small">Początkowa data</label>
+            <input type="date" name="meetingRangeDateStart" id="meetingRangeDateStart" class="form-control col-md-12" value="{{ request.GET.meetingRangeDateStart }}">
+          </div>
+          <div class="col-md-4 form-group">
+            <label for="meetingRangeDateEnd" class="small">Końcowa data</label>
+            <input type="date" name="meetingRangeDateEnd" id="meetingRangeDateEnd" class="form-control col-md-12" value="{{ request.GET.meetingRangeDateEnd }}">
+          </div>
+        </div>
+        <div class="text-right mt-2">
+          <input type="submit" value="Wyszukaj" class="btn btn-primary btn-sm mr-3">
+        </div>
+      </form>
+    </div>
+
+    <div class="border-bottom pb-1 mb-4"></div>
+
+    <div class="alert alert-primary {% if meetings %}d-none{% endif %}" id="listEmptyInfo" role="alert">
+      Nie znaleziono żadnych spotkań.
+    </div>
+
+    <div id="meetingDecisions">
+      {% for meeting in meetings %}
+        <div id="meetingDecision" data-id="{{ meeting.id }}">
+          <p>Spotkanie organizowane przez:
+            <b>{{ meeting.created_by.profile.get_name }}</b>
+          </p>
+
+          <div class="mb-3">
+            <div class="meeting-calendar-card">
+              <div style="background-color: {{ meeting.conference_room.color }};">
+                <p class="meeting-calendar-card-header-text">{{ meeting.date|date:"F Y" }}</p> 
+              </div>
+              <div class="meeting-calendar-card-middle">
+                <p>{{ meeting.date|date:"j" }}</p>
+              </div>
+              <div class="meeting-calendar-card-footer">
+                <p>{{ meeting.date|date:"l" }}</p>
+              </div>
+            </div>
+
+            {% if meeting.possible_to_edit %}
+              <div class="dropdown dropleft float-right pos-static">
+                <a class="btn btn-sm btn-no-outline" href="#" role="button" id="meetingDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="fa fa-ellipsis-v float-right" aria-hidden="true"></i>
+                </a>
+                
+                <div class="dropdown-menu" aria-labelledby="meetingDropdownMenuLink">
+                  {% if meeting.status == statuses.ACCEPTED %}
+                    <button class="dropdown-item meeting-reject" type="button" data-id="{{ meeting.id }}" data-url="{% url 'conference_rooms:meeting_decision_change_to_rejected' meeting.id %}">Zmień decyzję</button>
+                  {% elif meeting.status == statuses.REJECTED %}
+                    <button class="dropdown-item meeting-accept" type="button" data-id="{{ meeting.id }}" data-url="{% url 'conference_rooms:meeting_decision_change_to_accepted' meeting.id %}">Zmień decyzję</button>
+                  {% endif%}
+                </div>
+              </div>
+            {% endif %}
+          
+            <h5 class="m-0 p-0"><a class="article-title text-wrap" href="{% url 'conference_rooms:meeting_detail' meeting.id %}">{{ meeting.title }}</a></h5>
+            <p class="small text-muted text-wrap m-0 p-0">{{ meeting.conference_room.location.name }}, {{ meeting.conference_room.name }}</p>
+            <p class="small text-muted text-wrap m-0 p-0">{{ meeting.start_time }}-{{ meeting.end_time }}</p>
+            <p class="text-wrap m-0 p-0">
+              {% if meeting.description %}
+                {{ meeting.description }}
+              {% else %}
+                <p class="small text-muted">Brak opisu</p>
+              {% endif %}
+            </p>
+
+            <div class="meeting-participants-container">
+              {% if meeting.participant_set.all %}
+                {% for participant in meeting.participant_set.all %}
+                  <div class="meeting-participants-item" style="border: 1px solid {{ meeting.conference_room.color }};">
+                    {{ participant.name }}
+                  </div>
+                {% endfor %}
+              {% else %}
+                <p class="small text-muted">Brak uczestników</p>
+              {% endif %}
+            </div>
+          </div>
+
+          {% if meeting.status == statuses.ACCEPTED %}
+            <div class="alert alert-success position-static" role="alert">
+              <p class="text-wrap p-0 m-0">
+                Zaakceptowane
+                {% if meeting.status_changed_by %}
+                  {% if meeting.last_status_change_time %}
+                    {{ meeting.last_status_change_time }}
+                  {% endif %}
+                  przez
+                  <b>{{ meeting.status_changed_by.profile.get_name }}</b>
+                {% endif %}
+              </p>
+            </div>
+          {% elif meeting.status == statuses.REJECTED %}
+            <div class="alert alert-danger position-static" role="alert">
+              <p class="small text-muted text-wrap p-0 m-0">
+                Odrzucone
+                {% if meeting.status_changed_by %}
+                  {% if meeting.last_status_change_time %}
+                    {{ meeting.last_status_change_time }}
+                  {% endif %}
+                  przez
+                  <b>{{ meeting.status_changed_by.profile.get_name }}</b>
+                {% endif %}
+              </p>
+              <p class="text-wrap p-0 m-0">
+                {% if meeting.rejection_reason %}
+                  {{ meeting.rejection_reason }}
+                {% else %}
+                  Nie został podany powód odrzucenia spotkania
+                {% endif %}
+              </p>
+            </div>
+          {% endif %}
+          <div class="border-bottom pb-1 mb-4 mt-2"></div>
+        </div>
+      {% endfor %}
+
+      <div class="modal fade" id="rejectModal" tabindex="-1" role="dialog" aria-labelledby="rejectModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="rejectModalLabel">Odrzucanie spotkania</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p>Czy na pewno chcesz odrzucić to spotkanie?</p>
+              <p class="small text-muted">Opcjonalnie możesz podać powód odrzucenia spotkania:</p>
+              <textarea class="w-100" id="rejectionReason"></textarea>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Nie odrzucaj</button>
+              <button type="button" class="btn btn-danger" id="modalRejectMeetingButton">Odrzuć</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    {% include "intranet/pagination_template.html" %}
+  </div>
+{% endblock content %}
+
+{% block bottom-js %}
+  {{ block.super }}
+
+  <script>
+    var csrfToken = '{{ csrf_token }}';
+  </script>
+  <script defer src="{% static 'intranet/js/ajax_navigation_back_forward_refresh.js' %}"></script>
+  <script src="{% static 'conference_rooms/js/meetings_moderation_history.js'%}"></script>
+  <script defer src="{% static 'intranet/js/filter_collapse.js'%}"></script>
+
+{% endblock bottom-js %}

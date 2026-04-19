@@ -1,0 +1,137 @@
+{% extends "intranet/base.html" %}
+{% load static %}
+
+{% block head-css %}
+
+  <link rel="stylesheet" href="{% static 'conference_rooms/css/conference_rooms.css' %}">
+
+  {{ block.super }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="content-section">
+    <h4 class="border-bottom pb-1 mb-4">Moderacja spotkań</h4>
+
+    <div class="d-flex justify-content-center">
+      <a class="small text-wrap default-link text-primary" href="{% url 'conference_rooms:meetings_moderation_history' %}">
+        <b>Historia</b>
+      </a>
+    </div>
+    <hr/>
+
+    <div class="alert alert-primary {% if meetings %}d-none{% endif %}" id="listEmptyInfo" role="alert">
+      Nie ma żadnych spotkań do przetworzenia.
+    </div>
+
+    <div id="meetingDecisions">
+      {% for meeting in meetings %}
+        <div id="meetingDecision" data-id="{{ meeting.id }}">
+          <p>Spotkanie organizowane przez:
+            <b>{{ meeting.created_by.profile.get_name }}</b>
+          </p>
+
+          <div class="mb-3">
+            <div class="meeting-calendar-card">
+              <div style="background-color: {{ meeting.conference_room.color }};">
+                <p class="meeting-calendar-card-header-text">{{ meeting.date|date:"F Y" }}</p> 
+              </div>
+              <div class="meeting-calendar-card-middle">
+                <p>{{ meeting.date|date:"j" }}</p>
+              </div>
+              <div class="meeting-calendar-card-footer">
+                <p>{{ meeting.date|date:"l" }}</p>
+              </div>
+            </div>
+          
+            <h5 class="m-0 p-0"><a class="article-title text-wrap" href="{% url 'conference_rooms:meeting_detail' meeting.id %}">{{ meeting.title }}</a></h5>
+            <p class="small text-muted text-wrap m-0 p-0">{{ meeting.conference_room.location.name }}, {{ meeting.conference_room.name }}</p>
+            <p class="small text-muted text-wrap m-0 p-0">{{ meeting.start_time }}-{{ meeting.end_time }}</p>
+            <p class="text-wrap m-0 p-0">
+              {% if meeting.description %}
+                {{ meeting.description }}
+              {% else %}
+                <p class="small text-muted">Brak opisu</p>
+              {% endif %}
+            </p>
+
+            <div class="meeting-participants-container">
+              {% if meeting.participant_set.all %}
+                {% for participant in meeting.participant_set.all %}
+                  <div class="meeting-participants-item" style="border: 1px solid {{ meeting.conference_room.color }};">
+                    {{ participant.name }}
+                  </div>
+                {% endfor %}
+              {% else %}
+                <p class="small text-muted">Brak uczestników</p>
+              {% endif %}
+            </div>
+          </div>
+
+          <button type="button" class="btn btn-sm btn-primary meeting-accept" data-id="{{ meeting.id }}" data-url="{% url 'conference_rooms:meeting_accept' meeting.id %}">Akceptuj</button>
+          <button type="button" class="btn btn-sm btn-danger meeting-reject" data-id="{{ meeting.id }}" data-url="{% url 'conference_rooms:meeting_reject' meeting.id %}">Odrzuć</button>
+          <div class="border-bottom pb-1 mb-4 mt-2"></div>
+        </div>
+
+        <div class="d-flex justify-content-center">
+          <div class="toast hide position-fixed bottom-0" role="alert" aria-live="assertive" aria-atomic="true" data-delay="2000" id="successToast" data-id="{{ meeting.id }}">
+            <div class="toast-header">
+              <strong class="mr-auto text-success">Wykonano poprawnie</strong>
+              <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="toast-body" id="successToastText" data-id="{{ meeting.id }}"></div>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-center">
+          <div class="toast hide position-fixed bottom-0" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="false" id="errorToast" data-id="{{ meeting.id }}">
+            <div class="toast-header">
+              <strong class="mr-auto text-danger">Błąd</strong>
+              <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="toast-body" id="errorToastText" data-id="{{ meeting.id }}"></div>
+          </div>
+        </div>
+      {% endfor %}
+
+
+      <div class="modal fade" id="rejectModal" tabindex="-1" role="dialog" aria-labelledby="rejectModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="rejectModalLabel">Odrzucanie spotkania</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p>Czy na pewno chcesz odrzucić to spotkanie?</p>
+              <p class="small text-muted">Opcjonalnie możesz podać powód odrzucenia spotkania:</p>
+              <textarea class="w-100" id="rejectionReason"></textarea>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Nie odrzucaj</button>
+              <button type="button" class="btn btn-danger" id="modalRejectMeetingButton">Odrzuć</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% include "intranet/pagination_template.html" %}
+  </div>
+{% endblock content %}
+
+{% block bottom-js %}
+  {{ block.super }}
+
+  <script>
+    var csrfToken = '{{ csrf_token }}';
+  </script>
+  <script defer src="{% static 'intranet/js/ajax_navigation_back_forward_refresh.js' %}"></script>
+  <script src="{% static 'conference_rooms/js/meetings_moderation.js'%}"></script>
+
+{% endblock bottom-js %}

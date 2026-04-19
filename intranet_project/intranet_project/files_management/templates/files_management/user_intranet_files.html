@@ -1,0 +1,90 @@
+{% extends "intranet/base.html" %}
+{% load static %}
+
+{% block head-js %}
+  {{ block.super }}
+
+  <script>
+    var csrfToken = '{{ csrf_token }}';
+  </script>
+{% endblock head-js%}
+
+{% block full-content %}
+  <div class="col-md-9">
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      {% endfor %}
+    {% endif %}
+
+    <div class="alert alert-primary mt-2 {% if files %}d-none{% endif %}" id="listEmptyInfo" role="alert">
+      Lista z twoimi plikami jest pusta.
+    </div>
+
+    <div class="content-section">
+      <h4 class="border-bottom pb-1 mb-4">Moje pliki</h4>
+
+      <div class="mb-1">
+        <button type="button" class="controls-button-alt-1" id="uploadFileButton" data-url="{% url 'files_management:upload_file_ajax' %}">Prześlij plik</button>
+        <button type="button" class="controls-button-alt-1 action-for-selected-checkboxes" data-url="{% url 'files_management:delete_files' %}" data-confirmation="true">Usuń zaznaczone</button>
+      </div>
+
+      <div class="overflow-auto">
+        <table class="table table-responsive-lg table-sm table-bordered table-hover">
+          <thead>
+            <tr>
+              <th scope="col">
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input c-pointer" id="selectAllCheckbox">
+                  <label class="form-check-label" for="selectAllCheckbox"></label>
+                </div>
+              </th>
+              <th scope="col">Nazwa</th>
+              <th scope="col">Typ</th>
+              <th scope="col">Rozmiar</th>
+              <th scope="col">Link</th>
+              <th scope="col">Data przesłania</th>
+              <th scope="col">Użycia</th>
+              <th scope="col">Z edytora</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for file in files %}
+              <tr>
+                <th scope="row" class="align-middle bg-white border border-muted c-default" onclick="event.stopPropagation()" oncontextmenu="event.stopPropagation()">
+                  <div class="form-check">
+                    <input type="checkbox" class="form-check-input c-pointer select-checkbox" data-id="{{ file.id }}">
+                    <label class="form-check-label"></label>
+                  </div>
+                </th>
+                <td>{{ file.name }}</td>
+                <td>{{ file.get_type }}</td>
+                <td>{{ file.get_size_str }}</td>
+                <td><a class="mr-2 clip-board-link" href="{{ request.scheme }}://{{ request.META.HTTP_HOST }}{{ file.get_link }}" data-id="{{ file.id }}">Link</a><button type="button" data-toggle="tooltip" data-placement="bottom" title="Link został skopiowany do schowka." class="btn btn-sm btn-no-outline float-right copy-file-link-to-clip-board-button" data-id="{{ file.id }}"><i class="fa fa-link" aria-hidden="true"></i></button></td>
+                <td>{{ file.upload_date|date:"Y-m-d H:i" }}</td>
+                <td>{{ file.usage_counter }}</td>
+                <td>{% if file.added_with_wysiwyg %}Tak{% else %}Nie{% endif %}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+      {% include "intranet/pagination_template.html" %}
+    </div>
+  </div>
+
+{% endblock full-content %}
+
+{% block bottom-js %}
+  {{ block.super }}
+
+  <script defer src="{% static 'intranet/js/checkbox_select_list.js' %}"></script>
+  <script defer src="{% static 'files_management/js/copy_to_clipboard.js' %}"></script>
+  <script defer src="{% static 'files_management/js/file_upload.js' %}"></script>
+
+{% endblock bottom-js %}

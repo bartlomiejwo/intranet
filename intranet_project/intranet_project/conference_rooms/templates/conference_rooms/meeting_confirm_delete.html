@@ -1,0 +1,21 @@
+{% extends "intranet/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+  <div class="content-section">
+
+    <form method="POST">
+      {% csrf_token %}
+
+      <fieldset class="form-group">
+        <legend class="border-bottom mb-4">Usuwanie spotkania</legend>
+        <h2>Czy na pewno chcesz usunąć spotkanie "{{ object.title }}"?</h2>
+      </fieldset>
+
+      <div class="form-group">
+        <button class="btn btn-outline-danger" type="submit">Tak, usuń</button>
+        <a class="btn btn-outline-secondary" href="{% url 'conference_rooms:meeting_detail' object.id %}">Anuluj</a>
+      </div>
+    </form>
+
+  </div>
+{% endblock content %}
