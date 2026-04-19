@@ -1,0 +1,434 @@
+1. instalacja ubuntu/debian
+2. instalacja ftp "sudo apt install vsftpd"
+3. instalacja apache "sudo apt install apache2"
+4. instalacja mariadb "sudo apt install mariadb-server mariadb-client -y"
+5. instalacja php "sudo apt install php php-common php-mysql php-gd php-cli -y", a następnie
+	stworzenie pliku info.php "echo "<?php phpinfo(); ?>" | sudo tee /var/www/html/info.php",
+	aby można było podglądać wersję php: http://SERVER_IP/info.php
+6. instalacja phpmyadmin "sudo apt install phpmyadmin"
+7. Dodanie w pliku: /etc/apache2/apache2.conf linijki: "Include /etc/phpmyadmin/apache.conf"
+8. restart apache "sudo systemctl restart apache2"
+9. logowanie do mariadb "sudo mysql -u root -p", a następnie utworzenie admina:
+	MariaDB [(none)]> CREATE USER 'admin’@’localhost' IDENTIFIED BY 'hostnextra=@3454';
+	MariaDB [(none)]> GRANT ALL PRIVILEGES ON *.* TO 'admin’@’localhost' WITH GRANT OPTION;
+	MariaDB [(none)]> FLUSH PRIVILEGES;
+	
+	albo za to środkowe:
+	GRANT ALL PRIVILEGES ON *.* TO admin@localhost IDENTIFIED BY ' your current password ' WITH GRANT 
+	
+10. instalacja wkhtmltopdf:
+	sudo apt-get update
+	sudo apt-get install xvfb libfontconfig wkhtmltopdf
+	
+	Można też: (wtedy instaluje sie wersja z qt-patched ale lepiej nie instalować jej bo nie działa tak dobrze)
+	albo (tak jest zalecane przez producenta wkhtmltopdf)
+	
+	sudo apt-get install xvfb libfontconfig
+	
+	Następnie pobieramy odpowiednią wersję stąd:
+	https://wkhtmltopdf.org/downloads.html
+	
+	przerzucamy przez winscp na serwer i instalujemy:
+	sudo dpkg -i  <nazwa_pliku>
+
+11. instalacja i konfiguracja redis
+	sudo apt install redis-server
+	sudo nano /etc/redis/redis.conf
+	
+	zamienić "supervised no" na "supervised systemd"
+	
+	sudo systemctl restart redis.service
+	sudo systemctl status redis
+	redis-cli
+	
+12. instalacja dodatkowych rzeczy dla python-ldap:
+	sudo apt-get install libsasl2-dev python-dev libldap2-dev libssl-dev
+	
+13. instalacja i włączenie dodatkowych modułów do apache2:
+
+sudo apt install openssl
+
+sudo apt install -y build-essential
+
+Jeśli nie są zainstalowane to:
+sudo apt install -y libapache2-mod-proxy-html libxml2-dev
+
+sudo a2enmod proxy_wstunnel
+sudo a2enmod rewrite
+sudo a2enmod proxy_http
+sudo a2enmod ssl
+sudo a2enmod headers
+
+sudo systemctl restart apache2
+
+apache instance config
+
+14. instalacja modułów dla mysqlclient (jeśli jeszcze ich nie ma)
+sudo apt install libmariadbclient-dev
+lub
+sudo apt install libmariadb-dev libmariadb-dev-compat
+
+15. Utworzenie folderu dla plików intranet:
+sudo mkdir /intranet/data
+`
+16. Wrzucenie spakowanych plików projektu przez FTP do katalogu głównego użytkownika,
+a następnie przeniesienie ich do lokalizacji /intranet
+
+sudo mv /home/admin/intranet_project.zip /intranet
+
+17. Wypakowanie plików:
+
+sudo apt install unzip
+sudo unzip intranet_project.zip
+
+Po wypakowaniu usuwamy archiwum:
+sudo rm intranet_project.zip
+
+18. Utworzenie w /intranet/data folderów:
+
+sudo mkdir /intranet/data/static
+sudo mkdir /intranet/data/files_archive
+sudo mkdir /intranet/data/logs
+sudo cp -r /intranet/intranet_project/intranet_project/media /intranet/data/media
+sudo cp -r /intranet/intranet_project/intranet_project/locale /intranet/data/locale
+
+I wyczyszczenie zawartości /intranet/data/media/uploads:
+
+sudo rm -R /intranet/data/media/uploads/*
+
+19. Konfiguracja projektu:
+
+sudo nano /intranet/intranet_project/intranet_project/intranet_project/settings.py
+
+DEBUG = False
+ALLOWED_HOSTS = ['*',]
+
+DATABASES = {
+	'default': {
+		'ENGINE': 'django.db.backends.mysql',
+		'NAME': 'intranet',
+		'USER': 'intranet',
+		'PASSWORD': 'password',
+		'HOST': 'localhost',
+		'PORT': '3306',
+	}
+}
+
+LOCALE_PATHS = (
+	'/intranet/data/locale/',
+)
+
+STATIC_ROOT = '/intranet/data/static/'
+
+MEDIA_ROOT = '/intranet/data/media/'
+
+ARCHIVE_DIR = '/intranet/data/files_archive/'
+
+LOGGING_PATH = '/intranet/data/logs/'
+
+# Setup support for proxy headers
+USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+Zmiana w loggerach poziomu logowania na WARNING, oprócz handlera GLPI, FILES_MANAGEMENT i ABSENCE_CALENDAR, tam INFO
+
+20. Utworzenie bazy danych i użytkownika z loginem i hasłem podanym w konfiguracji z poprzedniego punktu
+
+	MariaDB [(none)]> CREATE DATABASE intranet CHARACTER SET UTF8;
+	MariaDB [(none)]> CREATE USER 'intranet’@’localhost' IDENTIFIED BY 'password';
+	MariaDB [(none)]> GRANT ALL PRIVILEGES ON intranet.* TO intranet@localhost;
+	MariaDB [(none)]> FLUSH PRIVILEGES;
+	
+21. Przygotowanie venv
+
+Jeśli w systemie nie ma python3.8 to trzeba najpierw zainstalować:
+
+sudo apt update
+sudo apt install build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libsqlite3-dev libreadline-dev libffi-dev curl libbz2-dev
+curl -O https://www.python.org/ftp/python/3.8.2/Python-3.8.2.tar.xz
+tar -xf Python-3.8.2.tar.xz
+cd Python-3.8.2
+./configure --enable-optimizations --enable-loadable-sqlite-extensions
+make -j 2
+Modify the -j to correspond to the number of cores in your processor. You can find the number by typing nproc.
+
+sudo make altinstall
+Do not use the standard make install as it will overwrite the default system python3 binary.
+
+python3.8 --version
+Python 3.8.2
+	
+---
+
+cd /intranet/intranet_project
+sudo rm -R virtualenv
+python3.8 -m venv ./virtualenv
+pip install -r /intranet/intranet_project/intranet_project/requirements.txt
+
+22. Wykonanie migracji bazy danych
+
+python manage.py migrate
+
+Jeśli jest błąd uprawnień podczas migracji to trzeba nadać uprawnienia folderowi /intranet/data:
+
+sudo chown -R admin:www-data /intranet/data
+sudo chmod -R 775 /intranet/data
+
+23. Przygotowanie plików statycznych
+
+python manage.py collectstatic
+
+24. Stworzenie admina w django:
+
+python manage.py createsuperuser
+
+25. Wrzucenie certyfikatów bezpieczeństwa:
+
+	Certyfikat wrzucamy do /etc/apache2/certificate/cert.txt
+	Klucz prywatny wrzucamy do /etc/apache2/certificate/private.txt
+
+27. Konfiguracja apache (sprawdzanie konfiguracji - sudo apachectl configtest)
+
+sudo nano /etc/apache2/apache2.conf
+
+Zmienić domyślne
+<Directory /var/www>
+	Options Indexes FollowSymLinks Includes ExecCGI
+	AllowOverride None
+	Require all granted
+</Directory>
+na 
+<Directory /intranet/data>
+	Options Indexes FollowSymLinks Includes ExecCGI
+	AllowOverride None
+	Require all granted
+</Directory>
+
+
+sudo nano /etc/apache2/sites-enabled/000-default.conf
+
+<VirtualHost *:80>
+	RewriteEngine On
+	RewriteCond %{HTTPS} !=on
+	RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1 [R=301,L]
+</VirtualHost>
+
+<VirtualHost *:443>
+	DocumentRoot /intranet/data/
+	ServerName intranet.domain.pl
+	
+	Alias /static/ /intranet/data/static/
+	Alias /media/ /intranet/data/media/
+	Alias /shared/ /intranet/data/network_shared_files/
+	
+	<Directory /intranet/static>
+		Options -Indexes
+		AllowOverride None
+		Order allow,deny
+		Allow from all
+	</Directory>
+	<Directory /intranet/media>
+		Options -Indexes
+		AllowOverride None
+		Order allow,deny
+		Allow from all
+	</Directory>
+	<Directory /intranet/data/network_shared_files>
+		Options -Indexes
+		AllowOverride None
+		Order allow,deny
+		Allow from all
+	</Directory>
+
+	RewriteEngine On
+	RewriteCond %{HTTP:Connection} Upgrade		[NC]
+	RewriteCond %{HTTP:Upgrade} websocket		[NC]
+	RewriteRule /(.*) ws://127.0.0.1:8001/$1	[P,L]
+
+	RequestHeader set X-Forwarded-Proto 'https' env=HTTPS
+
+	ProxyPass /static !
+	ProxyPass /media !
+	ProxyPass /shared !
+	ProxyPass /phpmyadmin !
+	ProxyRequests Off
+	ProxyPreserveHost On
+	ProxyPass / http://0.0.0.0:8001/
+	ProxyPassReverse / http://0.0.0.0:8001/
+	
+	SSLEngine on
+	SSLCertificateFile /etc/apache2/certificate/cert.txt
+	SSLCertificateKeyFile /etc/apache2/certificate/private.txt
+	
+	ErrorLog ${APACHE_LOG_DIR}/error.log
+	CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+
+sudo systemctl restart apache2
+
+28. Konfiguracja Daphne
+
+
+--
+
+sudo nano /etc/systemd/system/daphne.service
+
+[Unit]
+Description=daphne
+After=network.target
+
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory=/intranet/intranet_project/intranet_project
+ExecStart=/intranet/intranet_project/virtualenv/bin/python3 /intranet/intranet_project/virtualenv/bin/daphne -b 0.0.0.0 -p 8001 intranet_project.asgi:application
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
+sudo systemctl enable daphne
+
+29. Ustawienie uprawnień dla plików
+
+sudo chmod -R 775 data
+
+30. Konfiguracja ustawień w aplikacji
+
+31. Zezwolenie na połączenia z GLPI
+
+32. Poustawianie słowników dla urlopów
+
+33. Dodanie dla grup uprawnień:
+
+		Can fill additional employee data
+	
+
+		Can view special leave document
+		Can view vacation leave document
+		
+
+		Can moderate meeting
+		
+		Can add event
+		Can change event
+		Can delete event
+
+---------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------
+	
+URUCHAMIANIE:
+
+source virtualenv/bin/activate
+cd intranet_porject/
+python manage.py runserver 0.0.0.0:8000 --noreload
+
+
+
+intranet mysql password ''
+
+------
+apache
+
+sudo apt install -y build-essential
+sudo apt install -y libapache2-mod-proxy-html libxm12-dev
+
+sudo a2enmod proxy_wstunnel
+sudo a2enmod rewrite
+sudo a2enmod proxy_http
+sudo a2enmod headers
+
+sudo systemctl restart apache2
+
+apache instance config
+
+
+sudo nano /etc/apache2/sites-enabled/000-default.conf
+
+<VirtualHost *:80>
+	DocumentRoot /intranet/
+	ServerName intranet.domain.pl
+	
+	Alias /static/ /intranet/static/
+	Alias /media/ /intranet/media/
+	
+	<Directory /intranet/static>
+		Options -Indexes
+		AllowOverride None
+		Order allow,deny
+		Allow from all
+	</Directory>
+	<Directory /intranet/media>
+		Options -Indexes
+		AllowOverride None
+		Order allow,deny
+		Allow from all
+	</Directory>
+
+	RewriteEngine On
+	RewriteCond %{HTTP:Connection} Upgrade		[NC]
+	RewriteCond %{HTTP:Upgrade} websocket		[NC]
+	RewriteRule /(.*) ws://127.0.0.1:8001/$1	[P, L]
+
+	ProxyPass /static !
+	ProxyPass /media !
+	ProxyPass /phpmyadmin !
+	ProxyRequests Off
+	ProxyPreserveHost On
+	ProxyPass / http://0.0.0.0:8001/
+	ProxyPassReverse / http://0.0.0.0:8001/
+	
+	ErrorLog ${APACHE_LOG_DIR}/error.log
+	CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+
+
+To change working directory:
+nano /etc/apache2/apache2.conf
+
+Zmienić domyślne
+<Directory>
+	Options Indexes FollowSymLinks Includes ExecCGI
+	AllowOverride None
+	Require all granted
+</Directory>
+na 
+<Directory /intranet/>
+	Options Indexes FollowSymLinks Includes ExecCGI
+	AllowOverride None
+	Require all granted
+</Directory>
+
+
+---
+daphne
+
+daphne -b 0.0.0.0 -p 8002 intranet_project.asgi:application
+
+sudo systemctl enable daphne
+
+nano /etc/systemd/system/daphne.service
+
+[Unit]
+Description=daphne
+After=network.target
+
+[Service]
+User=admin
+Group=www-data
+WorkingDirectory=/home/admin/intranet_project/intranet_project
+ExecStart=/home/admin/intranet_project/virtualenv/bin/python3 /home/admin/intranet_project/virtualenv/bin/daphne -b 0.0.0.0 -p 8001 intranet_project.asgi:application
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
+---
+(do instalacji mysqlclient w pip)
+
+sudo apt-get install libmariadbclient-dev
+
