@@ -1,2 +1,2 @@
 # intranet
-An app for company internal communication
+An app for internal communication within a company
